@@ -34,6 +34,7 @@ function Users({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
+  const [status, setStatus] = useState(userData.status)
 
   const router = useRouter();
 
@@ -87,6 +88,7 @@ function Users({ userData, setSelectedChatroom }) {
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.id)
     await updateDoc(loginUserRef, { status: 'offline' })
+    setStatus('offline')
     console.log('You are offline')
   }
 
@@ -211,6 +213,9 @@ function Users({ userData, setSelectedChatroom }) {
                   }
                   latestMessage={chatroom.lastMessage}
                   type={"chat"}
+                  id={userData.id}
+                  // status={userData.status}
+                  status={status}
                 />
               </div>
             ))}
@@ -232,6 +237,8 @@ function Users({ userData, setSelectedChatroom }) {
                     avatarUrl={user.avatarUrl}
                     latestMessage={""}
                     type={"user"}
+                    id={user.id}
+                    status={user.status}
                   />
                 )}
               </div>
