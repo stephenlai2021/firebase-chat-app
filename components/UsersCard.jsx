@@ -1,7 +1,7 @@
 "use client";
 
 function UsersCard({ avatarUrl, name, latestMessage, time, type, status, id }) {
-  console.log('user id: ', id)
+  // console.log('user id: ', id)
   return (
     <div
       className={`flex items-center p-4 relative hover:cursor-pointer hover:bg-gray-800`}

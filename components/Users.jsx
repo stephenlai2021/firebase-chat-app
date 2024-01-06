@@ -30,7 +30,7 @@ import { toast } from "react-hot-toast";
 import { AiOutlineLogout } from "react-icons/ai";
 
 function Users({ userData, setSelectedChatroom }) {
-  console.log('userData: ', userData)
+  // console.log('userData: ', userData)
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
@@ -58,37 +58,32 @@ function Users({ userData, setSelectedChatroom }) {
 
   // 讀取聊天室s
   useEffect(() => {
-    // if (!userData?.id) return;
+    if (!userData?.id) return;
     const chatroomsQuery = query(
-      // doc(firestore, "chatrooms", )
       collection(firestore, "chatrooms"),
-      where("users", "array-contains", [userData.id])
+      where("users", "array-contains", userData.id)
     );
     const unsubscribeChatrooms = onSnapshot(chatroomsQuery, (snapshot) => {
       /* 方法一 */
-      const chatrooms = snapshot.docs.map((doc) => {
-        ({ id: doc.id, ...doc.data() });
+      // const chatrooms = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      // setUserChatrooms(chatrooms);
+      // console.log("chatrooms: ", chatrooms);
+
+      /* 方法二 官方推薦 */
+      const chatrooms = [];
+      snapshot.forEach((doc) => {
+        chatrooms.push({ id: doc.id, ...doc.data() });
       });
       setUserChatrooms(chatrooms);
       console.log("chatrooms: ", chatrooms);
-
-      /* 方法二 官方推薦 */
-      // const chatrooms = [];
-      // snapshot.forEach((doc) => {
-      //   chatrooms.push({ id: doc.id, ...doc.data() });
-      // });
-      // setUserChatrooms(chatrooms);
-      // console.log("chatrooms: ", chatrooms);
     });
 
     // Cleanup function for chatrooms
     return () => unsubscribeChatrooms();
   }, [userData]);
 
-  /* 用戶登出前把 status 設為 off */
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.id)
-    // console.log('user ')
     await updateDoc(loginUserRef, { status: 'offline' })
     console.log('You are offline')
   }
@@ -112,11 +107,9 @@ function Users({ userData, setSelectedChatroom }) {
       }
 
       // Chatroom doesn't exist, proceed to create a new one
-      // userData.id = login user's email
-      // user.id = user's email
       const usersData = {
-        [userData.id]: userData,
-        [user.id]: user,
+        [userData.id]: userData, // login user data
+        [user.id]: user, // selected user data
       };
 
       const chatroomData = {
