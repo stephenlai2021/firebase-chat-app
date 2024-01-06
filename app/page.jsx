@@ -25,7 +25,8 @@ function page() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const docRef = doc(firestore, "users", user.email);
+        // const docRef = doc(firestore, "users", user.email);
+        const docRef = doc(firestore, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = { id: docSnap.id, ...docSnap.data() };

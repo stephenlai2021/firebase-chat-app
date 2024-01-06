@@ -55,13 +55,15 @@ function page() {
     setLoading(true);
     try {
       if (validateForm()) {
-        await createUserWithEmailAndPassword(
+        const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
+        const user = userCredential.user
 
-        const docRef = doc(firestore, "users", email);
+        // const docRef = doc(firestore, "users", email);
+        const docRef = doc(firestore, "users", user.uid);
         await setDoc(docRef, {
           name,
           email,

@@ -1,12 +1,13 @@
 "use client";
 
-function UsersCard({ avatarUrl, name, latestMessage, time, type, status }) {
+function UsersCard({ avatarUrl, name, latestMessage, time, type, status, id }) {
+  console.log('user id: ', id)
   return (
     <div
       className={`flex items-center p-4 relative hover:cursor-pointer hover:bg-gray-800`}
     >
       {/* Avatar on the left */}
-      <div className="flex-shrink-0 mr-4 relative border border-2">
+      <div className="flex-shrink-0 mr-4 relative">
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
             className="w-full h-full object-cover"

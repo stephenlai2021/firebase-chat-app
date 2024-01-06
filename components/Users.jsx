@@ -30,6 +30,7 @@ import { toast } from "react-hot-toast";
 import { AiOutlineLogout } from "react-icons/ai";
 
 function Users({ userData, setSelectedChatroom }) {
+  console.log('userData: ', userData)
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
@@ -57,7 +58,7 @@ function Users({ userData, setSelectedChatroom }) {
 
   // 讀取聊天室s
   useEffect(() => {
-    if (!userData?.id) return;
+    // if (!userData?.id) return;
     const chatroomsQuery = query(
       // doc(firestore, "chatrooms", )
       collection(firestore, "chatrooms"),
@@ -85,8 +86,9 @@ function Users({ userData, setSelectedChatroom }) {
   }, [userData]);
 
   /* 用戶登出前把 status 設為 off */
-  const setUserSatusOffline = async () => {
+  const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.id)
+    // console.log('user ')
     await updateDoc(loginUserRef, { status: 'offline' })
     console.log('You are offline')
   }
@@ -96,8 +98,7 @@ function Users({ userData, setSelectedChatroom }) {
     // Check if a chatroom already exists for these users
     const existingChatroomsQuery = query(
       collection(firestore, "chatrooms"),
-      // where("users", "array-contains-any", [userData.id, user.id])
-      where("users", "in", [[user.id, userData.id], [userData.id, user.id]])
+      where("users", "==", [userData.id, user.id])
     );
 
     try {
@@ -125,25 +126,24 @@ function Users({ userData, setSelectedChatroom }) {
         lastMessage: null,
       };
 
-      // const chatroomRef = await addDoc(
-      //   collection(firestore, "chatrooms"),
-      //   chatroomData
-      // );
-
-      const chatroomRef = await setDoc(
-        // doc(firestore, "chatrooms", `${userData.id}+${user.id}`),
-        doc(firestore, "chatrooms", `${userData.name}+${user.name}`),
+      const chatroomRef = await addDoc(
+        collection(firestore, "chatrooms"),
         chatroomData
       );
 
-      // console.log("Chatroom created with ID:", chatroomRef.id);
+      // const chatroomRef = await setDoc(
+      //   doc(firestore, "chatrooms", `${userData.id}+${user.id}`),
+      //   // doc(firestore, "chatrooms", `${userData.name}+${user.name}`),
+      //   chatroomData
+      // );
+
+      console.log("Chatroom created with ID:", chatroomRef.id);
       setActiveTab("chatrooms");
     } catch (error) {
       console.error("Error creating or checking chatroom:", error);
     }
   };
 
-  //open chatroom
   const openChat = async (chatroom) => {
     const data = {
       id: chatroom.id,
@@ -156,9 +156,9 @@ function Users({ userData, setSelectedChatroom }) {
   };
 
   const logoutClick = () => {
-    setUserSatusOffline()
     signOut(auth)
-      .then(() => {
+    .then(() => {
+        setUserStatusOffline()
         router.push("/login");
       })
       .catch((error) => {
@@ -169,10 +169,6 @@ function Users({ userData, setSelectedChatroom }) {
   return (
     <>
       <div className="fixed top-0 bg-black z-20 w-[300px]">
-        {/* <div className="h-[56px] flex items-center font-bold text-[20px] flex justify-center">
-          京華大廈住戶即時通
-        </div> */}
-
         <div className="flex flex-col h-[72px] lg:flex-row justify-evenly p-4 space-y-4 lg:space-y-0">
           <button
             className={`btn-outline rounded lg:w-1/2 sm:w-full ${
@@ -238,6 +234,7 @@ function Users({ userData, setSelectedChatroom }) {
                     latestMessage={""}
                     type={"user"}
                     status={user.status}
+                    id={user.id}
                   />
                 )}
               </div>
