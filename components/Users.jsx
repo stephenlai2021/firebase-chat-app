@@ -164,6 +164,7 @@ function Users({ userData, setSelectedChatroom }) {
   };
 
   return (
+    // <div className="flex flex-col relative">
     <>
       {/* <div className="fixed top-0 bg-black z-20 w-[300px]"> */}
         <div className="flex flex-col h-[72px] lg:flex-row justify-evenly p-4 space-y-4 lg:space-y-0">
@@ -187,7 +188,7 @@ function Users({ userData, setSelectedChatroom }) {
       {/* </div> */}
 
       {/* <div className="w-[300px] pt-[110px] lg:pt-[70px] shadow-lg h-full pb-[60px] overflow-auto flex flex-col"> */}
-      <div>
+      <div className="">
         {activeTab === "chatrooms" && (
           <>
             {userChatrooms.map((chatroom) => (
@@ -240,7 +241,11 @@ function Users({ userData, setSelectedChatroom }) {
       </div>
 
       {/* bottom */}
-      <div className="flex p-4 fixed bottom-0 bg-black w-[300px] z-2">
+      {/* <div className="border border-2 flex p-4 fixed bottom-0 bg-black w-[300px] z-2"> */}
+      {/* <div className="border border-2 flex p-4 fixed bottom-0 bg-black z-2"> */}
+      {/* <div className="border border-2 flex p-4"> */}
+      <div className="bottom-rwd flex p-4 fixed bg-black bottom-0 max-w-[300px] min-w-[171px] lg:w-full md:w-[290px] sm:w-[250px] ">
+      {/* <div className="flex p-4 fixed bg-black bottom-0 min-w-[171px] w-full"> */}
         <div className="flex items-center">
           <img
             src={userData.avatarUrl}
@@ -252,12 +257,14 @@ function Users({ userData, setSelectedChatroom }) {
         </div>
         <span className="flex items-end ml-1">{userData.name}</span>
         <div
-          className="ml-auto flex items-center hover:cursor-pointer"
+          // className="btn-logout-rwd ml-[200px] flex items-center hover:cursor-pointer"
+          className="btn-logout-rwd flex ml-auto items-center hover:cursor-pointer"
           onClick={logoutClick}
         >
           <AiOutlineLogout />
         </div>
       </div>
+    {/* </div> */}
     </>
   );
 }
