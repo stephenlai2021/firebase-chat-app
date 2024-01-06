@@ -34,6 +34,7 @@ function Users({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
+
   const router = useRouter();
 
   const handleTabClick = (tab) => setActiveTab(tab);
@@ -76,6 +77,7 @@ function Users({ userData, setSelectedChatroom }) {
       });
       setUserChatrooms(chatrooms);
       console.log("chatrooms: ", chatrooms);
+
     });
 
     // Cleanup function for chatrooms
@@ -93,7 +95,8 @@ function Users({ userData, setSelectedChatroom }) {
     // Check if a chatroom already exists for these users
     const existingChatroomsQuery = query(
       collection(firestore, "chatrooms"),
-      where("users", "==", [userData.id, user.id])
+      // where("users", "==", [userData.id, user.id])
+      where("users", "in", [[userData.id, user.id], [user.id, userData.id]])
     );
 
     try {
@@ -130,7 +133,8 @@ function Users({ userData, setSelectedChatroom }) {
       //   chatroomData
       // );
 
-      console.log("Chatroom created with ID:", chatroomRef.id);
+      // chatroomRef.id = doc id
+      console.log("Chatroom created with ID:", chatroomRef.id); 
       setActiveTab("chatrooms");
     } catch (error) {
       console.error("Error creating or checking chatroom:", error);
@@ -161,7 +165,7 @@ function Users({ userData, setSelectedChatroom }) {
 
   return (
     <>
-      <div className="fixed top-0 bg-black z-20 w-[300px]">
+      {/* <div className="fixed top-0 bg-black z-20 w-[300px]"> */}
         <div className="flex flex-col h-[72px] lg:flex-row justify-evenly p-4 space-y-4 lg:space-y-0">
           <button
             className={`btn-outline rounded lg:w-1/2 sm:w-full ${
@@ -180,9 +184,10 @@ function Users({ userData, setSelectedChatroom }) {
             Chatrooms
           </button>
         </div>
-      </div>
+      {/* </div> */}
 
-      <div className="w-[300px] pt-[110px] lg:pt-[70px] shadow-lg h-full pb-[60px] overflow-auto flex flex-col">
+      {/* <div className="w-[300px] pt-[110px] lg:pt-[70px] shadow-lg h-full pb-[60px] overflow-auto flex flex-col"> */}
+      <div>
         {activeTab === "chatrooms" && (
           <>
             {userChatrooms.map((chatroom) => (
@@ -226,8 +231,6 @@ function Users({ userData, setSelectedChatroom }) {
                     avatarUrl={user.avatarUrl}
                     latestMessage={""}
                     type={"user"}
-                    status={user.status}
-                    id={user.id}
                   />
                 )}
               </div>

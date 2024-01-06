@@ -17,7 +17,7 @@ import { firestore } from "@/lib/firebase";
 function ChatRoom({ user, selectedChatroom }) {
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
-  console.log('other: ', other)
+  // console.log('other: ', other)
   const chatRoomId = selectedChatroom?.id;
 
   const [message, setMessage] = useState([]);
