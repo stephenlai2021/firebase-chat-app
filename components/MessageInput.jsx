@@ -1,5 +1,5 @@
 /* react */
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 /* firebase */
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -7,20 +7,29 @@ import { storage } from "@/lib/firebase";
 
 /* 3rd-pary libraries */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
-import EmojiPicker from "emoji-picker-react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import EmojiPicker from "emoji-picker-react";
 
-// function MessageInput({ showEmojiPicker, setShowEmojiPicker, sendMessage, message, setMessage, image, setImage }) {
 function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [file, setFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showImagePreviewModal, setShowImagePreviewModal] = useState(false);
+  const [input, setInput] = useState(null)
+
+  const inputFile = useRef(null)
 
   const handleFileChange = (e) => {
+    setInput(null);
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
+
+    if (selectedFile) {
+      setFile(selectedFile);
+    } else {
+      setFile(null);
+      return;
+    }
 
     // Display image preview
     const reader = new FileReader();
@@ -56,13 +65,12 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
           // Reset file && upload progress state and update message with download URL
           setFile(null);
-          setUploadProgress(null);
+          setUploadProgress(0);
           setImage(downloadURL);
 
           // Clear image preview
           setImagePreview(null);
           document.getElementById("dashboard").close();
-          // setShowImagePreviewModal(false);
         });
       }
     );
@@ -77,11 +85,16 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
     if (event.key === "Enter") sendMessage();
   };
 
+  const closeAndClearModal = () => {
+    inputFile.current.value = ""
+    setImagePreview(null);
+    document.getElementById("dashboard").close();
+  };
+
   return (
     <div className="relative bg-gray-900 relative flex items-center p-4">
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
-        // onClick={() => setShowImagePreviewModal(true)}
         className={`${
           image ? "text-blue-500" : "text-gray-500"
         } mr-2 cursor-pointer`}
@@ -128,35 +141,48 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         </div>
       )}
 
-      {/* {showImagePreviewModal && ( */}
-      {/* <dialog id="dashboard" className="absolute top-0 right-0 p-2"> */}
+      {/* image preview modal */}
       <dialog id="dashboard" className="modal">
-        <div className="modal-box">
-          <form method="dialog">
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Uploaded"
-                className="max-h-60 w-60 mb-4"
+        <div className="modal-box relative">
+          <form method="dialog" className="flex justify-center">
+            <div className="">
+              {imagePreview && (
+                <div className="relative">
+                  <img
+                    src="./upload-icon.png"
+                    alt="upload icon"
+                    className="w-[40px] absolute top-2 left-2 hover:cursor-pointer"
+                    onClick={handleUpload}
+                  />
+                  <img
+                    src={imagePreview}
+                    alt="Uploaded"
+                    className="max-h-60 w-full max-w-xs mb-4 rounded"
+                  />
+                  <progress
+                    value={uploadProgress}
+                    className="progress progress-primary w-full absolute bottom-0 left-0 z-50"
+                    max="100"
+                  ></progress>
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                ref={inputFile}
+                className="file-input file-input-bordered file-input-primary w-full max-w-xs"
+                onChange={handleFileChange}
               />
-            )}
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-
-            <div onClick={handleUpload} className="btn btn-sm btn-primary">
-              Upload
             </div>
-            <progress value={uploadProgress} max="100"></progress>
-            <button
-              // onClick={() => document.getElementById("my_modal_3").close()}
-              // onClick={() => setShowImagePreviewModal(false)}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
           </form>
+          <button
+            className="btn btn-sm btn-circle btn-ghost absolute top-0 right-2 top-2"
+            onClick={closeAndClearModal}
+          >
+            ✕
+          </button>
         </div>
       </dialog>
-      {/* )} */}
     </div>
   );
 }
