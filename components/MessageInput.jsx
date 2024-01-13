@@ -1,19 +1,16 @@
 /* react */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 /* firebase */
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 
 /* 3rd-pary libraries */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
+// function MessageInput({ showEmojiPicker, setShowEmojiPicker, sendMessage, message, setMessage, image, setImage }) {
 function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(null);
@@ -110,6 +107,9 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       {showEmojiPicker && (
         <div className="absolute right-0 bottom-full p-2">
+          <span className="absolute top-[10px] right-[10px] z-50 hover:cursor-pointer text-black text-lg font-bold" onClick={() => setShowEmojiPicker(false)}>
+            <IoIosCloseCircleOutline />
+          </span>
           <EmojiPicker
             onEmojiClick={handleEmojiClick}
             disableAutoFocus={true}

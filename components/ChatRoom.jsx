@@ -22,8 +22,9 @@ function ChatRoom({ selectedChatroom }) {
 
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
-  const messagesContainerRef = useRef(null);
   const [image, setImage] = useState(null);
+  // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const messagesContainerRef = useRef(null);
 
   // Scroll to the bottom when messages change
   useEffect(() => {
@@ -131,6 +132,8 @@ function ChatRoom({ selectedChatroom }) {
         setMessage={setMessage}
         image={image}
         setImage={setImage}
+        // showEmojiPicker={showEmojiPicker}
+        // setShowEmojiPicker={setShowEmojiPicker}
       />
     </div>
   );
