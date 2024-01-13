@@ -65,6 +65,7 @@ function page() {
         // const docRef = doc(firestore, "users", email);
         const docRef = doc(firestore, "users", user.uid);
         await setDoc(docRef, {
+          id: user.uid,
           name,
           email,
           avatarUrl,

@@ -14,10 +14,10 @@ import {
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 
-function ChatRoom({ user, selectedChatroom }) {
+function ChatRoom({ selectedChatroom }) {
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
-  // console.log('other: ', other)
+  console.log("other: ", other);
   const chatRoomId = selectedChatroom?.id;
 
   const [message, setMessage] = useState([]);
@@ -25,8 +25,8 @@ function ChatRoom({ user, selectedChatroom }) {
   const messagesContainerRef = useRef(null);
   const [image, setImage] = useState(null);
 
+  // Scroll to the bottom when messages change
   useEffect(() => {
-    // Scroll to the bottom when messages change
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
@@ -59,30 +59,32 @@ function ChatRoom({ user, selectedChatroom }) {
   const sendMessage = async () => {
     const messagesCollection = collection(firestore, "messages");
     // Check if the message is not empty
-    if (message == "" && image == "") return
+    // if (message == "" && image == "") return;
 
-    try {
-      // Add a new message to the Firestore collection
-      const newMessage = {
-        chatRoomId: chatRoomId,
-        sender: me.id,
-        content: message,
-        time: serverTimestamp(),
-        image: image,
-      };
+    if ((message == "" && image !== "") || (message !== "" && image == "") || (message !== "" && image !== "")) {
+      try {
+        // Add a new message to the Firestore collection
+        const newMessage = {
+          chatRoomId: chatRoomId,
+          sender: me.id,
+          content: message,
+          time: serverTimestamp(),
+          image: image,
+        };
 
-      await addDoc(messagesCollection, newMessage);
-      setMessage("");
-      setImage("");
-      //send to chatroom by chatroom id and update last message
-      const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
-      await updateDoc(chatroomRef, {
-        lastMessage: message ? message : "Image",
-      });
+        await addDoc(messagesCollection, newMessage);
+        setMessage("");
+        setImage("");
+        //send to chatroom by chatroom id and update last message
+        const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
+        await updateDoc(chatroomRef, {
+          lastMessage: message ? message : "Image",
+        });
 
-      // Clear the input field after sending the message
-    } catch (error) {
-      console.error("Error sending message:", error.message);
+        // Clear the input field after sending the message
+      } catch (error) {
+        console.error("Error sending message:", error.message);
+      }
     }
 
     // Scroll to the bottom after sending a message
@@ -94,14 +96,24 @@ function ChatRoom({ user, selectedChatroom }) {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Selected user menu at the top */}
+      {/* Selected user info at the top */}
       <div className="bg-gray-900 h-[72px] flex items-center">
-        <img src={other.avatarUrl} className="w-9 h-9 ml-2" alt="" />
-        <div className="h-8 flex items-end ml-1">{other.name}</div>
+        <div className="relative">
+          <img src={other.avatarUrl} className="w-9 h-9 ml-2" alt="" />
+          {/* <span
+            className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
+              other.status === "online" ? "bg-green-500" : "bg-gray-500"
+            }`}
+          ></span> */}
+        </div>
+        <div className="h-8 flex items-end ml-4">{other.name}</div>
       </div>
 
       {/* Messages container with overflow and scroll */}
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-10">
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto pt-10 px-6"
+      >
         {messages?.map((message) => (
           <MessageCard
             key={message.id}
@@ -114,8 +126,8 @@ function ChatRoom({ user, selectedChatroom }) {
 
       {/* Input box at the bottom */}
       <MessageInput
-        sendMessage={sendMessage}
         message={message}
+        sendMessage={sendMessage}
         setMessage={setMessage}
         image={image}
         setImage={setImage}

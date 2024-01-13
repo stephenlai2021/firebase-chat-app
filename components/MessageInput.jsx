@@ -1,5 +1,5 @@
 /* react */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /* firebase */
 import {
@@ -13,29 +13,12 @@ import { storage } from "@/lib/firebase";
 /* 3rd-pary libraries */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
-// function MessageInput({ sendMessage, message, setMessage }) {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  // const [image, setImage] = useState('')
-
-  // Initialize storage object
-  // const storage = getStorage(storage);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -79,7 +62,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
           // Clear image preview
           setImagePreview(null);
-          document.getElementById("my_modal_3").close();
+          document.getElementById("dashboard").close();
         });
       }
     );
@@ -97,7 +80,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   return (
     <div className="bg-gray-900 relative flex items-center p-4">
       <FaPaperclip
-        onClick={() => document.getElementById("my_modal_3").showModal()}
+        onClick={() => document.getElementById("dashboard").showModal()}
         className={`${
           image ? "text-blue-500" : "text-gray-500"
         } mr-2 cursor-pointer`}
@@ -134,49 +117,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         </div>
       )}
 
-      {/* Image Upload Modal */}
-      {/* <dialog id="my_modal_3" className="modal">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Edit Profile</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  defaultValue="Pedro Duarte"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
-                </Label>
-                <Input
-                  id="username"
-                  defaultValue="@peduarte"
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </dialog> */}
-
-      <dialog id="my_modal_3" className="modal">
+      <dialog id="dashboard" className="modal">
         <div className="modal-box">
           <form method="dialog">
             {imagePreview && (
@@ -187,10 +128,8 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
               />
             )}
             <input type="file" accept="image/*" onChange={handleFileChange} />
-            {/* <div onClick={() => {handleUpload()}}  */}
-            <div onClick={handleUpload} 
-              className="btn btn-sm btn-primary"
-            >
+
+            <div onClick={handleUpload} className="btn btn-sm btn-primary">
               Upload
             </div>
             <progress value={uploadProgress} max="100"></progress>

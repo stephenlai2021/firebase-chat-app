@@ -10,7 +10,8 @@ function MessageCard({ message, me, other }) {
   };
 
   return (
-    <div key={message.id} className={`flex mb-4 ${isMessageFromMe ? 'justify-end' : 'justify-start'}`}>
+    // <div key={message.id} className={`border border-2 flex mb-4 ${isMessageFromMe ? 'justify-end' : 'justify-start'}`}>
+    <div key={message.id} className={`flex mb-4 ${isMessageFromMe ? 'justify-end' : 'justify-start'}`}> 
       {/* Avatar on the left or right based on the sender */}
       <div className={`w-10 h-10 ${isMessageFromMe ? 'ml-2 mr-2' : 'mr-2'}`}>
         {isMessageFromMe && (
