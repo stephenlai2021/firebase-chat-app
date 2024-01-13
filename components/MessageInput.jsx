@@ -16,6 +16,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showImagePreviewModal, setShowImagePreviewModal] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -53,13 +54,15 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
           console.log("File available at", downloadURL);
           // save downloadURL into message
 
-          // Reset file state and update message with download URL
+          // Reset file && upload progress state and update message with download URL
           setFile(null);
+          setUploadProgress(null);
           setImage(downloadURL);
 
           // Clear image preview
           setImagePreview(null);
           document.getElementById("dashboard").close();
+          // setShowImagePreviewModal(false);
         });
       }
     );
@@ -78,6 +81,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
     <div className="relative bg-gray-900 relative flex items-center p-4">
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
+        // onClick={() => setShowImagePreviewModal(true)}
         className={`${
           image ? "text-blue-500" : "text-gray-500"
         } mr-2 cursor-pointer`}
@@ -97,11 +101,11 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className="rounded bg-gray-700 flex-1 border-none p-2 outline-none text-gray-200"
+        className="rounded bg-gray-700 flex-1 border-none p-2 pr-[60px] outline-none text-gray-200"
       />
 
       <div className="absolute right-[40px]">
-        <img src={image ? image : ''} alt="" className="h-[40px] rounded" />
+        <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
 
       <FaPaperPlane
@@ -124,6 +128,8 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         </div>
       )}
 
+      {/* {showImagePreviewModal && ( */}
+      {/* <dialog id="dashboard" className="absolute top-0 right-0 p-2"> */}
       <dialog id="dashboard" className="modal">
         <div className="modal-box">
           <form method="dialog">
@@ -140,15 +146,17 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
               Upload
             </div>
             <progress value={uploadProgress} max="100"></progress>
+            <button
+              // onClick={() => document.getElementById("my_modal_3").close()}
+              // onClick={() => setShowImagePreviewModal(false)}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
           </form>
-          <button
-            onClick={() => document.getElementById("my_modal_3").close()}
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          >
-            ✕
-          </button>
         </div>
       </dialog>
+      {/* )} */}
     </div>
   );
 }
