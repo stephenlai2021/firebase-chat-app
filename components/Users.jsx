@@ -309,23 +309,24 @@ function Users({ userData, setSelectedChatroom }) {
       </div>
 
       {/* bottom */}
-      <div className="bottom-rwd flex p-4 fixed bg-black bottom-0 max-w-[300px] min-w-[171px] lg:w-full md:w-[290px] sm:w-[250px] ">
+      {/* <div className="h-[72px] bottom-rwd flex p-4 fixed bg-black bottom-0 max-w-[300px] min-w-[171px] lg:w-full md:w-[290px] sm:w-[250px] "> */}
+      <div className="users-bottom h-[72px] w-[300px] flex p-4 fixed bg-black bottom-0">
         <div className="flex items-center">
           <img
             src={userData.avatarUrl}
-            width={30}
-            height={30}
+            width={25}
+            height={25}
             alt="Picture of the author"
             className="rounded-full"
           />
         </div>
-        <span className="flex items-end ml-1">{userData.name}</span>
-        <div
+        {/* <span className="flex items-end ml-1">{userData.name}</span> */}
+        {/* <div
           className="btn-logout-rwd flex ml-auto items-center hover:cursor-pointer"
           onClick={logoutClick}
         >
           <AiOutlineLogout />
-        </div>
+        </div> */}
       </div>
     </>
   );

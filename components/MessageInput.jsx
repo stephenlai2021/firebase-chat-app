@@ -75,7 +75,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   };
 
   return (
-    <div className="bg-gray-900 relative flex items-center p-4">
+    <div className="relative bg-gray-900 relative flex items-center p-4">
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
         className={`${
@@ -100,6 +100,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         className="rounded bg-gray-700 flex-1 border-none p-2 outline-none text-gray-200"
       />
 
+      <div className="absolute right-[40px]">
+        <img src={image ? image : ''} alt="" className="h-[40px] rounded" />
+      </div>
+
       <FaPaperPlane
         onClick={() => sendMessage()}
         className="text-blue-500 cursor-pointer ml-2"
@@ -107,7 +111,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       {showEmojiPicker && (
         <div className="absolute right-0 bottom-full p-2">
-          <span className="absolute top-[10px] right-[10px] z-50 hover:cursor-pointer text-black text-lg font-bold" onClick={() => setShowEmojiPicker(false)}>
+          <span
+            className="absolute top-[10px] right-[10px] z-50 hover:cursor-pointer text-black text-lg font-bold"
+            onClick={() => setShowEmojiPicker(false)}
+          >
             <IoIosCloseCircleOutline />
           </span>
           <EmojiPicker

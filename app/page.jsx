@@ -58,6 +58,8 @@ function page() {
       </div>
 
       <div className="flex-grow w-9/12">
+      {/* <div className="flex-grow w-full"> */}
+      {/* <div className=""> */}
         {selectedChatroom ? (
           // <ChatRoom user={user} selectedChatroom={selectedChatroom} />
           <ChatRoom selectedChatroom={selectedChatroom} />

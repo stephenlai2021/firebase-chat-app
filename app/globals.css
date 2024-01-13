@@ -118,7 +118,11 @@
   }
 } 
 
-
+@media (max-width: 485px) {
+  .users-bottom {
+    height: 55px;
+  }
+}
 
 @media (max-width: 800px) {
   .users {

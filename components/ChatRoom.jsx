@@ -79,7 +79,8 @@ function ChatRoom({ selectedChatroom }) {
         //send to chatroom by chatroom id and update last message
         const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
         await updateDoc(chatroomRef, {
-          lastMessage: message ? message : "Image",
+          // lastMessage: message ? message : `Image`,
+          lastMessage: message ? message : `${me.name} has sent an image`,
         });
 
         // Clear the input field after sending the message
@@ -101,13 +102,13 @@ function ChatRoom({ selectedChatroom }) {
       <div className="bg-gray-900 h-[72px] flex items-center">
         <div className="relative">
           <img src={other.avatarUrl} className="w-9 h-9 ml-2" alt="" />
-          {/* <span
+          <span
             className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
               other.status === "online" ? "bg-green-500" : "bg-gray-500"
             }`}
-          ></span> */}
+          ></span>
         </div>
-        <div className="h-8 flex items-end ml-4">{other.name}</div>
+        <div className="h-8 flex items-end ml-2">{other.name}</div>
       </div>
 
       {/* Messages container with overflow and scroll */}
