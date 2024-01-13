@@ -15,12 +15,11 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [input, setInput] = useState(null)
+  const [showImagePreviewModal, setShowImagePreviewModal] = useState(false)
 
-  const inputFile = useRef(null)
+  const inputFile = useRef(null);
 
   const handleFileChange = (e) => {
-    setInput(null);
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
 
@@ -70,6 +69,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
           // Clear image preview
           setImagePreview(null);
+          inputFile.current.value = "";
           document.getElementById("dashboard").close();
         });
       }
@@ -86,7 +86,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   };
 
   const closeAndClearModal = () => {
-    inputFile.current.value = ""
+    inputFile.current.value = "";
     setImagePreview(null);
     document.getElementById("dashboard").close();
   };
@@ -145,23 +145,25 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       <dialog id="dashboard" className="modal">
         <div className="modal-box relative">
           <form method="dialog" className="flex justify-center">
-            <div className="">
+            <div className="border border-2">
               {imagePreview && (
                 <div className="relative">
                   <img
                     src="./upload-icon.png"
                     alt="upload icon"
-                    className="w-[40px] absolute top-2 left-2 hover:cursor-pointer"
+                    className="w-[40px] absolute top-[-20px] left-[50%] translate-x-[-50%] hover:cursor-pointer"
                     onClick={handleUpload}
                   />
-                  <img
-                    src={imagePreview}
-                    alt="Uploaded"
-                    className="max-h-60 w-full max-w-xs mb-4 rounded"
-                  />
+                  <div className="flex justify-center">
+                    <img
+                      src={imagePreview}
+                      alt="Uploaded"
+                      className="max-h-60 max-w-xs mb-4 rounded"
+                    />
+                  </div>
                   <progress
                     value={uploadProgress}
-                    className="progress progress-primary w-full absolute bottom-0 left-0 z-50"
+                    className="progress progress-primary absolute bottom-0 left-0 z-50"
                     max="100"
                   ></progress>
                 </div>
@@ -170,7 +172,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
                 type="file"
                 accept="image/*"
                 ref={inputFile}
-                className="file-input file-input-bordered file-input-primary w-full max-w-xs"
+                className="mt-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
                 onChange={handleFileChange}
               />
             </div>
