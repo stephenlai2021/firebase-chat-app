@@ -17,13 +17,12 @@ import { firestore } from "@/lib/firebase";
 function ChatRoom({ selectedChatroom }) {
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
-  console.log("other: ", other);
   const chatRoomId = selectedChatroom?.id;
+  // console.log("other: ", other);
 
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
-  // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const messagesContainerRef = useRef(null);
 
   // Scroll to the bottom when messages change
@@ -58,10 +57,9 @@ function ChatRoom({ selectedChatroom }) {
 
   //put messages in db
   const sendMessage = async () => {
-    const messagesCollection = collection(firestore, "messages");
     // Check if the message is not empty
-    // if (message == "" && image == "") return;
-
+    if (message == "" && image == "") return;
+    
     if ((message == "" && image !== "") || (message !== "" && image == "") || (message !== "" && image !== "")) {
       try {
         // Add a new message to the Firestore collection
@@ -72,7 +70,8 @@ function ChatRoom({ selectedChatroom }) {
           time: serverTimestamp(),
           image: image,
         };
-
+        
+        const messagesCollection = collection(firestore, "messages");
         await addDoc(messagesCollection, newMessage);
         setMessage("");
         setImage("");
@@ -133,8 +132,6 @@ function ChatRoom({ selectedChatroom }) {
         setMessage={setMessage}
         image={image}
         setImage={setImage}
-        // showEmojiPicker={showEmojiPicker}
-        // setShowEmojiPicker={setShowEmojiPicker}
       />
     </div>
   );

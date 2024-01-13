@@ -15,7 +15,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showImagePreviewModal, setShowImagePreviewModal] = useState(false)
+  const [showCloseIcon, setShowCloseIcon] = useState(true);
 
   const inputFile = useRef(null);
 
@@ -59,13 +59,13 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       () => {
         // Upload complete, get download URL and log it
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          // save downloadURL into message
-
           // Reset file && upload progress state and update message with download URL
           setFile(null);
           setUploadProgress(0);
+          console.log("File available at", downloadURL);
+
           setImage(downloadURL);
+          console.log("image | downloadURL: ", image);
 
           // Clear image preview
           setImagePreview(null);
@@ -117,6 +117,14 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         className="rounded bg-gray-700 flex-1 border-none p-2 pr-[60px] outline-none text-gray-200"
       />
 
+      {/* {image && (
+        <div
+          className="absolute right-[30px] z-200 top-[8px] hover:cursor-pointer"
+          onClick={clearImagePreview}
+        >
+          <IoIosCloseCircleOutline />
+        </div>
+      )} */}
       <div className="absolute right-[40px]">
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
