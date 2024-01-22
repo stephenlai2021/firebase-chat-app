@@ -15,7 +15,6 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showCloseIcon, setShowCloseIcon] = useState(true);
 
   const inputFile = useRef(null);
 
@@ -114,7 +113,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className="rounded bg-gray-700 flex-1 border-none p-2 pr-[60px] outline-none text-gray-200"
+        className={`rounded bg-gray-700 flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
       />
 
       {/* {image && (
@@ -147,7 +146,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
             disableAutoFocus={true}
           />
         </div>
-      )}
+      )}     
 
       {/* image preview modal */}
       <dialog id="dashboard" className="modal">

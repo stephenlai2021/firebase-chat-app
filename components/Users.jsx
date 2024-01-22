@@ -29,6 +29,11 @@ import UsersCard from "./UsersCard";
 /* 3rd-party libraries */
 import { toast } from "react-hot-toast";
 import { AiOutlineLogout } from "react-icons/ai";
+import { FaCircleUser } from "react-icons/fa6";
+import { IoMdChatboxes } from "react-icons/io";
+import { IoSearchSharp } from "react-icons/io5";
+import { IoIosSend } from "react-icons/io";
+import { IoPersonAddSharp } from "react-icons/io5";
 
 function Users({ userData, setSelectedChatroom }) {
   // console.log("userData: ", userData);
@@ -36,22 +41,71 @@ function Users({ userData, setSelectedChatroom }) {
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
   const [user, setUser] = useState("");
+  const [menu, setMenu] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userByEmail, setUserByEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const router = useRouter();
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
+  /* 依姓名搜尋用戶 */
+  const searchUserByName = async () => {
+    if (!userName) return;
+
+    const q = query(
+      collection(firestore, "users"),
+      where("name", "==", userName)
+    );
+
+    const users = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      users.push(doc.data());
+      setUserName("");
+    });
+    console.log("users: ", users);
+  };
+
+  /* 依電郵信箱搜尋用戶 */
+  const searchUserByEmail = async () => {
+    if (!userEmail) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) setEmailError("Invalid Email");
+
+    const docRef = doc(firestore, "users", userEmail);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("user: ", docSnap.data());
+      setUserByEmail(docSnap.data());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+
+  /* 處理 Email 表格 */
+  const handleEmail = (val) => {
+    setUserEmail(val);
+    setEmailError("");
+  };
+
+  const handleUserEmailSubmit = (event) => {
+    if (event.key === "Enter") searchUserByEmail();
+  };
+
   /* 讀取用戶s */
   useEffect(() => {
     const usersRef = collection(firestore, "users");
     const unsubscribe = onSnapshot(usersRef, (snapshot) => {
-      /* 方法一 */
-      // const users = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      // setUsers(users);
-
-      /* 方法二 官方推薦 */
       const users = [];
-      // snapshot.forEach((doc) => users.push({ id: doc.id, ...doc.data() }));
+      // snapshot.forEach((doc) => users.push({id: doc.id, ...doc.data()}));
       snapshot.forEach((doc) => users.push(doc.data()));
       setUsers(users);
       console.log("users: ", users);
@@ -64,15 +118,9 @@ function Users({ userData, setSelectedChatroom }) {
     if (!userData?.id) return;
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
-      // where("users", "array-contains", userData.id)
-      where("users", "array-contains", userData.email)
+      where("users", "array-contains", userData.id)
     );
     const unsubscribeChatrooms = onSnapshot(chatroomsQuery, (snapshot) => {
-      /* 方法一 */
-      // const chatrooms = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      // setUserChatrooms(chatrooms);
-
-      /* 方法二 官方推薦 */
       const chatrooms = [];
       snapshot.forEach((doc) => {
         chatrooms.push({ id: doc.id, ...doc.data() });
@@ -85,6 +133,7 @@ function Users({ userData, setSelectedChatroom }) {
     return () => unsubscribeChatrooms();
   }, [userData]);
 
+  /* 把登出用戶狀態設置為下線 */
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.id);
 
@@ -94,36 +143,16 @@ function Users({ userData, setSelectedChatroom }) {
     // Get documents contains login user
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
-      where("users", "array-contains", userData.email)
-      // where("usersData", "array-contains", { email: userData.email })
+      where("users", "array-contains", userData.id)
     );
-
-    const chatroomsIdArray = [];
     const querySnapshot = await getDocs(chatroomsQuery);
-    querySnapshot.forEach(async (doc) => {
-      console.log(doc.id, ' => ', doc.data())
-      chatroomsIdArray.push(doc.id)
-      const updatedUsersData = [{ ...userData, status: 'offline' }, user]
-      // await updateDoc(doc.id, { usersData: updatedUsersData })
-      
-    });
-    console.log('chatroomsIdArray: ', chatroomsIdArray)
+    querySnapshot.forEach(async (document) => {
+      console.log(document.id, " => ", document.data());
 
-    /* 
-    chatroomsIdArray = [
-      "Ih7w7ROVl8eLjZiTBTCW",
-      "VI2MMJddRReEsAaxnUwy"
-    ]
-    */
-    // chatroomsIdArray.forEach(async chatroomId => {
-    //   const docRef = doc(firestore, 'chatrooms', chatroomId)
-    //   const matches = await getDoc(docRef);
-    //   if (!matches.exists()) return;
-      
-    //   const docData = matches.data()
-    //   const foundUser = docData.usersData.find(user => user.email === userData.email).status
-    //   await updateDoc(docRef, { status: 'offline' })
-    // })
+      await updateDoc(doc(firestore, "chatrooms", document.id), {
+        [`usersData.${userData.id}.status`]: "offline",
+      });
+    });
   };
 
   /* 建立聊天室 */
@@ -133,8 +162,8 @@ function Users({ userData, setSelectedChatroom }) {
     const existingChatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "in", [
-        [userData.email, user.email],
-        [user.email, userData.email],
+        [userData.id, user.id],
+        [user.id, userData.id],
       ])
     );
 
@@ -152,26 +181,21 @@ function Users({ userData, setSelectedChatroom }) {
       // userData: login user data
       // user: user data
 
-      // const usersData = {
-      //   // [userData.id]: userData,
-      //   // [user.id]: user,
-      //   [userData.email]: userData,
-      //   [user.email]: user,
-      // };
-      // const usersData = [
-      //   userData,
-      //   user,
-      // ];
-      const usersData = [
-        userData,
-        user,
-      ];
+      /* 
+        usersData = {
+          asdfadfadf: {},
+          234erterts: {}
+        }
+      */
+      const usersData = {
+        [userData.id]: userData,
+        [user.id]: user,
+      };
+      // const usersData = [userData, user];
 
       const chatroomData = {
-        users: [userData.email, user.email],
+        users: [userData.id, user.id],
         usersData,
-        // loginUser: userData,
-        // otherUser: user,
         timestamp: serverTimestamp(),
         lastMessage: null,
       };
@@ -180,25 +204,27 @@ function Users({ userData, setSelectedChatroom }) {
         collection(firestore, "chatrooms"),
         chatroomData
       );
-      console.log('Chatroom created with ID:', chatroomRef.id);
+      console.log("Chatroom created with ID:", chatroomRef.id);
       setActiveTab("chatrooms");
     } catch (error) {
       console.error("Error creating or checking chatroom:", error);
     }
   };
 
+  /* 開啟聊天室 */
   const openChat = async (chatroom) => {
     const data = {
       id: chatroom.id,
       myData: userData,
       otherData:
         // chatroom.usersData[chatroom.usersData.find((id) => id !== userData.id)],
-        chatroom.usersData.find(user => user.email !== userData.email)
+        chatroom.usersData.find((user) => user.email !== userData.email),
     };
     setSelectedChatroom(data);
     console.log("openChat: ", data);
   };
 
+  /* 用戶登出 */
   const logoutClick = () => {
     signOut(auth)
       .then(() => {
@@ -212,26 +238,36 @@ function Users({ userData, setSelectedChatroom }) {
 
   return (
     <>
-      <div className="flex flex-col h-[72px] lg:flex-row justify-evenly p-4 space-y-4 lg:space-y-0">
-        <button
-          className={`btn-outline rounded lg:w-1/2 sm:w-full ${
-            activeTab === "users" ? "btn-primary" : ""
-          }`}
-          onClick={() => handleTabClick("users")}
-        >
-          Users
-        </button>
-        <button
-          className={`btn-outline rounded lg:ml-2 ml-0 lg:w-1/2 sm:w-full ${
-            activeTab === "chatrooms" ? "btn-primary" : ""
-          }`}
-          onClick={() => handleTabClick("chatrooms")}
-        >
-          Chatrooms
-        </button>
+      <div className="p-2">
+        <ul className="menu menu-horizontal bg-base-200 rounded-box w-full">
+          <li
+            className="w-1/2 flex justify-center items-center"
+            onClick={() => handleTabClick("users")}
+          >
+            <a className="tooltip tooltip-bottom" data-tip="Search">
+              <IoSearchSharp
+                className={`w-[22px] h-[22px] hover:cursor-pointer ${
+                  activeTab === "users" ? "text-white" : "text-gray-700"
+                }`}
+              />
+            </a>
+          </li>
+          <li
+            className="w-1/2 flex justify-center items-center"
+            onClick={() => handleTabClick("chatrooms")}
+          >
+            <a className="tooltip tooltip-bottom" data-tip="Chatrooms">
+              <IoMdChatboxes
+                className={`w-[24px] h-[24px] hover:cursor-pointer ${
+                  activeTab === "chatrooms" ? "text-white" : "text-gray-700"
+                }`}
+              />
+            </a>
+          </li>
+        </ul>
       </div>
 
-      <div className="">
+      <div className="p-2">
         {activeTab === "chatrooms" && (
           <>
             {userChatrooms.map((chatroom) => (
@@ -242,41 +278,44 @@ function Users({ userData, setSelectedChatroom }) {
                 }}
               >
                 <UsersCard
-                  // name={
-                  //   chatroom.usersData[
-                  //     chatroom.users.find((id) => id !== userData?.id)
-                  //   ].name
-                  // }
-                  // avatarUrl={
-                  //   chatroom.usersData[
-                  //     chatroom.users.find((id) => id !== userData?.id)
-                  //   ].avatarUrl
-                  // }
-                  // status={
-                  //   chatroom.usersData[
-                  //     chatroom.users.find((id) => id !== userData?.id)
-                  //   ].status
-                  // }
-
                   name={
-                    chatroom.usersData.find((data) => data.email !== userData.email).name                    
+                    chatroom.usersData[
+                      chatroom.users.find((id) => id !== userData?.id)
+                    ].name
                   }
                   avatarUrl={
-                    chatroom.usersData.find((data) => data.email !== userData.email).avatarUrl
+                    chatroom.usersData[
+                      chatroom.users.find((id) => id !== userData?.id)
+                    ].avatarUrl
+                  }
+                  email={
+                    chatroom.usersData[
+                      chatroom.users.find((id) => id !== userData?.id)
+                    ].email
                   }
                   status={
-                    chatroom.usersData.find((data) => data.email !== userData.email).status
+                    chatroom.usersData[
+                      chatroom.users.find((id) => id !== userData?.id)
+                    ].status
                   }
+                  // name={
+                  //   chatroom.usersData.find(
+                  //     (data) => data.id !== userData.id
+                  //   ).name
+                  // }
+                  // avatarUrl={
+                  //   chatroom.usersData.find(
+                  //       (data) => data.id !== userData.id
+                  //   ).avatarUrl
+                  // }
+                  // status={
+                  //   chatroom.usersData.find(
+                  //       (data) => data.id !== userData.id
+                  //   ).status
+                  // }
+
                   latestMessage={chatroom.lastMessage}
                   type={"chat"}
-                  id={userData.id}
-
-                  // name={chatroom.otherUser.name}                    
-                  // avatarUrl={chatroom.otherUser.avatarUrl}
-                  // status={chatroom.otherUser.status}
-                  // latestMessage={chatroom.lastMessage}
-                  // type={"chat"}
-                  // id={userData.id}
                 />
               </div>
             ))}
@@ -296,22 +335,111 @@ function Users({ userData, setSelectedChatroom }) {
                   <UsersCard
                     name={user.name}
                     avatarUrl={user.avatarUrl}
+                    email={user.email}
+                    status={user.status}
                     latestMessage={""}
                     type={"user"}
-                    id={user.id}
-                    status={user.status}
                   />
                 )}
               </div>
             ))}
+
+            {/* Search user by name */}
+            {/* <div className="mt-2">
+              <span className="label-text pl-1">Search by name</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="Enter name"
+                  className="input input-bordered input-sm w-full max-w-xs pr-[30px]"
+                />
+                <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
+                  <IoIosSend
+                    className="w-[20px] h-[20px] hover:cursor-pointer"
+                    onClick={searchUserByName}
+                  />
+                </div>
+              </div>
+            </div> */}
+
+            {/* Search user by email */}
+            {/* <div className="mt-6">
+              <span className="label-text pl-1">Search by email</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={userEmail}
+                  onChange={(e) => handleEmail(e.target.value)}
+                  onKeyDown={handleUserEmailSubmit}
+                  placeholder="Enter email"
+                  className="input input-bordered input-sm w-full max-w-xs pr-[30px]"
+                />
+                <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
+                  <IoIosSend
+                    className="w-[20px] h-[20px] hover:cursor-pointer"
+                    onClick={searchUserByEmail}
+                  />
+                </div>
+              </div>
+              {emailError && (
+                <span className="label-text text-red-500 p-1">
+                  {emailError}
+                </span>
+              )}
+            </div> */}
+
+            {/* user found by email  */}
+            {/* {activeTab === "users" && userByEmail && (
+              // <UsersCard
+              //   name={userByEmail.name}
+              //   avatarUrl={userByEmail.avatarUrl}
+              //   type={"user"}
+              //   status={userByEmail.status}
+              //   email={userByEmail.email}
+              // />
+              <div
+                className={`mt-8 flex items-center p-4 relative hover:cursor-pointer bg-gray-800`}
+              >
+                <IoPersonAddSharp
+                  className="absolute top-[5px] right-[5px] w-[20px] h-[20px] hover:cursor-pointer text-sky-500"
+                  onClick={() => {
+                    createChat(userByEmail);
+                  }}
+                />
+                <div className="mr-4 relative flex flex-col">
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={userByEmail.avatarUrl}
+                      alt="Avatar"
+                    />
+                    <span
+                      className={`absolute bottom-0 right-0 w-3 h-3 border border-2 rounded-full ${
+                        userByEmail.status === "online"
+                          ? "bg-green-500"
+                          : "bg-gray-500"
+                      }`}
+                    ></span>
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <h2 className="text-lg font-semibold">{userByEmail.name}</h2>
+                  <p className="text-gray-500 truncate">{userByEmail.email}</p>
+                </div>
+              </div>
+            )} */}
           </>
         )}
       </div>
 
       {/* bottom */}
-      {/* <div className="h-[72px] bottom-rwd flex p-4 fixed bg-black bottom-0 max-w-[300px] min-w-[171px] lg:w-full md:w-[290px] sm:w-[250px] "> */}
       <div className="users-bottom h-[72px] w-[300px] flex p-4 fixed bg-black bottom-0">
-        <div className="flex items-center">
+        <div
+          className="relative flex items-center hover:cursor-pointer"
+          onClick={() => setMenu(!menu)}
+        >
           <img
             src={userData.avatarUrl}
             width={25}
@@ -319,14 +447,21 @@ function Users({ userData, setSelectedChatroom }) {
             alt="Picture of the author"
             className="rounded-full"
           />
+          {/* menu */}
+          {menu ? (
+            <ul className="absolute top-[-80px] left-[24px] menu bg-base-200 max-w-56 rounded-box">
+              <li>
+                <a>{userData.email}</a>
+              </li>
+              <li>
+                <a onClick={logoutClick}>logout</a>
+              </li>
+            </ul>
+          ) : (
+            ""
+          )}
         </div>
-        {/* <span className="flex items-end ml-1">{userData.name}</span> */}
-        {/* <div
-          className="btn-logout-rwd flex ml-auto items-center hover:cursor-pointer"
-          onClick={logoutClick}
-        >
-          <AiOutlineLogout />
-        </div> */}
+        <span className="flex items-end ml-1 text-[12px]">Me</span>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-function UsersCard({ avatarUrl, name, latestMessage, time, type, id, status
+function UsersCard({ name, avatarUrl, email, lastMessage, status, type
 }) {
   return (
     <div
@@ -24,15 +24,16 @@ function UsersCard({ avatarUrl, name, latestMessage, time, type, id, status
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">{name}</h2>
           </div>
-          <p className="text-gray-500 truncate">{latestMessage}</p>
+          <p className="text-gray-500 truncate">{lastMessage}</p>
         </div>
       )}
 
       {type == "user" && (
         /* Name */
         <div className="flex-1">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col">
             <h2 className="text-lg font-semibold">{name}</h2>
+            {/* <p className="text-gray-500 text-sm truncate">{email}</p> */}
           </div>
         </div>
       )}

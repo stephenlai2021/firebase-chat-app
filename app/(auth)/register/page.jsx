@@ -97,7 +97,7 @@ function page() {
         </h1>
 
         {/* Display the avatar and refresh button */}
-        <div className="flex items-center space-y-2 justify-between border border-gray-200 p-2">
+        <div className="flex items-center space-y-2 justify-between p-2">
           <img
             src={avatarUrl}
             alt="Avatar"
@@ -173,7 +173,7 @@ function page() {
         </div>
 
         <div>
-          <button type="submit" className="btn-primary">
+          <button type="submit" className="btn btn-block bg-[#0b3a65ff] text-white">
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (

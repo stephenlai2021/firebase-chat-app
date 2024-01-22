@@ -84,6 +84,9 @@
   width: 100%;
 }
 
+.resize {
+  text-size-adjust: auto;
+}
 
 @media (max-width: 800px) {
   .users {
