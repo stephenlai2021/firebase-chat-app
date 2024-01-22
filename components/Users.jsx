@@ -76,29 +76,42 @@ function Users({ userData, setSelectedChatroom }) {
     if (!userEmail) return;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail)) setEmailError("Invalid Email");
+    if (!emailRegex.test(userEmail)) {
+      setEmailError("Invalid Email");
+      return
+    }
 
     const docRef = doc(firestore, "users", userEmail);
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
-      console.log("user: ", docSnap.data());
       setUserByEmail(docSnap.data());
     } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
+      console.log("The email does not exist!");
+      toast('The email does not exist!', {
+        icon: '⚠️'
+      });
     }
   };
 
   /* 處理 Email 表格 */
   const handleEmail = (val) => {
     setUserEmail(val);
+    setUserByEmail("");
     setEmailError("");
   };
 
+  /* 用戶按 Enter 鍵執行 searchUserByEmail 函式 */
   const handleUserEmailSubmit = (event) => {
     if (event.key === "Enter") searchUserByEmail();
   };
+
+  /* 切換到 chatrooms tab 時清除 Email 表格內容及找到的用戶資料 */
+  useEffect(() => {
+    if (activeTab == "chatrooms") {
+      setUserEmail("");
+      setUserByEmail("");
+    }
+  }, [activeTab]);
 
   /* 讀取用戶s */
   useEffect(() => {
@@ -135,7 +148,7 @@ function Users({ userData, setSelectedChatroom }) {
 
   /* 把登出用戶狀態設置為下線 */
   const setUserStatusOffline = async () => {
-    const loginUserRef = doc(firestore, "users", userData.id);
+    const loginUserRef = doc(firestore, "users", userData.email);
 
     // update login user status
     await updateDoc(loginUserRef, { status: "offline" });
@@ -171,9 +184,8 @@ function Users({ userData, setSelectedChatroom }) {
       const existingChatroomsSnapshot = await getDocs(existingChatroomsQuery);
 
       if (existingChatroomsSnapshot.docs.length > 0) {
-        // Chatroom already exists, handle it accordingly (e.g., show a message)
-        console.log("Chatroom already exists for these users.");
-        toast.error("Chatroom already exists for these users.");
+        console.log("Chatroom already exists for this user.");
+        toast.error("Chatroom already exists for this user.");
         return;
       }
 
@@ -204,8 +216,9 @@ function Users({ userData, setSelectedChatroom }) {
         collection(firestore, "chatrooms"),
         chatroomData
       );
-      console.log("Chatroom created with ID:", chatroomRef.id);
+      // console.log("Chatroom created with ID:", chatroomRef.id);
       setActiveTab("chatrooms");
+      setUserByEmail("");
     } catch (error) {
       console.error("Error creating or checking chatroom:", error);
     }
@@ -224,7 +237,7 @@ function Users({ userData, setSelectedChatroom }) {
     console.log("openChat: ", data);
   };
 
-  /* 用戶登出 */
+  /* 登出用戶並將用戶狀態設置為"offline" */
   const logoutClick = () => {
     signOut(auth)
       .then(() => {
@@ -298,22 +311,6 @@ function Users({ userData, setSelectedChatroom }) {
                       chatroom.users.find((id) => id !== userData?.id)
                     ].status
                   }
-                  // name={
-                  //   chatroom.usersData.find(
-                  //     (data) => data.id !== userData.id
-                  //   ).name
-                  // }
-                  // avatarUrl={
-                  //   chatroom.usersData.find(
-                  //       (data) => data.id !== userData.id
-                  //   ).avatarUrl
-                  // }
-                  // status={
-                  //   chatroom.usersData.find(
-                  //       (data) => data.id !== userData.id
-                  //   ).status
-                  // }
-
                   latestMessage={chatroom.lastMessage}
                   type={"chat"}
                 />
@@ -324,28 +321,8 @@ function Users({ userData, setSelectedChatroom }) {
 
         {activeTab === "users" && (
           <>
-            {users.map((user) => (
-              <div
-                key={user.id}
-                onClick={() => {
-                  createChat(user);
-                }}
-              >
-                {user.id !== userData?.id && (
-                  <UsersCard
-                    name={user.name}
-                    avatarUrl={user.avatarUrl}
-                    email={user.email}
-                    status={user.status}
-                    latestMessage={""}
-                    type={"user"}
-                  />
-                )}
-              </div>
-            ))}
-
             {/* Search user by name */}
-            {/* <div className="mt-2">
+            <div className="mt-2">
               <span className="label-text pl-1">Search by name</span>
               <div className="relative">
                 <input
@@ -357,15 +334,15 @@ function Users({ userData, setSelectedChatroom }) {
                 />
                 <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                   <IoIosSend
-                    className="w-[20px] h-[20px] hover:cursor-pointer"
+                    className="w-[18px] h-[18px] hover:cursor-pointer"
                     onClick={searchUserByName}
                   />
                 </div>
               </div>
-            </div> */}
+            </div>
 
             {/* Search user by email */}
-            {/* <div className="mt-6">
+            <div className="mt-6">
               <span className="label-text pl-1">Search by email</span>
               <div className="relative">
                 <input
@@ -378,7 +355,7 @@ function Users({ userData, setSelectedChatroom }) {
                 />
                 <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                   <IoIosSend
-                    className="w-[20px] h-[20px] hover:cursor-pointer"
+                    className="w-[18px] h-[18px] hover:cursor-pointer"
                     onClick={searchUserByEmail}
                   />
                 </div>
@@ -388,53 +365,36 @@ function Users({ userData, setSelectedChatroom }) {
                   {emailError}
                 </span>
               )}
-            </div> */}
+            </div>
 
             {/* user found by email  */}
-            {/* {activeTab === "users" && userByEmail && (
-              // <UsersCard
-              //   name={userByEmail.name}
-              //   avatarUrl={userByEmail.avatarUrl}
-              //   type={"user"}
-              //   status={userByEmail.status}
-              //   email={userByEmail.email}
-              // />
-              <div
-                className={`mt-8 flex items-center p-4 relative hover:cursor-pointer bg-gray-800`}
-              >
-                <IoPersonAddSharp
-                  className="absolute top-[5px] right-[5px] w-[20px] h-[20px] hover:cursor-pointer text-sky-500"
-                  onClick={() => {
-                    createChat(userByEmail);
-                  }}
+            {activeTab === "users" && userByEmail && (
+              <div className="relative mt-8 flex flex-col">                
+                <UsersCard
+                  name={userByEmail.name}
+                  avatarUrl={userByEmail.avatarUrl}
+                  email={userByEmail.email}
+                  status={userByEmail.status}
+                  lastMessage={userByEmail.name}
+                  type={"user"}
+                  found={"true"}
+                  bgColor="bg-gray-700"
                 />
-                <div className="mr-4 relative flex flex-col">
-                  <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img
-                      className="w-full h-full object-cover"
-                      src={userByEmail.avatarUrl}
-                      alt="Avatar"
-                    />
-                    <span
-                      className={`absolute bottom-0 right-0 w-3 h-3 border border-2 rounded-full ${
-                        userByEmail.status === "online"
-                          ? "bg-green-500"
-                          : "bg-gray-500"
-                      }`}
-                    ></span>
-                  </div>
-                </div>
-                <div className="flex flex-col">
-                  <h2 className="text-lg font-semibold">{userByEmail.name}</h2>
-                  <p className="text-gray-500 truncate">{userByEmail.email}</p>
-                </div>
-              </div>
-            )} */}
+                <button
+                  className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
+                  onClick={() => createChat(userByEmail)}
+                >
+                  <IoPersonAddSharp
+                    className="w-[20px] h-[20px] text-white"
+                  />
+                </button>
+              </div>              
+            )}
           </>
         )}
       </div>
 
-      {/* bottom */}
+      {/* bottom menu */}
       <div className="users-bottom h-[72px] w-[300px] flex p-4 fixed bg-black bottom-0">
         <div
           className="relative flex items-center hover:cursor-pointer"

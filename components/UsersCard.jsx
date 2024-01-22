@@ -1,10 +1,19 @@
 "use client";
 
-function UsersCard({ name, avatarUrl, email, lastMessage, status, type
+function UsersCard({
+  name,
+  avatarUrl,
+  email,
+  lastMessage,
+  status,
+  type,
+  found,
+  createChat,
+  bgColor
 }) {
   return (
     <div
-      className={`flex items-center p-4 relative hover:cursor-pointer hover:bg-gray-800`}
+      className={`flex items-center p-4 relative ${bgColor ? bgColor : ''}`}
     >
       {/* Avatar on the left */}
       <div className="flex-shrink-0 mr-4 relative">
@@ -14,7 +23,11 @@ function UsersCard({ name, avatarUrl, email, lastMessage, status, type
             src={avatarUrl}
             alt="Avatar"
           />
-          <span className={`absolute bottom-0 right-0 w-3 h-3 border border-2 rounded-full ${status === "online" ? 'bg-green-500' : 'bg-gray-500'}`}></span>
+          <span
+            className={`absolute bottom-0 right-0 w-3 h-3 border border-2 rounded-full ${
+              status === "online" ? "bg-green-500" : "bg-gray-500"
+            }`}
+          ></span>
         </div>
       </div>
 
@@ -22,7 +35,7 @@ function UsersCard({ name, avatarUrl, email, lastMessage, status, type
         /* Name, latest message, and time on the right */
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">{name}</h2>
+            <h2 className="text-lg font-semibold truncate">{name}</h2>
           </div>
           <p className="text-gray-500 truncate">{lastMessage}</p>
         </div>
@@ -32,7 +45,7 @@ function UsersCard({ name, avatarUrl, email, lastMessage, status, type
         /* Name */
         <div className="flex-1">
           <div className="flex flex-col">
-            <h2 className="text-lg font-semibold">{name}</h2>
+            <h2 className="text-lg font-semibold truncate">{name}</h2>
             {/* <p className="text-gray-500 text-sm truncate">{email}</p> */}
           </div>
         </div>

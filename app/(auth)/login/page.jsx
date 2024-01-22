@@ -47,8 +47,7 @@ function page() {
         );
         const user = userCredential.user;
         if (user) {
-          // const loginUserRef = doc(firestore, "users", user.email);
-          const loginUserRef = doc(firestore, "users", user.uid)
+          const loginUserRef = doc(firestore, "users", user.email);
           await updateDoc(loginUserRef, { status: "online" });
           console.log("You are online");
 

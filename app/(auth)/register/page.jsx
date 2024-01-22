@@ -62,8 +62,7 @@ function page() {
         );
         const user = userCredential.user
 
-        // const docRef = doc(firestore, "users", email);
-        const docRef = doc(firestore, "users", user.uid);
+        const docRef = doc(firestore, "users", email);
         await setDoc(docRef, {
           id: user.uid,
           name,
@@ -84,7 +83,7 @@ function page() {
     }
     setLoading(false);
   };
-  console.log(avatarUrl);
+  // console.log(avatarUrl);
   return (
     <div className="flex justify-center items-center h-screen font-primary p-10 m-2">
       {/*form*/}

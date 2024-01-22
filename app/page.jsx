@@ -42,7 +42,7 @@ function page() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const docRef = doc(firestore, "users", user.uid);
+        const docRef = doc(firestore, "users", user.email);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           // const data = { id: docSnap.id, ...docSnap.data() };
@@ -64,14 +64,10 @@ function page() {
 
   return (
     <div className="flex h-screen oveflow-hidden">
-      {/* <div className={`g-gray-900 w-[300px] ${selectedChatroom === null ? 'w-full' : 'w-[300px]'}`}> */}
-      {/* <div className={`g-gray-900 min-[800px]:w-[300px]`}> */}
       <div className={`bg-gray-900 w-[300px]`}>
-        {/* <div className={`g-gray-900 w-3/12`}> */}
         <Users userData={user} setSelectedChatroom={setSelectedChatroom} />
       </div>
-
-      {/* <div className={`flex-grow min-[800px]:w-9/12`}> */}
+      
       <div className={`flex-grow w-9/12`}>
         {selectedChatroom ? (
           <ChatRoom selectedChatroom={selectedChatroom} />
