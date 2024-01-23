@@ -19,25 +19,8 @@ import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 function page() {
   const [user, setUser] = useState(null);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
-  // const [windowSize, setWindowSize] = useState([
-  //   window.innerWidth,
-  //   window.innerHeight,
-  // ]);
 
   const router = useRouter();
-
-  // useEffect(() => {
-  //   const handleWindowResize = () => {
-  //     setWindowSize([window.innerWidth, window.innerHeight]);
-  //     console.log("window size: ", windowSize[0], windowSize[1]);
-  //   };
-
-  //   window.addEventListener("resize", handleWindowResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleWindowResize);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

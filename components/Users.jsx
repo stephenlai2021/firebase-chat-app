@@ -28,8 +28,6 @@ import UsersCard from "./UsersCard";
 
 /* 3rd-party libraries */
 import { toast } from "react-hot-toast";
-import { AiOutlineLogout } from "react-icons/ai";
-import { FaCircleUser } from "react-icons/fa6";
 import { IoMdChatboxes } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
@@ -45,6 +43,7 @@ function Users({ userData, setSelectedChatroom }) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userByEmail, setUserByEmail] = useState("");
+  const [usersByName, setUsersByName] = useState(null);
   const [emailError, setEmailError] = useState("");
 
   const router = useRouter();
@@ -66,9 +65,10 @@ function Users({ userData, setSelectedChatroom }) {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
       users.push(doc.data());
-      setUserName("");
+      // setUserName("");
     });
-    console.log("users: ", users);
+    setUsersByName(users);
+    console.log("users: ", usersByName);
   };
 
   /* 依電郵信箱搜尋用戶 */
@@ -78,17 +78,25 @@ function Users({ userData, setSelectedChatroom }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userEmail)) {
       setEmailError("Invalid Email");
-      return
+      return;
     }
 
+    // 在 users 收集搜尋符合 email 的用戶
     const docRef = doc(firestore, "users", userEmail);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       setUserByEmail(docSnap.data());
     } else {
       console.log("The email does not exist!");
-      toast('The email does not exist!', {
-        icon: '⚠️'
+      toast("The email does not exist!", {
+        icon: "⚠️",
+      });
+    }
+
+    if (userEmail == userData.email) {
+      console.log("This is you!");
+      toast("This is you!", {
+        icon: "😀",
       });
     }
   };
@@ -118,7 +126,6 @@ function Users({ userData, setSelectedChatroom }) {
     const usersRef = collection(firestore, "users");
     const unsubscribe = onSnapshot(usersRef, (snapshot) => {
       const users = [];
-      // snapshot.forEach((doc) => users.push({id: doc.id, ...doc.data()}));
       snapshot.forEach((doc) => users.push(doc.data()));
       setUsers(users);
       console.log("users: ", users);
@@ -146,22 +153,19 @@ function Users({ userData, setSelectedChatroom }) {
     return () => unsubscribeChatrooms();
   }, [userData]);
 
-  /* 把登出用戶狀態設置為下線 */
+  /* 把登陸用戶狀態設置為 "offline" */
   const setUserStatusOffline = async () => {
+    /* 把 firestore 的 users 收集的登陸用戶狀態設置為 "offline" */
     const loginUserRef = doc(firestore, "users", userData.email);
-
-    // update login user status in users collection
     await updateDoc(loginUserRef, { status: "offline" });
 
-    // update login user status in chatrooms collection
+    /* 把 firestore 的 chatrooms 收集的登陸用戶狀態設置為 "offline" */
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
     );
     const querySnapshot = await getDocs(chatroomsQuery);
     querySnapshot.forEach(async (document) => {
-      console.log(document.id, " => ", document.data());
-
       await updateDoc(doc(firestore, "chatrooms", document.id), {
         [`usersData.${userData.id}.status`]: "offline",
       });
@@ -171,7 +175,8 @@ function Users({ userData, setSelectedChatroom }) {
   /* 建立聊天室 */
   const createChat = async (user) => {
     setUser(user);
-    // Check if a chatroom already exists for these users
+
+    // 檢查聊天室是否存在
     const existingChatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "in", [
@@ -184,26 +189,15 @@ function Users({ userData, setSelectedChatroom }) {
       const existingChatroomsSnapshot = await getDocs(existingChatroomsQuery);
 
       if (existingChatroomsSnapshot.docs.length > 0) {
-        console.log("Chatroom already exists for this user.");
-        toast.error("Chatroom already exists for this user.");
+        console.log(`${user.name} is already in your chatroom`);
+        toast(`${user.name} is already in your chatroom`, { icon: "😎"});    
         return;
       }
 
-      // Chatroom doesn't exist, proceed to create a new one
-      // userData: login user data
-      // user: user data
-
-      /* 
-        usersData = {
-          asdfadfadf: {},
-          234erterts: {}
-        }
-      */
       const usersData = {
         [userData.id]: userData,
         [user.id]: user,
       };
-      // const usersData = [userData, user];
 
       const chatroomData = {
         users: [userData.id, user.id],
@@ -212,11 +206,7 @@ function Users({ userData, setSelectedChatroom }) {
         lastMessage: null,
       };
 
-      const chatroomRef = await addDoc(
-        collection(firestore, "chatrooms"),
-        chatroomData
-      );
-      // console.log("Chatroom created with ID:", chatroomRef.id);
+      await addDoc(collection(firestore, "chatrooms"), chatroomData);
       setActiveTab("chatrooms");
       setUserByEmail("");
     } catch (error) {
@@ -230,8 +220,7 @@ function Users({ userData, setSelectedChatroom }) {
       id: chatroom.id,
       myData: userData,
       otherData:
-        // chatroom.usersData[chatroom.usersData.find((id) => id !== userData.id)],
-        chatroom.usersData.find((user) => user.email !== userData.email),
+        chatroom.usersData[chatroom.usersData.find((id) => id !== userData.id)],
     };
     setSelectedChatroom(data);
     console.log("openChat: ", data);
@@ -283,6 +272,7 @@ function Users({ userData, setSelectedChatroom }) {
 
       {/* body */}
       <div className="p-2">
+        {/* chatrooms section */}
         {activeTab === "chatrooms" && (
           <>
             {userChatrooms.map((chatroom) => (
@@ -321,6 +311,7 @@ function Users({ userData, setSelectedChatroom }) {
           </>
         )}
 
+        {/* users section */}
         {activeTab === "users" && (
           <>
             {/* Search user by name */}
@@ -371,7 +362,7 @@ function Users({ userData, setSelectedChatroom }) {
 
             {/* user found by email  */}
             {activeTab === "users" && userByEmail && (
-              <div className="relative mt-8 flex flex-col">                
+              <div className="relative mt-8 flex flex-col">
                 <UsersCard
                   name={userByEmail.name}
                   avatarUrl={userByEmail.avatarUrl}
@@ -382,15 +373,15 @@ function Users({ userData, setSelectedChatroom }) {
                   found={"true"}
                   bgColor="bg-gray-800"
                 />
-                <button
-                  className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
-                  onClick={() => createChat(userByEmail)}
-                >
-                  <IoPersonAddSharp
-                    className="w-[20px] h-[20px] text-white"
-                  />
-                </button>
-              </div>              
+                {userEmail !== userData.email && (
+                  <button
+                    className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
+                    onClick={() => createChat(userByEmail)}
+                  >
+                    <IoPersonAddSharp className="w-[20px] h-[20px] text-white" />
+                  </button>
+                )}
+              </div>
             )}
           </>
         )}

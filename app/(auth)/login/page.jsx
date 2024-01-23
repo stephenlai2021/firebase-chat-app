@@ -47,11 +47,12 @@ function page() {
         );
         const user = userCredential.user;
         if (user) {
+          /* 把 firestore 的 users 收集的登陸用戶狀態設置為 "online" */
           const loginUserRef = doc(firestore, "users", user.email);
           await updateDoc(loginUserRef, { status: "online" });
           console.log("You are online");
 
-          // update login user status in chatrooms collection
+          /* 把 firestore 的 chatrooms 收集的登陸用戶狀態設置為 "online" */
           const chatroomsQuery = query(
             collection(firestore, "chatrooms"),
             where("users", "array-contains", user.uid)
