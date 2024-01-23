@@ -5,7 +5,7 @@ import { useState } from "react";
 /* firebase */
 import { auth, firestore } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, query, collection, getDocs, where } from "firebase/firestore";
 
 /* next */
 import { useRouter } from "next/navigation";
@@ -50,6 +50,20 @@ function page() {
           const loginUserRef = doc(firestore, "users", user.email);
           await updateDoc(loginUserRef, { status: "online" });
           console.log("You are online");
+
+          // update login user status in chatrooms collection
+          const chatroomsQuery = query(
+            collection(firestore, "chatrooms"),
+            where("users", "array-contains", user.uid)
+          );
+          const querySnapshot = await getDocs(chatroomsQuery);
+          querySnapshot.forEach(async (document) => {
+            console.log(document.id, " => ", document.data());
+
+            await updateDoc(doc(firestore, "chatrooms", document.id), {
+              [`usersData.${user.uid}.status`]: "online",
+            });
+          });
 
           router.push("/");
         }

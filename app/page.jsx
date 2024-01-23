@@ -45,10 +45,9 @@ function page() {
         const docRef = doc(firestore, "users", user.email);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          // const data = { id: docSnap.id, ...docSnap.data() };
           const data = docSnap.data();
           setUser(data);
-          console.log("login user: ", data);
+          // console.log("login user: ", data);
         } else {
           console.log("No such document!");
         }

@@ -150,10 +150,10 @@ function Users({ userData, setSelectedChatroom }) {
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.email);
 
-    // update login user status
+    // update login user status in users collection
     await updateDoc(loginUserRef, { status: "offline" });
 
-    // Get documents contains login user
+    // update login user status in chatrooms collection
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
@@ -251,6 +251,7 @@ function Users({ userData, setSelectedChatroom }) {
 
   return (
     <>
+      {/* top menu */}
       <div className="p-2">
         <ul className="menu menu-horizontal bg-base-200 rounded-box w-full">
           <li
@@ -280,6 +281,7 @@ function Users({ userData, setSelectedChatroom }) {
         </ul>
       </div>
 
+      {/* body */}
       <div className="p-2">
         {activeTab === "chatrooms" && (
           <>
@@ -378,7 +380,7 @@ function Users({ userData, setSelectedChatroom }) {
                   lastMessage={userByEmail.name}
                   type={"user"}
                   found={"true"}
-                  bgColor="bg-gray-700"
+                  bgColor="bg-gray-800"
                 />
                 <button
                   className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
