@@ -17,7 +17,6 @@ import { firestore } from "@/lib/firebase";
 function ChatRoom({ selectedChatroom }) {
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
-  console.log("other: ", other);
   const chatRoomId = selectedChatroom?.id;
 
   const messagesContainerRef = useRef(null);
@@ -27,11 +26,10 @@ function ChatRoom({ selectedChatroom }) {
   const [image, setImage] = useState(null);
   const [otherUser, setOtherUser] = useState(null);
 
-  /* get other user data */
+  /* get other user data in realtime */
   useEffect(() => {
     const unsubOtherUser = onSnapshot(
       doc(firestore, "users", other.email),
-      // doc(firestore, "users", selectedChatroom?.otherData.email),
       (doc) => {
         setOtherUser(doc.data())
         console.log('other user: ', otherUser)
@@ -138,7 +136,7 @@ function ChatRoom({ selectedChatroom }) {
             key={message.id}
             message={message}
             me={me}
-            other={other}
+            other={otherUser}
           />
         ))}
       </div>
