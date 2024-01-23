@@ -17,13 +17,28 @@ import { firestore } from "@/lib/firebase";
 function ChatRoom({ selectedChatroom }) {
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
+  console.log("other: ", other);
   const chatRoomId = selectedChatroom?.id;
-  // console.log("other: ", other);
+
+  const messagesContainerRef = useRef(null);
 
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
-  const messagesContainerRef = useRef(null);
+  const [otherUser, setOtherUser] = useState(null);
+
+  /* get other user data */
+  useEffect(() => {
+    const unsubOtherUser = onSnapshot(
+      doc(firestore, "users", other.email),
+      // doc(firestore, "users", selectedChatroom?.otherData.email),
+      (doc) => {
+        setOtherUser(doc.data())
+        console.log('other user: ', otherUser)
+      }
+    );
+    return () => unsubOtherUser();
+  }, [other]);
 
   // Scroll to the bottom when messages change
   useEffect(() => {
@@ -33,7 +48,7 @@ function ChatRoom({ selectedChatroom }) {
     }
   }, [messages]);
 
-  //get messages
+  /* get messages */
   useEffect(() => {
     if (!chatRoomId) return;
     const unsubscribe = onSnapshot(
@@ -47,7 +62,6 @@ function ChatRoom({ selectedChatroom }) {
           id: doc.id,
           ...doc.data(),
         }));
-        //console.log(messages);
         setMessages(messages);
       }
     );
@@ -55,12 +69,16 @@ function ChatRoom({ selectedChatroom }) {
     return unsubscribe;
   }, [chatRoomId]);
 
-  //put messages in db
+  /* put messages in db */
   const sendMessage = async () => {
     // Check if the message is not empty
     if (message == "" && image == "") return;
-    
-    if ((message == "" && image !== "") || (message !== "" && image == "") || (message !== "" && image !== "")) {
+
+    if (
+      (message == "" && image !== "") ||
+      (message !== "" && image == "") ||
+      (message !== "" && image !== "")
+    ) {
       try {
         // Add a new message to the Firestore collection
         const newMessage = {
@@ -70,7 +88,7 @@ function ChatRoom({ selectedChatroom }) {
           time: serverTimestamp(),
           image: image,
         };
-        
+
         const messagesCollection = collection(firestore, "messages");
         await addDoc(messagesCollection, newMessage);
         setMessage("");
@@ -97,17 +115,17 @@ function ChatRoom({ selectedChatroom }) {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Selected user info at the top */}
+      {/* top menu */}
       <div className="bg-gray-900 h-[72px] flex items-center">
         <div className="relative">
-          <img src={other.avatarUrl} className="w-9 h-9 ml-2" alt="" />
+          <img src={otherUser?.avatarUrl} className="w-9 h-9 ml-2" alt="" />
           <span
             className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
-              other.status === "online" ? "bg-green-500" : "bg-gray-500"
+              otherUser?.status === "online" ? "bg-green-500" : "bg-gray-500"
             }`}
           ></span>
         </div>
-        <div className="h-8 flex items-end ml-2">{other.name}</div>
+        <div className="h-8 flex items-end ml-2">{otherUser?.name}</div>
       </div>
 
       {/* Messages container with overflow and scroll */}

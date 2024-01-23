@@ -54,7 +54,6 @@ function page() {
         {selectedChatroom ? (
           <ChatRoom selectedChatroom={selectedChatroom} />
         ) : (
-          // selectedChatroom === null
           <div className="flex items-center justify-center h-full">
             <div className="text-2xl text-gray-400">Select a chatroom</div>
           </div>

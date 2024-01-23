@@ -10,7 +10,6 @@ import {
   onSnapshot,
   query,
   addDoc,
-  setDoc,
   updateDoc,
   serverTimestamp,
   doc,
@@ -34,8 +33,7 @@ import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 
 function Users({ userData, setSelectedChatroom }) {
-  // console.log("userData: ", userData);
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("chatrooms");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
   const [user, setUser] = useState("");
@@ -113,6 +111,11 @@ function Users({ userData, setSelectedChatroom }) {
     if (event.key === "Enter") searchUserByEmail();
   };
 
+  /* 如果沒有找不到聊天室, 把用戶導向搜尋畫面 */
+  // useEffect(() => {
+  //   if (userChatrooms.length == 0) setActiveTab('users')
+  // }, [])
+
   /* 切換到 chatrooms tab 時清除 Email 表格內容及找到的用戶資料 */
   useEffect(() => {
     if (activeTab == "chatrooms") {
@@ -155,11 +158,11 @@ function Users({ userData, setSelectedChatroom }) {
 
   /* 把登陸用戶狀態設置為 "offline" */
   const setUserStatusOffline = async () => {
-    /* 把 firestore 的 users 收集的登陸用戶狀態設置為 "offline" */
+    /* 把 users 收集的登陸用戶狀態設置為 "offline" */
     const loginUserRef = doc(firestore, "users", userData.email);
     await updateDoc(loginUserRef, { status: "offline" });
 
-    /* 把 firestore 的 chatrooms 收集的登陸用戶狀態設置為 "offline" */
+    /* 把 chatrooms 收集的登陸用戶狀態設置為 "offline" */
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
@@ -248,8 +251,9 @@ function Users({ userData, setSelectedChatroom }) {
             onClick={() => handleTabClick("users")}
           >
             <a className="tooltip tooltip-bottom" data-tip="Search">
-              <IoSearchSharp
-                className={`w-[22px] h-[22px] hover:cursor-pointer ${
+              {/* <IoSearchSharp */}
+              <IoPersonAddSharp
+                className={`w-[20px] h-[20px] hover:cursor-pointer ${
                   activeTab === "users" ? "text-white" : "text-gray-700"
                 }`}
               />
@@ -304,6 +308,8 @@ function Users({ userData, setSelectedChatroom }) {
                     ].status
                   }
                   lastMessage={chatroom.lastMessage}
+                  timeStamp={chatroom.timestamp}
+                  loginUser={userData}
                   type={"chat"}
                 />
               </div>
@@ -414,6 +420,7 @@ function Users({ userData, setSelectedChatroom }) {
             ""
           )}
         </div>
+        {/* <span className="flex items-end ml-1 text-[12px]">{userData.name}</span> */}
         <span className="flex items-end ml-1 text-[12px]">Me</span>
       </div>
     </>

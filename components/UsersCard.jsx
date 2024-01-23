@@ -1,26 +1,42 @@
 "use client";
 
+import moment from "moment";
+
 function UsersCard({
   name,
   avatarUrl,
   email,
   lastMessage,
+  timeStamp,
   status,
-  type,
   found,
-  createChat,
-  bgColor
+  type,
+  loginUser,
+  bgColor,
 }) {
+  /* 時間格式 */
+  const formatTimeAgo = (timestamp) => {
+    const date = timestamp?.toDate();
+    const momentDate = moment(date);
+    return momentDate.fromNow();
+  };
+
   return (
     <div
-      className={`flex items-center rounded p-4 relative ${bgColor ? bgColor : ''}`}
+      className={`${found == 'true' ? '' : 'cursor-pointer'} flex items-center justify-between rounded p-4 relative ${
+        bgColor ? bgColor : ""
+      }`}
     >
       {/* Avatar on the left */}
       <div className="flex-shrink-0 mr-4 relative">
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
             className="w-full h-full object-cover"
-            src={avatarUrl ? avatarUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ&usqp=CAU'}
+            src={
+              avatarUrl
+                ? avatarUrl
+                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ&usqp=CAU"
+            }
             alt="Avatar"
           />
           <span
@@ -34,10 +50,10 @@ function UsersCard({
       {type == "chat" && (
         /* Name, latest message, and time on the right */
         <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold truncate">{name}</h2>
-          </div>
-          <p className="text-gray-500 truncate text-sm">{lastMessage}</p>
+          <h2 className="text-lg font-semibold truncate">{name}</h2>
+          <p className="text-gray-500 truncate text-sm">
+            {lastMessage}
+          </p>
         </div>
       )}
 
@@ -50,6 +66,14 @@ function UsersCard({
           </div>
         </div>
       )}
+
+      {/* {lastMessage && (
+        <div className="h-[48px]">
+          <span className="truncate text-xs text-gray-500">
+            {formatTimeAgo(timeStamp)}
+          </span>
+        </div>
+      )} */}
     </div>
   );
 }
