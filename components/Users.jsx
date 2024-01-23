@@ -220,7 +220,7 @@ function Users({ userData, setSelectedChatroom }) {
       id: chatroom.id,
       myData: userData,
       otherData:
-        chatroom.usersData[chatroom.usersData.find((id) => id !== userData.id)],
+        chatroom.usersData[chatroom.users.find((id) => id !== userData.id)],
     };
     setSelectedChatroom(data);
     console.log("openChat: ", data);
@@ -303,7 +303,7 @@ function Users({ userData, setSelectedChatroom }) {
                       chatroom.users.find((id) => id !== userData?.id)
                     ].status
                   }
-                  latestMessage={chatroom.lastMessage}
+                  lastMessage={chatroom.lastMessage}
                   type={"chat"}
                 />
               </div>

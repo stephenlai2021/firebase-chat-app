@@ -37,7 +37,7 @@ function UsersCard({
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold truncate">{name}</h2>
           </div>
-          <p className="text-gray-500 truncate">{lastMessage}</p>
+          <p className="text-gray-500 truncate text-sm">{lastMessage}</p>
         </div>
       )}
 
