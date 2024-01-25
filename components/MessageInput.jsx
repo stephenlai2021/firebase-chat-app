@@ -92,21 +92,23 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
   return (
     <div className="relative bg-gray-900 relative flex items-center p-4">
+      {/* file input icon */}
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
         className={`${
           image ? "text-blue-500" : "text-gray-500"
-        } mr-2 cursor-pointer`}
+        } mr-3 cursor-pointer`}
       />
 
       {/* Emoji Picker Button */}
       <button
-        className="mr-2"
+        className="mr-3"
         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
       >
         😊
       </button>
 
+      {/* text input field */}
       <input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -116,21 +118,14 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         className={`rounded bg-gray-700 flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
       />
 
-      {/* {image && (
-        <div
-          className="absolute right-[30px] z-200 top-[8px] hover:cursor-pointer"
-          onClick={clearImagePreview}
-        >
-          <IoIosCloseCircleOutline />
-        </div>
-      )} */}
+      {/* small image preview */}
       <div className="absolute right-[40px]">
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
 
       <FaPaperPlane
         onClick={() => sendMessage()}
-        className="text-blue-500 cursor-pointer ml-2"
+        className="text-blue-500 cursor-pointer ml-3"
       />
 
       {showEmojiPicker && (

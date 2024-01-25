@@ -116,7 +116,7 @@ function ChatRoom({ selectedChatroom }) {
       {/* top menu */}
       <div className="bg-gray-900 h-[72px] flex items-center">
         <div className="relative">
-          <img src={otherUser?.avatarUrl} className="w-9 h-9 ml-2" alt="" />
+          <img src={otherUser?.avatarUrl} className="w-9 h-9 ml-2 rounded-full" alt="" />
           <span
             className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
               otherUser?.status === "online" ? "bg-green-500" : "bg-gray-500"

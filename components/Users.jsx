@@ -65,7 +65,9 @@ function Users({ userData, setSelectedChatroom }) {
       // doc.data() is never undefined for query doc snapshots
       users.push(doc.data());
     });
+
     setUsersByName(users);
+    setUserByEmail("")
   };
 
   /* 依電郵信箱搜尋用戶 */
@@ -96,6 +98,8 @@ function Users({ userData, setSelectedChatroom }) {
         icon: "😀",
       });
     }
+
+    setUsersByName("")
   };
 
   /* 處理 Name 表格 */
@@ -337,7 +341,6 @@ function Users({ userData, setSelectedChatroom }) {
                 <input
                   type="text"
                   value={userName}
-                  // onChange={(e) => setUserName(e.target.value)}
                   onChange={(e) => handleName(e.target.value)}
                   onKeyDown={handleUserNameSubmit}
                   placeholder="Enter name"
