@@ -1,16 +1,7 @@
-/* react */
-import { useEffect, useState } from "react";
-
-/* firebase */
-import { doc, onSnapshot } from "firebase/firestore";
-import { firestore } from "@/lib/firebase";
-
 /* 3rd-party library */
 import moment from "moment";
 
 function MessageCard({ message, me, other }) {
-  const [otherUser, setOtherUser] = useState(null);
-
   const isMessageFromMe = message.sender === me.id;
 
   const formatTimeAgo = (timestamp) => {
@@ -18,18 +9,6 @@ function MessageCard({ message, me, other }) {
     const momentDate = moment(date);
     return momentDate.fromNow();
   };
-
-  /* get other user data */
-  // useEffect(() => {
-  //   const unsubOtherUser = onSnapshot(
-  //     doc(firestore, "users", other.email),
-  //     (doc) => {
-  //       setOtherUser(doc.data());
-  //       console.log("other user: ", otherUser);
-  //     }
-  //   );
-  //   return () => unsubOtherUser();
-  // }, [other]);
 
   return (
     <div

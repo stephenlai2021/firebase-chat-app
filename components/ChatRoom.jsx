@@ -32,7 +32,7 @@ function ChatRoom({ selectedChatroom }) {
       doc(firestore, "users", other.email),
       (doc) => {
         setOtherUser(doc.data())
-        console.log('other user: ', otherUser)
+        // console.log('other user: ', otherUser)
       }
     );
     return () => unsubOtherUser();

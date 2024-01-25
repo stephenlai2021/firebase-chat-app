@@ -39,9 +39,10 @@ function Users({ userData, setSelectedChatroom }) {
   const [user, setUser] = useState("");
   const [menu, setMenu] = useState(false);
   const [userName, setUserName] = useState("");
+  const [userByName, setUserByName] = useState("");
+  const [usersByName, setUsersByName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userByEmail, setUserByEmail] = useState("");
-  const [usersByName, setUsersByName] = useState(null);
   const [emailError, setEmailError] = useState("");
 
   const router = useRouter();
@@ -52,6 +53,7 @@ function Users({ userData, setSelectedChatroom }) {
   const searchUserByName = async () => {
     if (!userName) return;
 
+    console.log("user name: ", userName);
     const q = query(
       collection(firestore, "users"),
       where("name", "==", userName)
@@ -61,12 +63,9 @@ function Users({ userData, setSelectedChatroom }) {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
       users.push(doc.data());
-      // setUserName("");
     });
     setUsersByName(users);
-    console.log("users: ", usersByName);
   };
 
   /* 依電郵信箱搜尋用戶 */
@@ -99,8 +98,17 @@ function Users({ userData, setSelectedChatroom }) {
     }
   };
 
+  /* 處理 Name 表格 */
+  const handleName = (val) => {
+    setUserByEmail("");
+    setEmailError("");
+    setUserName(val);
+    setUsersByName("");
+  };
+
   /* 處理 Email 表格 */
   const handleEmail = (val) => {
+    setUsersByName("");
     setUserEmail(val);
     setUserByEmail("");
     setEmailError("");
@@ -111,14 +119,16 @@ function Users({ userData, setSelectedChatroom }) {
     if (event.key === "Enter") searchUserByEmail();
   };
 
-  /* 如果沒有找不到聊天室, 把用戶導向搜尋畫面 */
-  // useEffect(() => {
-  //   if (userChatrooms.length == 0) setActiveTab('users')
-  // }, [])
+  /* 用戶按 Enter 鍵執行 searchUserByName 函式 */
+  const handleUserNameSubmit = (event) => {
+    if (event.key === "Enter") searchUserByName();
+  };
 
   /* 切換到 chatrooms tab 時清除 Email 表格內容及找到的用戶資料 */
   useEffect(() => {
     if (activeTab == "chatrooms") {
+      setUserName("");
+      setUsersByName("");
       setUserEmail("");
       setUserByEmail("");
     }
@@ -192,8 +202,8 @@ function Users({ userData, setSelectedChatroom }) {
       const existingChatroomsSnapshot = await getDocs(existingChatroomsQuery);
 
       if (existingChatroomsSnapshot.docs.length > 0) {
-        console.log(`${user.name} is already in your chatroom`);
-        toast(`${user.name} is already in your chatroom`, { icon: "😎"});    
+        console.log(`chatroom for ${user.name} is already existed`);
+        toast(`chatroom for ${user.name} is already existed`, { icon: "😎" });
         return;
       }
 
@@ -226,7 +236,7 @@ function Users({ userData, setSelectedChatroom }) {
         chatroom.usersData[chatroom.users.find((id) => id !== userData.id)],
     };
     setSelectedChatroom(data);
-    console.log("openChat: ", data);
+    // console.log("openChat: ", data);
   };
 
   /* 登出用戶並將用戶狀態設置為"offline" */
@@ -327,7 +337,9 @@ function Users({ userData, setSelectedChatroom }) {
                 <input
                   type="text"
                   value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
+                  // onChange={(e) => setUserName(e.target.value)}
+                  onChange={(e) => handleName(e.target.value)}
+                  onKeyDown={handleUserNameSubmit}
                   placeholder="Enter name"
                   className="input input-bordered input-sm w-full max-w-xs pr-[30px]"
                 />
@@ -365,6 +377,35 @@ function Users({ userData, setSelectedChatroom }) {
                 </span>
               )}
             </div>
+
+            {/* users found by name  */}
+            {activeTab === "users" && usersByName && (
+              <div className="relative mt-8 flex flex-col">
+                {usersByName &&
+                  usersByName.map((user) => (
+                    <div key={user.id} className="relative mb-2">
+                      <UsersCard
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        email={user.email}
+                        status={user.status}
+                        lastMessage={user.name}
+                        type={"user"}
+                        found={"true"}
+                        bgColor="bg-gray-800"
+                      />
+                      {user.email !== userData.email && (
+                        <button
+                          className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
+                          onClick={() => createChat(user)}
+                        >
+                          <IoPersonAddSharp className="w-[20px] h-[20px] text-white" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            )}
 
             {/* user found by email  */}
             {activeTab === "users" && userByEmail && (
