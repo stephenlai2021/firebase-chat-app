@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import MessageCard from "./MessageCard";
-import MessageInput from "./MessageInput";
+/* react */
+import { useState, useEffect, useRef } from "react";
+
+/* firebase */
 import {
   addDoc,
   collection,
@@ -14,7 +15,17 @@ import {
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 
-function ChatRoom({ selectedChatroom }) {
+/* components */
+import MessageCard from "./MessageCard";
+import MessageInput from "./MessageInput";
+import MessageSkeleton from "@/components/skeleton/MessageSkeleton";
+
+/* 3rd-party libraries */
+import { FaArrowLeft } from "react-icons/fa";
+
+function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
+  // console.log("selectedChatroom: ", selectedChatroom);
+
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
   const chatRoomId = selectedChatroom?.id;
@@ -31,8 +42,7 @@ function ChatRoom({ selectedChatroom }) {
     const unsubOtherUser = onSnapshot(
       doc(firestore, "users", other.email),
       (doc) => {
-        setOtherUser(doc.data())
-        // console.log('other user: ', otherUser)
+        setOtherUser(doc.data());
       }
     );
     return () => unsubOtherUser();
@@ -61,6 +71,7 @@ function ChatRoom({ selectedChatroom }) {
           ...doc.data(),
         }));
         setMessages(messages);
+        console.log("messages: ", messages);
       }
     );
 
@@ -111,12 +122,29 @@ function ChatRoom({ selectedChatroom }) {
     }
   };
 
+  const gotoUsersMenu = () => {
+    setSelectedChatroom(null);
+    console.log("selectedChatroom: ", selectedChatroom);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       {/* top menu */}
       <div className="bg-gray-900 h-[72px] flex items-center">
-        <div className="relative">
-          <img src={otherUser?.avatarUrl} className="w-9 h-9 ml-2 rounded-full" alt="" />
+        <div
+          className={`${
+            selectedChatroom ? "arrow-show" : "hidden"
+          } hidden ml-4 flex pt-[12px] h-9 hover:cursor-pointer`}
+          onClick={gotoUsersMenu}
+        >
+          <FaArrowLeft />
+        </div>
+        <div className="relative w-9 h-9 ml-2">
+          <img
+            src={otherUser?.avatarUrl}
+            className="w-full h-full ml- rounded-full"
+            alt=""
+          />
           <span
             className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
               otherUser?.status === "online" ? "bg-green-500" : "bg-gray-500"
@@ -137,8 +165,11 @@ function ChatRoom({ selectedChatroom }) {
             message={message}
             me={me}
             other={otherUser}
+            // selectedChatroom={selectedChatroom}
           />
         ))}
+
+        {messages.length == 0 && <MessageSkeleton />}
       </div>
 
       {/* Input box at the bottom */}

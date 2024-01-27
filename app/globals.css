@@ -89,7 +89,35 @@
 }
 
 @media (max-width: 800px) {
-  .users {
+  .users-hide {
+    width: 0;
+    display: none;
+  }
+  .users-mobile {
+    width: 100%;
+    display: block;
+  }
+  .chatroom-hide {
+    width: 0;
+    display: none;
+  }
+  .chatroom-mobile {
+    display: block;
+    width: 100%;
+  }
+  .arrow-show {
+    display: block;
+  }
+  .input-expand {
+    width: 100%;
+  }
+  .bottom-menu-expand {
+    width: 100vw;
+  }
+  .avatar-show {
+    display: block;
+  }
+  .avatar-hide {
     display: none;
   }
 }

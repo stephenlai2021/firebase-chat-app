@@ -22,6 +22,7 @@ function page() {
 
   const router = useRouter();
 
+  /* read login user */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -30,7 +31,6 @@ function page() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setUser(data);
-          // console.log("login user: ", data);
         } else {
           console.log("No such document!");
         }
@@ -46,19 +46,29 @@ function page() {
 
   return (
     <div className="flex h-screen oveflow-hidden">
-      <div className={`bg-gray-900 w-[300px]`}>
+      <div
+        className={`bg-gray-900 w-3/12 relative ${
+          selectedChatroom == null ? "users-mobile" : "users-hide"
+        }`}
+      >
         <Users userData={user} setSelectedChatroom={setSelectedChatroom} />
       </div>
-      
-      <div className={`flex-grow w-9/12`}>
-        {selectedChatroom ? (
-          <ChatRoom selectedChatroom={selectedChatroom} />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-2xl text-gray-400">Select a chatroom</div>
-          </div>
-        )}
-      </div>
+
+      {selectedChatroom && (
+        <div className={`w-9/12 ${selectedChatroom ? 'chatroom-mobile' : 'chatroom-hide'}`}>
+          <ChatRoom selectedChatroom={selectedChatroom} setSelectedChatroom={setSelectedChatroom} />
+        </div>
+      )}
+
+      {selectedChatroom == null && (
+        <div
+          className={`${
+            selectedChatroom == null ? "chatroom-hide" : ""
+          } w-9/12 flex items-center justify-center h-full chatroom-none`}
+        >
+          <div className="text-2xl text-gray-400">Select a chatroom</div>
+        </div>
+      )}
     </div>
   );
 }

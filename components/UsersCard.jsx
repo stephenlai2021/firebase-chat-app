@@ -23,7 +23,7 @@ function UsersCard({
 
   return (
     <div
-      className={`${found == 'true' ? '' : 'cursor-pointer'} flex items-center justify-between rounded p-4 relative ${
+      className={`${found == 'true' ? '' : 'hover:cursor-pointer'} hover:bg-gray-800 flex items-center justify-between rounded p-4 relative ${
         bgColor ? bgColor : ""
       }`}
     >

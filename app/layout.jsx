@@ -6,6 +6,9 @@ import { Inter } from "next/font/google";
 /* 3rd pary library */
 import { Toaster } from "react-hot-toast";
 
+/* components */
+import Users from "@/components/Users"
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,7 +20,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`{inter.className} dark`} suppressHydrationWarning={true}>
-        <Toaster position="bottom-center " />
+        <Toaster position="bottom-center" />
         {children}
       </body>
     </html>

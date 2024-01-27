@@ -31,6 +31,7 @@ import { IoMdChatboxes } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 
 function Users({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("chatrooms");
@@ -67,7 +68,7 @@ function Users({ userData, setSelectedChatroom }) {
     });
 
     setUsersByName(users);
-    setUserByEmail("")
+    setUserByEmail("");
   };
 
   /* 依電郵信箱搜尋用戶 */
@@ -99,7 +100,7 @@ function Users({ userData, setSelectedChatroom }) {
       });
     }
 
-    setUsersByName("")
+    setUsersByName("");
   };
 
   /* 處理 Name 表格 */
@@ -240,7 +241,6 @@ function Users({ userData, setSelectedChatroom }) {
         chatroom.usersData[chatroom.users.find((id) => id !== userData.id)],
     };
     setSelectedChatroom(data);
-    // console.log("openChat: ", data);
   };
 
   /* 登出用戶並將用戶狀態設置為"offline" */
@@ -264,8 +264,7 @@ function Users({ userData, setSelectedChatroom }) {
             className="w-1/2 flex justify-center items-center"
             onClick={() => handleTabClick("users")}
           >
-            <a className="tooltip tooltip-bottom" data-tip="Search">
-              {/* <IoSearchSharp */}
+            <a className="tooltip tooltip-bottom">
               <IoPersonAddSharp
                 className={`w-[20px] h-[20px] hover:cursor-pointer ${
                   activeTab === "users" ? "text-white" : "text-gray-700"
@@ -273,11 +272,12 @@ function Users({ userData, setSelectedChatroom }) {
               />
             </a>
           </li>
+
           <li
             className="w-1/2 flex justify-center items-center"
             onClick={() => handleTabClick("chatrooms")}
           >
-            <a className="tooltip tooltip-bottom" data-tip="Chatrooms">
+            <a className="tooltip tooltip-bottom">
               <IoMdChatboxes
                 className={`w-[24px] h-[24px] hover:cursor-pointer ${
                   activeTab === "chatrooms" ? "text-white" : "text-gray-700"
@@ -285,6 +285,33 @@ function Users({ userData, setSelectedChatroom }) {
               />
             </a>
           </li>
+
+          {/* <li className="w-1/3 flex justify-center items-center">
+            <div
+              className="flex items-center hover:cursor-pointer"
+              onClick={() => setMenu(!menu)}
+            >
+              <img
+                src={userData.avatarUrl}
+                width={25}
+                height={25}
+                alt="Picture of the author"
+                className="rounded-full"
+              />
+              {menu ? (
+                <ul className="absolute z-500 top-[40px] left-[30px] menu bg-base-200 max-w-56 rounded-box">
+                  <li>
+                    <a>{userData.email}</a>
+                  </li>
+                  <li>
+                    <a onClick={logoutClick}>logout</a>
+                  </li>
+                </ul>
+              ) : (
+                ""
+              )}
+            </div>
+          </li> */}
         </ul>
       </div>
 
@@ -344,7 +371,7 @@ function Users({ userData, setSelectedChatroom }) {
                   onChange={(e) => handleName(e.target.value)}
                   onKeyDown={handleUserNameSubmit}
                   placeholder="Enter name"
-                  className="input input-bordered input-sm w-full max-w-xs pr-[30px]"
+                  className="input input-bordered input- w-full max-w-x pr-[30px]"
                 />
                 <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                   <IoIosSend
@@ -365,7 +392,7 @@ function Users({ userData, setSelectedChatroom }) {
                   onChange={(e) => handleEmail(e.target.value)}
                   onKeyDown={handleUserEmailSubmit}
                   placeholder="Enter email"
-                  className="input input-bordered input-sm w-full max-w-xs pr-[30px]"
+                  className="input input-bordered input- w-full max-w-x pr-[30px]"
                 />
                 <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                   <IoIosSend
@@ -438,24 +465,24 @@ function Users({ userData, setSelectedChatroom }) {
       </div>
 
       {/* bottom menu */}
-      <div className="users-bottom h-[72px] w-[300px] flex p-4 fixed bg-black bottom-0">
+      <div className="h-[72px] w-3/12 bottom-menu-expand flex pl-4 fixed bg-gray-800 bottom-0">
         <div
-          className="relative flex items-center hover:cursor-pointer"
+          className="flex items-center hover:cursor-pointer"
           onClick={() => setMenu(!menu)}
         >
-          <img
+          {/* <img
             src={userData.avatarUrl}
-            width={25}
-            height={25}
+            width={30}
+            height={30}
             alt="Picture of the author"
-            className="rounded-full"
-          />
-          {/* menu */}
+            className="rounded-full "
+          /> */}
+          <IoSettingsOutline className="w-[20px] h-[20px]" />
           {menu ? (
-            <ul className="absolute top-[-80px] left-[24px] menu bg-base-200 max-w-56 rounded-box">
-              <li>
+            <ul className="absolute top-[50%] translate-y-[-50%] left-[60px] menu bg-base-200 max-w-56 rounded-box">
+              {/* <li>
                 <a>{userData.email}</a>
-              </li>
+              </li> */}
               <li>
                 <a onClick={logoutClick}>logout</a>
               </li>
@@ -464,8 +491,7 @@ function Users({ userData, setSelectedChatroom }) {
             ""
           )}
         </div>
-        {/* <span className="flex items-end ml-1 text-[12px]">{userData.name}</span> */}
-        <span className="flex items-end ml-1 text-[12px]">Me</span>
+        {/* <span className="flex items-end ml-1 text-[12px]">Me</span> */}
       </div>
     </>
   );

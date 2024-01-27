@@ -18,22 +18,22 @@ function MessageCard({ message, me, other }) {
       }`}
     >
       {/* Avatar on the left or right based on the sender */}
-      {/* <div className={`w-10 h-10 ${isMessageFromMe ? "ml-2 mr-2" : "mr-2"}`}>
+      <div className={`${isMessageFromMe ? "ml-2 mr-2" : "mr-2"}`}>
         {isMessageFromMe && (
           <img
-            className="w-full h-full object-cover rounded-full"
+            className="avatar-show hidden w-10 h-10 object-cover rounded-full"
             src={me.avatarUrl}
             alt="Avatar"
           />
         )}
         {!isMessageFromMe && (
           <img
-            className="w-full h-full object-cover rounded-full"
+            className="avatar-show hidden w-10 h-10 object-cover rounded-full"
             src={other?.avatarUrl}
             alt="Avatar"
           />
         )}
-      </div> */}
+      </div>
 
       {/* Message bubble on the right or left based on the sender */}
       <div

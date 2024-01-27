@@ -12,10 +12,6 @@ export default function UsersSkeleton() {
       </div>
       <div className="flex p-4 absolute bottom-0">
         <Skeleton className="w-[30px] h-[30px] rounded-full" />
-        {/* <div className="border border-2 flex items-center"> */}
-        {/* <div className="flex items-center">
-          <Skeleton className="w-[20px] h-[20px] rounded absolute left-[250px]" />
-        </div> */}
       </div>
     </div>
   );
