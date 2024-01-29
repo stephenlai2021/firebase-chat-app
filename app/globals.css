@@ -116,8 +116,10 @@
   }
   .avatar-show {
     display: block;
+    
   }
   .avatar-hide {
     display: none;
+    width: 0;
   }
 }

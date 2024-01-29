@@ -18,10 +18,9 @@ function MessageCard({ message, me, other }) {
       }`}
     >
       {isMessageFromMe && (
-        <div className="chat-image avatar">
+        <div className="chat-image avatar avatar-show hidden">
           <div className="w-10 rounded-full">
             <img
-              className="avatar-show hidden"
               src={me.avatarUrl}
               alt="Avatar"
             />
@@ -29,10 +28,9 @@ function MessageCard({ message, me, other }) {
         </div>
       )}
       {!isMessageFromMe && (
-        <div className="chat-image avatar">
+        <div className="chat-image avatar avatar-show hidden">
           <div className="w-10 rounded-full">
             <img
-              className="avatar-show hidden"
               src={other?.avatarUrl}
               alt="Avatar"
             />
