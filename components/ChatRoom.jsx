@@ -24,8 +24,6 @@ import MessageSkeleton from "@/components/skeleton/MessageSkeleton";
 import { FaArrowLeft } from "react-icons/fa";
 
 function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
-  // console.log("selectedChatroom: ", selectedChatroom);
-
   const me = selectedChatroom?.myData;
   const other = selectedChatroom?.otherData;
   const chatRoomId = selectedChatroom?.id;
@@ -165,7 +163,6 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             message={message}
             me={me}
             other={otherUser}
-            // selectedChatroom={selectedChatroom}
           />
         ))}
 

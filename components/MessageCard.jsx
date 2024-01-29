@@ -13,34 +13,37 @@ function MessageCard({ message, me, other }) {
   return (
     <div
       key={message.id}
-      className={`flex mb-4 ${
-        isMessageFromMe ? "justify-end" : "justify-start"
+      className={` ${
+        isMessageFromMe ? "chat chat-end" : "chat chat-start"
       }`}
     >
-      {/* Avatar on the left or right based on the sender */}
-      <div className={`${isMessageFromMe ? "ml-2 mr-2" : "mr-2"}`}>
-        {isMessageFromMe && (
-          <img
-            className="avatar-show hidden w-10 h-10 object-cover rounded-full"
-            src={me.avatarUrl}
-            alt="Avatar"
-          />
-        )}
-        {!isMessageFromMe && (
-          <img
-            className="avatar-show hidden w-10 h-10 object-cover rounded-full"
-            src={other?.avatarUrl}
-            alt="Avatar"
-          />
-        )}
-      </div>
-
-      {/* Message bubble on the right or left based on the sender */}
+      {isMessageFromMe && (
+        <div className="chat-image avatar">
+          <div className="w-10 rounded-full">
+            <img
+              className="avatar-show hidden"
+              src={me.avatarUrl}
+              alt="Avatar"
+            />
+          </div>
+        </div>
+      )}
+      {!isMessageFromMe && (
+        <div className="chat-image avatar">
+          <div className="w-10 rounded-full">
+            <img
+              className="avatar-show hidden"
+              src={other?.avatarUrl}
+              alt="Avatar"
+            />
+          </div>
+        </div>
+      )}
       <div
-        className={`p-2 rounded-md ${
+        className={`${
           isMessageFromMe
-            ? "bg-blue-500 self-end text-white"
-            : "bg-yellow-200 self-start text-gray-900"
+            ? "chat-bubble chat-bubble-accent"
+            : "chat-bubble chat-bubble-info"
         }`}
       >
         {message.image && (
@@ -50,9 +53,10 @@ function MessageCard({ message, me, other }) {
         )}
         <p>{message.content}</p>
         <div
-          className={`text-xs ${
-            isMessageFromMe ? "text-white" : "text-gray-900"
-          }`}
+          // className={`text-xs ${
+          //   isMessageFromMe ? "text-white" : "text-gray-900"
+          // }`}
+          className="text-xs"
         >
           {formatTimeAgo(message.time)}
         </div>
