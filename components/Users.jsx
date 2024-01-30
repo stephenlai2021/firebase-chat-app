@@ -399,7 +399,7 @@ function Users({ userData, setSelectedChatroom }) {
           {activeTab === "users" && (
             <>
               {/* Search user by name */}
-              <div className="mt-3 px-2">
+              <div className="mt-3 px-2 input-padding">
                 <span className="label-text pl-1">Search by name</span>
                 <div className="relative">
                   <input
@@ -412,7 +412,7 @@ function Users({ userData, setSelectedChatroom }) {
                   />
                   <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
-                      className="w-[18px] h-[18px] hover:cursor-pointer"
+                      className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
                       onClick={searchUserByName}
                     />
                   </div>
@@ -420,7 +420,7 @@ function Users({ userData, setSelectedChatroom }) {
               </div>
 
               {/* Search user by email */}
-              <div className="mt-6 px-2">
+              <div className="mt-6 px-2 input-padding">
                 <span className="label-text pl-1">Search by email</span>
                 <div className="relative">
                   <input
@@ -433,7 +433,7 @@ function Users({ userData, setSelectedChatroom }) {
                   />
                   <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
-                      className="w-[18px] h-[18px] hover:cursor-pointer"
+                      className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
                       onClick={searchUserByEmail}
                     />
                   </div>

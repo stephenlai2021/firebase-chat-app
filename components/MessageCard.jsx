@@ -49,15 +49,12 @@ function MessageCard({ message, me, other }) {
             <img src={message.image} className="max-h-60 mb-4 rounded" />
           </div>
         )}
-        <p className={`${
+        <p className={`max-w-[360px] text-wrap ${
           isMessageFromMe
             ? "text-accent-content"
             : "text-primary-content"
         }`}>{message.content}</p>
         <div
-          // className={`text-xs ${
-          //   isMessageFromMe ? "text-white" : "text-gray-900"
-          // }`}
           className={`text-xs ${
             isMessageFromMe
               ? "text-accent-content"

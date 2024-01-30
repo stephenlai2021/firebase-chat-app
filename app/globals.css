@@ -97,6 +97,10 @@ body {
   backdrop-filter: blur(30px);
 }
 
+.text-wrap {
+  word-wrap: break-word;
+}
+
 @media (min-width: 800px) {
   .text-desktop {
     max-width: 205px;
@@ -107,6 +111,10 @@ body {
 }
 
 @media (max-width: 800px) {
+  .input-padding {
+    padding-left: 15px; 
+    padding-right: 15px; 
+  }
   .text-tablet {
     max-width: 600px;
   }

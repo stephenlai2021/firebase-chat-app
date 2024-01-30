@@ -21,7 +21,9 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "@/components/skeleton/MessageSkeleton";
 
 /* 3rd-party libraries */
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaBullseye } from "react-icons/fa";
+
+let setTimeoutInstance;
 
 function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   const me = selectedChatroom?.myData;
@@ -35,6 +37,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
   const [otherUser, setOtherUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   /* get other user data in realtime */
   useEffect(() => {
@@ -58,6 +61,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   /* get messages */
   useEffect(() => {
     if (!chatRoomId) return;
+    setLoading(true);
     const unsubscribe = onSnapshot(
       query(
         collection(firestore, "messages"),
@@ -70,10 +74,10 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
           ...doc.data(),
         }));
         setMessages(messages);
+        if (messages.length !== 0) setLoading(false);
         console.log("messages: ", messages);
       }
     );
-
     return unsubscribe;
   }, [chatRoomId]);
 
@@ -105,7 +109,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
         await updateDoc(chatroomRef, {
           lastMessage: message ? message : "[Image]",
-          lastMessageSentTime: serverTimestamp()
+          lastMessageSentTime: serverTimestamp(),
         });
 
         // Clear the input field after sending the message
@@ -124,6 +128,12 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   const gotoUsersMenu = () => {
     setSelectedChatroom(null);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
 
   return (
     // <div className="flex flex-col h-screen divide-x divide-y divide-neutral">
@@ -150,7 +160,9 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             }`}
           ></span>
         </div>
-        <div className="h-8 font-semibold flex items-end ml-2 text-base-content">{otherUser?.name}</div>
+        <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
+          {otherUser?.name}
+        </div>
       </div>
 
       {/* Messages container with overflow and scroll */}
@@ -158,7 +170,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6"
       >
-        {messages?.map((message) => (
+        {!loading && messages?.map((message) => (
           <MessageCard
             key={message.id}
             message={message}
@@ -167,7 +179,9 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
           />
         ))}
 
-        {messages.length == 0 && <MessageSkeleton />}
+        {/* hide loading screen after 2 seconds */}
+        {/* {messages.length == 0 && <MessageSkeleton />} */}
+        {loading && <MessageSkeleton />}
       </div>
 
       {/* Input box at the bottom */}

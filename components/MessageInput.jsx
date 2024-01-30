@@ -115,7 +115,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-gray-70 flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
+        className={`rounded bg-base-300 text-base-conten text-neutral flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
       />
 
       {/* small image preview */}
@@ -125,7 +125,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       <FaPaperPlane
         onClick={() => sendMessage()}
-        className="text-blue-50 cursor-pointer ml-3"
+        className="text-base-content cursor-pointer ml-3"
       />
 
       {showEmojiPicker && (
