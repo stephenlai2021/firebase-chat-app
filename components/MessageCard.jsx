@@ -41,20 +41,28 @@ function MessageCard({ message, me, other }) {
         className={`${
           isMessageFromMe
             ? "chat-bubble chat-bubble-accent"
-            : "chat-bubble chat-bubble-info"
+            : "chat-bubble chat-bubble-primary"
         }`}
       >
         {message.image && (
-          <div className="w-60 flex justify-center">
+          <div className="max-w-60 flex justify-center">
             <img src={message.image} className="max-h-60 mb-4 rounded" />
           </div>
         )}
-        <p>{message.content}</p>
+        <p className={`${
+          isMessageFromMe
+            ? "text-accent-content"
+            : "text-primary-content"
+        }`}>{message.content}</p>
         <div
           // className={`text-xs ${
           //   isMessageFromMe ? "text-white" : "text-gray-900"
           // }`}
-          className="text-xs"
+          className={`text-xs ${
+            isMessageFromMe
+              ? "text-accent-content"
+              : "text-primary-content"
+          }`}
         >
           {formatTimeAgo(message.time)}
         </div>

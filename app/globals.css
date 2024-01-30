@@ -75,6 +75,11 @@
   }
 }
 
+body {
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
 .upload-box > p {
   text-align: center;
   font-weight: 500;
@@ -88,14 +93,30 @@
   text-size-adjust: auto;
 }
 
+.backdrop-blur {
+  backdrop-filter: blur(30px);
+}
+
+@media (min-width: 800px) {
+  .text-desktop {
+    max-width: 205px;
+  }
+  .time-stamp-desktop {
+    max-width: 60px;
+  }
+}
+
 @media (max-width: 800px) {
+  .text-tablet {
+    max-width: 600px;
+  }
   .users-hide {
     width: 0;
     display: none;
   }
   .users-mobile {
-    width: 100%;
-    display: block;
+    width: 100vw;
+    display: flex;
   }
   .chatroom-hide {
     width: 0;
@@ -104,6 +125,7 @@
   .chatroom-mobile {
     display: block;
     width: 100%;
+    /* overflow: hidden; */
   }
   .arrow-show {
     display: block;
@@ -116,10 +138,26 @@
   }
   .avatar-show {
     display: block;
-    
   }
   .avatar-hide {
     display: none;
     width: 0;
   }
+  .sidebar-hide {
+    display: none;
+    width: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .text-phone {
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 300px) {
+  .text-phone {
+    max-width: 200px;
+  }
+
 }

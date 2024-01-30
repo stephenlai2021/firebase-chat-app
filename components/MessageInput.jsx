@@ -91,7 +91,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   };
 
   return (
-    <div className="relative bg-gray-900 relative flex items-center p-4">
+    <div className="relative relative flex items-center px-4 py-3">
       {/* file input icon */}
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
@@ -115,7 +115,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-gray-700 flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
+        className={`rounded bg-gray-70 flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
       />
 
       {/* small image preview */}
@@ -125,7 +125,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       <FaPaperPlane
         onClick={() => sendMessage()}
-        className="text-blue-500 cursor-pointer ml-3"
+        className="text-blue-50 cursor-pointer ml-3"
       />
 
       {showEmojiPicker && (

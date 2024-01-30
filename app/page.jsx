@@ -14,6 +14,7 @@ import { doc, getDoc } from "firebase/firestore";
 /* components */
 import Users from "../components/Users";
 import ChatRoom from "../components/ChatRoom";
+import Sidebar from "@/components/Sidabar"
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
 function page() {
@@ -47,7 +48,7 @@ function page() {
   return (
     <div className="flex h-screen oveflow-hidden">
       <div
-        className={`bg-gray-900 w-3/12 relative ${
+        className={`relative ${
           selectedChatroom == null ? "users-mobile" : "users-hide"
         }`}
       >
@@ -63,7 +64,7 @@ function page() {
       {selectedChatroom == null && (
         <div
           className={`${
-            selectedChatroom == null ? "chatroom-hide" : ""
+            selectedChatroom == null ? "chatroom-hide" : "chatroom-mobile"
           } w-9/12 flex items-center justify-center h-full chatroom-none`}
         >
           <div className="text-2xl text-gray-400">Select a chatroom</div>

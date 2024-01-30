@@ -2,16 +2,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UsersCardSkeleton() {
   return (
-    <div className={`flex items-center p-4`}>
-      {/* Avatar on the left */}
+    <div className="flex items-center p-4">
       <div className="flex-shrink-0 mr-4">
-        <Skeleton className="w-12 h-12 rounded-full" />
+        <div className="skeleton w-12 h-12 rounded-full"></div>
       </div>
-
-      {/* Name on the right */}
       <div className="flex flex-col space-y-1">
-        <Skeleton className="w-[80px] h-[24px] rounded" />
-        <Skeleton className="w-[50px] h-[18px] rounded" />
+        <div className="flex justify-between">
+          <div className="skeleton w-[60px] h-[24px] rounded"></div>
+          <div className="skeleton w-[80px] h-[16px] rounded"></div>
+        </div>
+        <div className="skeleton w-[180px] h-[18px] rounded"></div>
       </div>
     </div>
   );

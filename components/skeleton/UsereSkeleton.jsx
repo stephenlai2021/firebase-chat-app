@@ -1,17 +1,22 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
+/* components */
 import UsersCardSkeleton from "./UsersCardSkeleton";
+import SidebarSkeleton from "./SidebarSkeleton";
 
 export default function UsersSkeleton() {
   return (
-    <div className="bg-gray-900 w-[300px] h-full flex flex-col pt-4">
-      <div>
+    <div className="flex">
+      <SidebarSkeleton />
+      <div className="w-[300px] h-full flex flex-col pt-">
+        {/* title */}
+        <div className="h-[60px] flex items-center pl-[15px]">
+          <div className="skeleton rounded w-[110px] h-[28px]"></div>
+        </div>
+        
         {"abcdef".split("").map((i) => (
           <UsersCardSkeleton key={i} />
         ))}
-      </div>
-      <div className="flex p-4 absolute bottom-0">
-        <Skeleton className="w-[30px] h-[30px] rounded-full" />
       </div>
     </div>
   );

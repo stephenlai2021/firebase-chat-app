@@ -18,8 +18,8 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`{inter.className} dark`} suppressHydrationWarning={true}>
+    <html lang="en" data-theme="dracula">
+      <body className={`${inter.className} bg-base-100`} suppressHydrationWarning={true}>
         <Toaster position="bottom-center" />
         {children}
       </body>

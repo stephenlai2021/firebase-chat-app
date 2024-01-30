@@ -7,6 +7,7 @@ function UsersCard({
   avatarUrl,
   email,
   lastMessage,
+  lastMessageSentTime,
   timeStamp,
   status,
   found,
@@ -23,7 +24,9 @@ function UsersCard({
 
   return (
     <div
-      className={`${found == 'true' ? '' : 'hover:cursor-pointer'} hover:bg-gray-800 flex items-center justify-between rounded p-4 relative ${
+      className={`${
+        found == "true" ? "" : "hover:cursor-pointer"
+      } border-1 border-red-30 w-full hover:bg-base-300 flex items-center justify-between rounded p-4 relative ${
         bgColor ? bgColor : ""
       }`}
     >
@@ -48,32 +51,18 @@ function UsersCard({
       </div>
 
       {type == "chat" && (
-        /* Name, latest message, and time on the right */
         <div className="flex-1">
-          <h2 className="text-lg font-semibold truncate">{name}</h2>
-          <p className="text-gray-500 truncate text-sm">
+          <div className="flex items-center justify-between text-desktop text-phone border-1 border-green-30">
+            <h2 className="text-lg font-semibold truncate text-base-content">{name}</h2>
+            <div className="text-xs text-base-content truncate time-stamp-desktop">
+              {lastMessageSentTime ? formatTimeAgo(lastMessageSentTime) : ''}
+            </div>
+          </div>
+          <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
             {lastMessage}
           </p>
         </div>
       )}
-
-      {type == "user" && (
-        /* Name */
-        <div className="flex-1">
-          <div className="flex flex-col">
-            <h2 className="text-lg font-semibold truncate">{name}</h2>
-            {/* <p className="text-gray-500 text-sm truncate">{email}</p> */}
-          </div>
-        </div>
-      )}
-
-      {/* {lastMessage && (
-        <div className="h-[48px]">
-          <span className="truncate text-xs text-gray-500">
-            {formatTimeAgo(timeStamp)}
-          </span>
-        </div>
-      )} */}
     </div>
   );
 }

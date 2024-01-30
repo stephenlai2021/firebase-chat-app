@@ -30,7 +30,8 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
 
   const messagesContainerRef = useRef(null);
 
-  const [message, setMessage] = useState([]);
+  // const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState(null);
   const [otherUser, setOtherUser] = useState(null);
@@ -103,8 +104,8 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         //send to chatroom by chatroom id and update last message
         const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
         await updateDoc(chatroomRef, {
-          // lastMessage: message ? message : `Image`,
-          lastMessage: message ? message : `${me.name} has sent an image`,
+          lastMessage: message ? message : "[Image]",
+          lastMessageSentTime: serverTimestamp()
         });
 
         // Clear the input field after sending the message
@@ -122,20 +123,20 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
 
   const gotoUsersMenu = () => {
     setSelectedChatroom(null);
-    console.log("selectedChatroom: ", selectedChatroom);
   };
 
   return (
+    // <div className="flex flex-col h-screen divide-x divide-y divide-neutral">
     <div className="flex flex-col h-screen">
       {/* top menu */}
-      <div className="bg-gray-900 h-[72px] flex items-center">
+      <div className="h-[60px] flex items-center">
         <div
           className={`${
             selectedChatroom ? "arrow-show" : "hidden"
           } hidden ml-4 flex pt-[12px] h-9 hover:cursor-pointer`}
           onClick={gotoUsersMenu}
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="text-base-content" />
         </div>
         <div className="relative w-9 h-9 ml-2">
           <img
@@ -149,13 +150,13 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             }`}
           ></span>
         </div>
-        <div className="h-8 flex items-end ml-2">{otherUser?.name}</div>
+        <div className="h-8 font-semibold flex items-end ml-2 text-base-content">{otherUser?.name}</div>
       </div>
 
       {/* Messages container with overflow and scroll */}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto pt-10 px-6"
+        className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6"
       >
         {messages?.map((message) => (
           <MessageCard
