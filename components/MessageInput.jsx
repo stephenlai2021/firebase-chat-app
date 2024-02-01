@@ -125,10 +125,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
 
-      <div className="w-[16px] h-[16px] ml-3 border-2 border-red-300">
+      <div className="ml-3">
         <FaPaperPlane
           onClick={() => sendMessage()}
-          className="text-base-content cursor-pointer w-full h-full"
+          className="text-base-content cursor-pointer w-[16px] h-[16px] "
         />
       </div>
 
