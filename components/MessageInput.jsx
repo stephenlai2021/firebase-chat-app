@@ -115,22 +115,22 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-base-300 text-base-content text-neutra flex-1 border-none p-2 ${
+        className={`rounded bg-base-300 text-base-content flex-1 flex-ful border-none p-2 ${
           image ? "pr-[52px]" : "pr-2"
         } outline-none text-gray-200`}
       />
 
       {/* small image preview */}
-      <div className="absolute right-[40px]">
+      {/* <div className="absolute right-[40px]">
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
-      </div>
+      </div> */}
 
-      <div className="ml-3">
+      {/* <div className="ml-3">
         <FaPaperPlane
           onClick={() => sendMessage()}
-          className="text-base-content cursor-pointer w-[16px] h-[16px] "
+          className="text-base-content cursor-pointer w-[16px] h-[16px]"
         />
-      </div>
+      </div> */}
 
       {showEmojiPicker && (
         <div className="absolute right-0 bottom-full p-2">
