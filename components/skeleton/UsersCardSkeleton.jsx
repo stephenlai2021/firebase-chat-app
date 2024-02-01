@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
 export default function UsersCardSkeleton() {
   return (
     <div className="flex items-center p-4">

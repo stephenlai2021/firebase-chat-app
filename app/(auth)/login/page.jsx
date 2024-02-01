@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /* firebase */
-import { auth, firestore } from "@/lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, updateDoc, query, collection, getDocs, where } from "firebase/firestore";
+import {
+  auth,
+  googleAuthProvider,
+  firestore,
+} from "@/app/firebase/client-config";
+import {
+  signInWithEmailAndPassword,
+  getRedirectResult,
+  signInWithRedirect,
+} from "firebase/auth";
+import {
+  doc,
+  updateDoc,
+  query,
+  collection,
+  getDocs,
+  where,
+} from "firebase/firestore";
 
 /* next */
 import { useRouter } from "next/navigation";
@@ -13,6 +28,7 @@ import Link from "next/link";
 
 /* 3rd-party libraries */
 import { toast } from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 function page() {
   const [email, setEmail] = useState("");
@@ -47,19 +63,19 @@ function page() {
         );
         const user = userCredential.user;
         if (user) {
-          /* 把 firestore 的 users 收集的登陸用戶狀態設置為 "online" */
+          /* 把 users colletion 的用戶狀態設置為 "online" */
           const loginUserRef = doc(firestore, "users", user.email);
           await updateDoc(loginUserRef, { status: "online" });
           console.log("You are online");
 
-          /* 把 firestore 的 chatrooms 收集的登陸用戶狀態設置為 "online" */
+          /* 把 chatrooms colletion 的用戶狀態設置為 "online" */
           const chatroomsQuery = query(
             collection(firestore, "chatrooms"),
             where("users", "array-contains", user.uid)
           );
           const querySnapshot = await getDocs(chatroomsQuery);
           querySnapshot.forEach(async (document) => {
-            console.log(document.id, " => ", document.data());
+            // console.log(document.id, " => ", document.data());
 
             await updateDoc(doc(firestore, "chatrooms", document.id), {
               [`usersData.${user.uid}.status`]: "online",
@@ -79,18 +95,40 @@ function page() {
     setLoading(false);
   };
 
+  // const signIn = () => {
+  //   signInWithRedirect(auth, googleAuthProvider);
+  // };
+
+  // useEffect(() => {
+  //   getRedirectResult(auth).then(async (userCred) => {
+  //     if (!userCred) {
+  //       return;
+  //     }
+  //     console.log('user credentials: ', userCred.user)
+
+  //     fetch("/api/login", {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${await userCred.user.getIdToken()}`,
+  //       },
+  //     }).then((response) => {
+  //       if (response.status === 200) {
+  //         router.push("/");
+  //       }
+  //     });
+  //   });
+  // }, []);
+
   return (
-    <div className="flex justify-center items-center h-screen font-primary p-10 m-2">
-      {/*form*/}
+    <div className="flex flex-col justify-center items-center h-screen font-primary p-10 m-2">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 w-full max-w-2xl shadow-lg p-10"
+        // className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 border-2 border-green-300"
+        className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10"
       >
-        <h1 className="font-secondary text-xl text-center font-semibold text-[#0b3a65ff]">
+        <h1 className="font-secondary text-xl text-center font-semibold text-base-content">
           CHAT<span className="font-bold text-[#eeab63ff]">2</span>CHAT
         </h1>
-
-        {/*email*/}
         <div>
           <label className="label">
             <span className="text-base label-text">Email</span>
@@ -104,8 +142,6 @@ function page() {
           />
           {errors.email && <span className="text-red-500">{errors.email}</span>}
         </div>
-
-        {/*password*/}
         <div>
           <label className="label">
             <span className="text-base label-text">Password</span>
@@ -121,30 +157,33 @@ function page() {
             <span className="text-red-500">{errors.password}</span>
           )}
         </div>
-
         <div>
-          <button
-            type="submit"
-            className="btn btn-block bg-[#0b3a65ff] text-white"
-          >
+          <button type="submit" className="btn btn-block btn-[#0b3a65ff]">
             {loading ? (
-              <span className="loading loading-spinner loading-sm"></span>
+              <span className="loading loading-spinner loading-sm text-base-content"></span>
             ) : (
               "Sign In"
             )}
           </button>
         </div>
-
-        <span>
+        <span className="text-base-content">
           Don't have an account?{" "}
-          <Link
-            href="/register"
-            className="text-blue-600 hover:text-blue-800 hover:underline"
-          >
+          <Link href="/register" className="text-base-content hover:underline">
             Register
           </Link>
         </span>
       </form>
+
+      {/* <div className="max-w-[600px] w-full px-10 border-2 border-red-300"> */}
+      <div className="max-w-[600px] w-full px-10">
+        <div className="divider divider-base-300 text-base-content">OR</div>
+        <button className="btn bg-red-400 w-full" 
+          // onClick={() => signIn()}
+        >
+          <FcGoogle className="w-[20px] h-[20px]" />
+          Sign in with Google
+        </button>
+      </div>
     </div>
   );
 }

@@ -13,7 +13,7 @@ import {
   orderBy,
   updateDoc,
 } from "firebase/firestore";
-import { firestore } from "@/lib/firebase";
+import { firestore } from "@/app/firebase/client-config";
 
 /* components */
 import MessageCard from "./MessageCard";
@@ -130,13 +130,13 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setLoading(false);
-    }, 3000);
-  }, []);
+    }, 5000);
+    return () => clearTimeout(timer)
+  }, [loading]);
 
   return (
-    // <div className="flex flex-col h-screen divide-x divide-y divide-neutral">
     <div className="flex flex-col h-screen">
       {/* top menu */}
       <div className="h-[60px] flex items-center">

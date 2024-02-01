@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 
 /* firebase */
-import { firestore, auth } from "@/lib/firebase";
+import { firestore, auth } from "@/app/firebase/client-config";
 import {
   collection,
   onSnapshot,
@@ -223,7 +223,7 @@ function Users({ userData, setSelectedChatroom }) {
         usersData,
         timestamp: serverTimestamp(),
         lastMessage: null,
-        lastMessageSentTime: null
+        lastMessageSentTime: null,
       };
 
       await addDoc(collection(firestore, "chatrooms"), chatroomData);
@@ -263,52 +263,21 @@ function Users({ userData, setSelectedChatroom }) {
       <div className="h-full p-5 flex flex-col items-center sidebar-hide">
         <IoPersonAddSharp
           className={`mb-6 w-[20px] h-[20px] hover:cursor-pointer ${
-            // activeTab === "users" ? "text-white" : "text-gray-700"
-            activeTab === "users" ? "text-secondary" : "text-gray-700"
+            activeTab === "users" ? "text-white" : "text-gray-700"
           }`}
           onClick={() => handleTabClick("users")}
         />
         <IoMdChatboxes
           className={`mb-6 w-[24px] h-[24px] hover:cursor-pointer ${
-            // activeTab === "chatrooms" ? "text-white" : "text-gray-700"
-            activeTab === "chatrooms" ? "text-secondary" : "text-gray-700"
+            activeTab === "chatrooms" ? "text-white" : "text-gray-700"
           }`}
           onClick={() => handleTabClick("chatrooms")}
         />
-        {/* <FiLogOut
-          className={`mb-6 w-[20px] h-[20px] hover:cursor-pointer ${
-            activeTab === "logout" ? "text-white" : "text-gray-700"
-          }`}
-          onClick={() => handleTabClick("logout")}
-        /> */}
         {/* user icon */}
-        <div className="dropdown dropdown-top mt-auto">
-          <img
-            src={userData.avatarUrl}
-            width={30}
-            height={30}
-            alt="Picture of the author"
-            className="rounded-full"
-            tabIndex={0}
-            role="button"
-          />
-          <ul
-            tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
-          >
-            <li>
-              <a>{userData.name}</a>
-            </li>
-            <li>
-              <a onClick={logoutClick}>Logout</a>
-            </li>
-          </ul>
-        </div>
-
-        {/* <div className="drawer drawer-end mt-auto">
-          <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
+        <div className="drawer mt-auto">
+          <input id="sidebar-menu" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
-            <label htmlFor="my-drawer-4" className="drawer-button">
+            <label htmlFor="sidebar-menu" className="drawer-button">
               <img
                 src={userData.avatarUrl}
                 width={30}
@@ -322,7 +291,7 @@ function Users({ userData, setSelectedChatroom }) {
           </div>
           <div className="drawer-side z-[500]">
             <label
-              htmlFor="my-drawer-4"
+              htmlFor="sidebar-menu"
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
@@ -331,24 +300,24 @@ function Users({ userData, setSelectedChatroom }) {
                 <a>Sidebar Item 1</a>
               </li>
               <li>
-                <a>Sidebar Item 2</a>
+                <a onClick={logoutClick}>Logout</a>
               </li>
             </ul>
           </div>
-        </div> */}
+        </div>
       </div>
 
-      {/* main menu */}
+      {/* main */}
       <div className="overflow-hidden h-screen flex flex-col bg-gray-90 w-[300px] min-w-[200px] users-mobile">
         {/* top menu */}
         <div className="h-[60px] flex items-center pl-[15px]">
-            <div className="text-xl font-bold text-base-content">
-              {activeTab == "chatrooms"
-                ? "Chatrooms"
-                : activeTab == "users"
-                ? "Add friend"
-                : ""}
-            </div>
+          <div className="text-xl font-bold text-base-content">
+            {activeTab == "chatrooms"
+              ? "Chatrooms"
+              : activeTab == "users"
+              ? "Add friend"
+              : ""}
+          </div>
         </div>
 
         {/* body */}
@@ -526,14 +495,14 @@ function Users({ userData, setSelectedChatroom }) {
             </li>
             <li className="w-1/3 flex justify-center items-center">
               <a>
-                {/* <div className="drawer drawer-end">
+                <div className="drawer">
                   <input
-                    id="my-drawer-4"
+                    id="bottom-menu"
                     type="checkbox"
                     className="drawer-toggle"
                   />
                   <div className="drawer-content">
-                    <label htmlFor="my-drawer-4" className="drawer-button">
+                    <label htmlFor="bottom-menu" className="drawer-button">
                       <img
                         src={userData.avatarUrl}
                         width={30}
@@ -547,7 +516,7 @@ function Users({ userData, setSelectedChatroom }) {
                   </div>
                   <div className="drawer-side z-[500]">
                     <label
-                      htmlFor="my-drawer-4"
+                      htmlFor="bottom-menu"
                       aria-label="close sidebar"
                       className="drawer-overlay"
                     ></label>
@@ -556,33 +525,10 @@ function Users({ userData, setSelectedChatroom }) {
                         <a>Sidebar Item 1</a>
                       </li>
                       <li>
-                        <a>Sidebar Item 2</a>
+                        <a onClick={logoutClick}>Logout</a>
                       </li>
                     </ul>
                   </div>
-                </div> */}
-
-                <div className={`dropdown dropdown-top mt-auto`}>
-                  <img
-                    src={userData.avatarUrl}
-                    width={30}
-                    height={30}
-                    alt="Picture of the author"
-                    className="rounded-full"
-                    tabIndex={0}
-                    role="button"
-                  />
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
-                  >
-                    {/* <li>
-                      <a>{userData.name}</a>
-                    </li> */}
-                    <li>
-                      <a onClick={logoutClick}>Logout</a>
-                    </li>
-                  </ul>
                 </div>
               </a>
             </li>

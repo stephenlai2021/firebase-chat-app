@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
 /* components */
 import UsersCardSkeleton from "./UsersCardSkeleton";
 import SidebarSkeleton from "./SidebarSkeleton";

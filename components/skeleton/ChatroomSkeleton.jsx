@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton"
-
 export default function ChatroomSkeleton() {
   return (
     <div className="flex-grow w-9/12">

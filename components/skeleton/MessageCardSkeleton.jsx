@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
 export default function MessageCardSkeletion() {
   return (
     <div className="">

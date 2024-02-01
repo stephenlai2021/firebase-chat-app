@@ -1,20 +1,19 @@
 "use client";
 
 /* react */
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 /* next */
 import { useRouter } from "next/navigation";
 
 /* firebase */
-import { firestore, auth } from "@/lib/firebase";
+import { firestore, auth } from "@/app/firebase/client-config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 /* components */
 import Users from "../components/Users";
 import ChatRoom from "../components/ChatRoom";
-import Sidebar from "@/components/Sidabar"
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
 function page() {

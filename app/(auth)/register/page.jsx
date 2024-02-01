@@ -11,11 +11,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 /* firebase */
-import { auth, firestore } from "@/lib/firebase";
+import { auth, firestore } from "@/app/firebase/client-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
+import { storage } from "@/app/firebase/client-config";
 
 
 function page() {  
@@ -156,8 +156,8 @@ function page() {
         onSubmit={handleSubmit}
         className="space-y-4 w-full max-w-2xl shadow-lg p-10"
       >
-        <h1 className="font-secondary text-xl text-center font-semibold text-[#0b3a65ff]">
-          CHAT<span className="font-bold text-[#eeab63ff]">2</span>CHAT
+        <h1 className="font-secondary text-xl text-center font-semibold text-base-content">
+          CHAT<span className="font-bold text-warning">2</span>CHAT
         </h1>
 
         {/* Display the avatar and upload button */}
@@ -169,7 +169,7 @@ function page() {
           />
           <button
             type="button"
-            className="btn btn-outline btn-md"
+            className="btn btn-outlin btn-[#0b3a65ff] btn-md"
             onClick={() => document.getElementById("dashboard").showModal()}
           >
             Upload Image
@@ -237,20 +237,20 @@ function page() {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-block bg-[#0b3a65ff] text-white">
+          <button type="submit" className="btn btn-block btn-[#0b3a65ff]">
             {loading ? (
-              <span className="loading loading-spinner loading-sm"></span>
+              <span className="loading loading-spinner loading-sm text-base-content"></span>
             ) : (
               "Sign Up"
             )}
           </button>
         </div>
 
-        <span className="">
+        <span className="text-base-content">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-blue-600 hover:text-blue-800 hover:underline"
+            className="text-base-content hover:underline"
           >
             Login
           </Link>
@@ -261,7 +261,6 @@ function page() {
       <dialog id="dashboard" className="modal">
         <div className="modal-box relative">
           <form method="dialog" className="flex justify-center">
-            <div className="border border-2">
               {imagePreview && (
                 <div className="relative">
                   <img
@@ -288,10 +287,9 @@ function page() {
                 type="file"
                 accept="image/*"
                 ref={inputFile}
-                className="mt-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
+                className="text-primary-content mt-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
                 onChange={handleFileChange}
               />
-            </div>
           </form>
           <button
             className="btn btn-sm btn-circle btn-ghost absolute top-0 right-2 top-2"

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function SidebarSkeleton() {
   return (
     <div className="h-full p-5 flex flex-col items-center sidebar-hide">
