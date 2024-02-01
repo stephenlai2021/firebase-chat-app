@@ -168,7 +168,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
       {/* Messages container with overflow and scroll */}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6"
+        className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6 chatroom-padding"
       >
         {!loading && messages?.map((message) => (
           <MessageCard

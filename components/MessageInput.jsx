@@ -114,7 +114,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-base-300 text-base-content flex-1 border-none p-2 pr-8 mr-3 ${
+        className={`rounded bg-base-300 text-base-content flex-1 border-none p-2 pr-8 max-w-full ${
           image ? "pr-[52px]" : "pr-2"
         } outline-none text-gray-200`}
       />

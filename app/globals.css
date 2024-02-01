@@ -161,6 +161,10 @@ body {
   .text-phone {
     max-width: 260px;
   }
+  .chatroom-padding {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
 @media (max-width: 300px) {
