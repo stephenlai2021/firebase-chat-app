@@ -93,10 +93,12 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   return (
     <div className="relative flex items-center px-4 py-3">
       {/* file input icon */}
-      <FaPaperclip
-        onClick={() => document.getElementById("dashboard").showModal()}
-        className={`mr-3 cursor-pointer text-gray-400 w-[16px] h-[16px]`}
-      />
+      <div className="w-[16px] h-[16px]">
+        <FaPaperclip
+          onClick={() => document.getElementById("dashboard").showModal()}
+          className={`mr-3 cursor-pointer text-gray-400 w-full h-full`}
+        />
+      </div>
 
       {/* Emoji Picker Button */}
       <button
@@ -113,7 +115,9 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-base-300 text-base-content text-neutra flex-1 border-none p-2 ${image ? 'pr-[52px]' : 'pr-2'} outline-none text-gray-200`}
+        className={`rounded bg-base-300 text-base-content text-neutra flex-1 border-none p-2 ${
+          image ? "pr-[52px]" : "pr-2"
+        } outline-none text-gray-200`}
       />
 
       {/* small image preview */}
@@ -121,10 +125,12 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
 
-      <FaPaperPlane
-        onClick={() => sendMessage()}
-        className="text-base-content cursor-pointer ml-3 w-[16px] h-[16px]"
-      />
+      <div className="w-[16px] h-[16px]">
+        <FaPaperPlane
+          onClick={() => sendMessage()}
+          className="text-base-content cursor-pointer ml-3 w-full h-full"
+        />
+      </div>
 
       {showEmojiPicker && (
         <div className="absolute right-0 bottom-full p-2">
@@ -139,7 +145,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
             disableAutoFocus={true}
           />
         </div>
-      )}     
+      )}
 
       {/* image preview modal */}
       <dialog id="dashboard" className="modal">
