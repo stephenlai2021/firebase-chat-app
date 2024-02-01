@@ -156,7 +156,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       <dialog id="dashboard" className="modal">
         <div className="modal-box relative">
           <form method="dialog" className="flex justify-center">
-            <div className="border border-2">
+            {/* <div className="border border-2"> */}
               {imagePreview && (
                 <div className="relative">
                   <img
@@ -186,7 +186,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
                 className="mt-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
                 onChange={handleFileChange}
               />
-            </div>
+            {/* </div> */}
           </form>
           <button
             className="btn btn-sm btn-circle btn-ghost absolute top-0 right-2 top-2"
