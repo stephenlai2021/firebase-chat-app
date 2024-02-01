@@ -93,10 +93,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   return (
     <div className="relative flex items-center px-4 py-3">
       {/* file input icon */}
-      <div className="w-[16px] h-[16px]">
+      <div className="w-[16px] h-[16px] mr-3">
         <FaPaperclip
           onClick={() => document.getElementById("dashboard").showModal()}
-          className={`mr-3 cursor-pointer text-gray-400 w-full h-full`}
+          className={`cursor-pointer text-gray-400 w-full h-full`}
         />
       </div>
 
@@ -125,10 +125,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
 
-      <div className="w-[16px] h-[16px]">
+      <div className="w-[16px] h-[16px] ml-3">
         <FaPaperPlane
           onClick={() => sendMessage()}
-          className="text-base-content cursor-pointer ml-3 w-full h-full"
+          className="text-base-content cursor-pointer w-full h-full"
         />
       </div>
 
