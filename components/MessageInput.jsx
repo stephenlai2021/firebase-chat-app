@@ -108,17 +108,24 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         😊
       </button>
 
-      {/* text input field */}
-      <input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={handleSubmit}
-        type="text"
-        placeholder="Type a message..."
-        className={`rounded bg-base-300 text-base-content flex-1 flex-ful border-none p-2 ${
-          image ? "pr-[52px]" : "pr-2"
-        } outline-none text-gray-200`}
-      />
+      {/* <div className="relative"> */}
+        <input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleSubmit}
+          type="text"
+          placeholder="Type a message..."
+          className={`rounded bg-base-300 text-base-content flex-1 border-none p-2 ${
+            image ? "pr-[52px]" : "pr-2"
+          } outline-none text-gray-200`}
+        />
+        {message && (
+          <FaPaperPlane
+            onClick={() => sendMessage()}
+            className="absolute right-[26px] top-[50%] translate-y-[-50%] z-[200] text-base-content cursor-pointer w-[16px] h-[16px]"
+          />
+        )}
+      {/* </div> */}
 
       {/* small image preview */}
       {/* <div className="absolute right-[40px]">
