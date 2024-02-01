@@ -260,21 +260,21 @@ function Users({ userData, setSelectedChatroom }) {
   return (
     <div className="flex h-full">
       {/* sidebar */}
-      <div className="h-full p-5 flex flex-col items-center sidebar-hide">
-        <IoPersonAddSharp
-          className={`mb-6 w-[20px] h-[20px] hover:cursor-pointer ${
-            activeTab === "users" ? "text-white" : "text-gray-700"
-          }`}
-          onClick={() => handleTabClick("users")}
-        />
-        <IoMdChatboxes
-          className={`mb-6 w-[24px] h-[24px] hover:cursor-pointer ${
-            activeTab === "chatrooms" ? "text-white" : "text-gray-700"
-          }`}
-          onClick={() => handleTabClick("chatrooms")}
-        />
+      <div className="h-full flex flex-col items-center sidebar-hide pt-1">
+        <div className={`${activeTab == 'users' ? 'menu-active border-base-content' : ''} border- w-full py-4 px-5 flex items-center justify-center`}>
+          <IoPersonAddSharp
+            className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
+            onClick={() => handleTabClick("users")}
+          />
+        </div>
+        <div className={`${activeTab == 'chatrooms' ? 'menu-active border-base-content' : ''} border- w-full py-4 px-5 flex items-center justify-center`}>
+          <IoMdChatboxes
+            className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
+            onClick={() => handleTabClick("chatrooms")}
+          />
+        </div>
         {/* user icon */}
-        <div className="drawer mt-auto">
+        <div className="drawer mt-auto p-5">
           <input id="sidebar-menu" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
             <label htmlFor="sidebar-menu" className="drawer-button">
@@ -308,7 +308,7 @@ function Users({ userData, setSelectedChatroom }) {
       </div>
 
       {/* main */}
-      <div className="overflow-hidden h-screen flex flex-col bg-gray-90 w-[300px] min-w-[200px] users-mobile">
+      <div className="overflow-hidde h-screen flex flex-col bg-gray-90 w-[300px] min-w-[200px] users-mobile">
         {/* top menu */}
         <div className="h-[60px] flex items-center pl-[15px]">
           <div className="text-xl font-bold text-base-content">
@@ -321,7 +321,7 @@ function Users({ userData, setSelectedChatroom }) {
         </div>
 
         {/* body */}
-        <div className="pt-2">
+        <div className="pt-2 overflow-y-auto">
           {/* chatrooms section */}
           {activeTab === "chatrooms" && (
             <>
@@ -472,67 +472,65 @@ function Users({ userData, setSelectedChatroom }) {
 
         {/* bottom menu */}
         <div className="mt-auto hidden users-mobile">
-          <ul className="h-[60px] men menu-horizontal bg-base-200 rounded-box w-full flex justify-center">
-            <li className="w-1/3 flex justify-center items-center">
-              <a>
-                <IoPersonAddSharp
-                  className={`w-[22px] h-[22px] hover:cursor-pointer ${
-                    activeTab === "users" ? "text-white" : "text-gray-700"
-                  }`}
-                  onClick={() => handleTabClick("users")}
-                />
-              </a>
-            </li>
-            <li className="w-1/3 flex justify-center items-center">
-              <a>
-                <IoMdChatboxes
-                  className={`w-[24px] h-[24px] hover:cursor-pointer ${
-                    activeTab === "chatrooms" ? "text-white" : "text-gray-700"
-                  }`}
-                  onClick={() => handleTabClick("chatrooms")}
-                />
-              </a>
-            </li>
-            <li className="w-1/3 flex justify-center items-center">
-              <a>
-                <div className="drawer">
-                  <input
-                    id="bottom-menu"
-                    type="checkbox"
-                    className="drawer-toggle"
+          <div className="btm-nav">
+            <button
+              className={`${
+                activeTab == "users" ? "active text-base-content" : ""
+              }`}
+            >
+              <IoPersonAddSharp
+                className="w-[20px] h-[20px] text-base-content"
+                onClick={() => handleTabClick("users")}
+              />
+            </button>
+
+            <button
+              className={`${
+                activeTab == "chatrooms" ? "active text-base-content" : ""
+              }`}
+            >
+              <IoMdChatboxes
+                className="w-[24px] h-[24px] text-base-content"
+                onClick={() => handleTabClick("chatrooms")}
+              />
+            </button>
+
+            <div className="drawer">
+              <input
+                id="bottom-menu"
+                type="checkbox"
+                className="drawer-toggle"
+              />
+              <div className="drawer-content">
+                <label htmlFor="bottom-menu" className="drawer-button">
+                  <img
+                    src={userData.avatarUrl}
+                    width={26}
+                    height={26}
+                    alt="Picture of the author"
+                    className="rounded-full"
+                    tabIndex={0}
+                    role="button"
                   />
-                  <div className="drawer-content">
-                    <label htmlFor="bottom-menu" className="drawer-button">
-                      <img
-                        src={userData.avatarUrl}
-                        width={30}
-                        height={30}
-                        alt="Picture of the author"
-                        className="rounded-full"
-                        tabIndex={0}
-                        role="button"
-                      />
-                    </label>
-                  </div>
-                  <div className="drawer-side z-[500]">
-                    <label
-                      htmlFor="bottom-menu"
-                      aria-label="close sidebar"
-                      className="drawer-overlay"
-                    ></label>
-                    <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                      <li>
-                        <a>Sidebar Item 1</a>
-                      </li>
-                      <li>
-                        <a onClick={logoutClick}>Logout</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
+                </label>
+              </div>
+              <div className="drawer-side z-[500]">
+                <label
+                  htmlFor="bottom-menu"
+                  aria-label="close sidebar"
+                  className="drawer-overlay"
+                ></label>
+                <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+                  <li>
+                    <a>Sidebar Item 1</a>
+                  </li>
+                  <li>
+                    <a onClick={logoutClick}>Logout</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

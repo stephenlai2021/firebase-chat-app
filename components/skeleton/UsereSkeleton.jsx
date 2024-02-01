@@ -4,7 +4,7 @@ import SidebarSkeleton from "./SidebarSkeleton";
 
 export default function UsersSkeleton() {
   return (
-    <div className="flex">
+    <div className="flex users-mobile">
       <SidebarSkeleton />
       <div className="w-[300px] h-full flex flex-col pt-">
         {/* title */}

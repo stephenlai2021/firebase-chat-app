@@ -101,6 +101,10 @@ body {
   word-wrap: break-word;
 }
 
+.menu-active {
+  border-left-width: 2px;
+}
+
 @media (min-width: 800px) {
   .text-desktop {
     max-width: 205px;
