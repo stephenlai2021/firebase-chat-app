@@ -11,11 +11,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 /* firebase */
-import { auth, firestore } from "@/app/firebase/client-config";
+import { auth, firestore } from "@/firebase/client-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "@/app/firebase/client-config";
+import { storage } from "@/firebase/client-config";
 
 
 function page() {  

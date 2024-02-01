@@ -7,7 +7,7 @@ import {
   auth,
   googleAuthProvider,
   firestore,
-} from "@/app/firebase/client-config";
+} from "@/firebase/client-config";
 import {
   signInWithEmailAndPassword,
   getRedirectResult,

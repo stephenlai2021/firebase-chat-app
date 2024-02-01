@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 
 /* firebase */
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "@/app/firebase/client-config";
+import { storage } from "@/firebase/client-config";
 
 /* 3rd-pary libraries */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
@@ -95,7 +95,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       {/* file input icon */}
       <FaPaperclip
         onClick={() => document.getElementById("dashboard").showModal()}
-        className={`mr-3 cursor-pointer text-gray-400`}
+        className={`mr-3 cursor-pointer text-gray-400 w-[16px] h-[16px]`}
       />
 
       {/* Emoji Picker Button */}
@@ -123,7 +123,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       <FaPaperPlane
         onClick={() => sendMessage()}
-        className="text-base-content cursor-pointer ml-3"
+        className="text-base-content cursor-pointer ml-3 w-[16px] h-[16px]"
       />
 
       {showEmojiPicker && (

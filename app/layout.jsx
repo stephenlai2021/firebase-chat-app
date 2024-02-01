@@ -12,7 +12,7 @@ import Users from "@/components/Users"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "WeChat",
+  title: "Chat2Chat",
   description: "an instant messenger that brings up your communication to a incredible awesome level 😍",
 };
 

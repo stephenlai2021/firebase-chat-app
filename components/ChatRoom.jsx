@@ -13,7 +13,7 @@ import {
   orderBy,
   updateDoc,
 } from "firebase/firestore";
-import { firestore } from "@/app/firebase/client-config";
+import { firestore } from "@/firebase/client-config";
 
 /* components */
 import MessageCard from "./MessageCard";

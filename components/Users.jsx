@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 
 /* firebase */
-import { firestore, auth } from "@/app/firebase/client-config";
+import { firestore, auth } from "@/firebase/client-config";
 import {
   collection,
   onSnapshot,
