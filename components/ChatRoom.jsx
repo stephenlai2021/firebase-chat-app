@@ -133,7 +133,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 5000);
-    return () => clearTimeout(timer)
+    return () => clearTimeout(timer);
   }, [loading]);
 
   return (
@@ -148,6 +148,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         >
           <FaArrowLeft className="text-base-content" />
         </div>
+
         <div className="relative w-9 h-9 ml-2">
           <img
             src={otherUser?.avatarUrl}
@@ -160,6 +161,13 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             }`}
           ></span>
         </div>
+
+        {/* <div className={`avatar ${otherUser?.status ==="online" ? "online" : "offline"}`}>
+          <div className="w-9 rounded-full">
+            <img src={otherUser?.avatarUrl} />
+          </div>
+        </div> */}
+
         <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
           {otherUser?.name}
         </div>
@@ -170,14 +178,15 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6 chatroom-padding"
       >
-        {!loading && messages?.map((message) => (
-          <MessageCard
-            key={message.id}
-            message={message}
-            me={me}
-            other={otherUser}
-          />
-        ))}
+        {!loading &&
+          messages?.map((message) => (
+            <MessageCard
+              key={message.id}
+              message={message}
+              me={me}
+              other={otherUser}
+            />
+          ))}
 
         {/* hide loading screen after 2 seconds */}
         {/* {messages.length == 0 && <MessageSkeleton />} */}

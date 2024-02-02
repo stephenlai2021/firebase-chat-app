@@ -161,6 +161,13 @@ body {
   }
 }
 
+@media (max-width: 500px) {
+  .form-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 @media (max-width: 360px) {
   .text-phone {
     max-width: 260px;

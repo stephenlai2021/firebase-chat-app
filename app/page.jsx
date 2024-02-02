@@ -22,7 +22,7 @@ function page() {
 
   const router = useRouter();
 
-  /* read login user */
+  /* get login user */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {

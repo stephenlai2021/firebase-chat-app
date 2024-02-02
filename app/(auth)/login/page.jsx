@@ -95,36 +95,12 @@ function page() {
     setLoading(false);
   };
 
-  // const signIn = () => {
-  //   signInWithRedirect(auth, googleAuthProvider);
-  // };
-
-  // useEffect(() => {
-  //   getRedirectResult(auth).then(async (userCred) => {
-  //     if (!userCred) {
-  //       return;
-  //     }
-  //     console.log('user credentials: ', userCred.user)
-
-  //     fetch("/api/login", {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${await userCred.user.getIdToken()}`,
-  //       },
-  //     }).then((response) => {
-  //       if (response.status === 200) {
-  //         router.push("/");
-  //       }
-  //     });
-  //   });
-  // }, []);
-
   return (
     <div className="flex flex-col justify-center items-center h-screen font-primary p-10 m-2">
       <form
         onSubmit={handleSubmit}
         // className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 border-2 border-green-300"
-        className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10"
+        className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 form-padding"
       >
         <h1 className="font-secondary text-xl text-center font-semibold text-base-content">
           CHAT<span className="font-bold text-[#eeab63ff]">2</span>CHAT
@@ -136,7 +112,7 @@ function page() {
           <input
             type="text"
             placeholder="Email"
-            className="w-full input input-bordered text-base pl-1"
+            className="w-full input input-bordered text-base-content pl-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -149,7 +125,7 @@ function page() {
           <input
             type="password"
             placeholder="Enter Password"
-            className="w-full input input-bordered text-base pl-1"
+            className="w-full input input-bordered text-base-content pl-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -175,7 +151,7 @@ function page() {
       </form>
 
       {/* <div className="max-w-[600px] w-full px-10 border-2 border-red-300"> */}
-      <div className="max-w-[600px] w-full px-10">
+      <div className="max-w-[600px] w-full px-10 form-padding">
         <div className="divider divider-base-300 text-base-content">OR</div>
         <button className="btn bg-red-400 w-full" 
           // onClick={() => signIn()}

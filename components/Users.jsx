@@ -308,7 +308,7 @@ function Users({ userData, setSelectedChatroom }) {
       </div>
 
       {/* main */}
-      <div className="overflow-hidde h-screen flex flex-col bg-gray-90 w-[300px] min-w-[200px] users-mobile">
+      <div className="h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
         {/* top menu */}
         <div className="h-[60px] flex items-center pl-[15px]">
           <div className="text-xl font-bold text-base-content">
