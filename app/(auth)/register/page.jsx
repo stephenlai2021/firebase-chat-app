@@ -150,7 +150,7 @@ function page() {
     setLoading(false);
   };
   return (
-    <div className="flex justify-center items-center h-screen font-primary p-10 m-2">
+    <div className="flex justify-center items-center h-screen font-primary p-8 m-2">
       {/*form*/}
       <form
         onSubmit={handleSubmit}
@@ -169,7 +169,7 @@ function page() {
           />
           <button
             type="button"
-            className="btn btn-outlin btn-[#0b3a65ff] btn-md"
+            className="btn btn-outlin btn-info btn-md"
             onClick={() => document.getElementById("dashboard").showModal()}
           >
             Upload Image
@@ -237,7 +237,7 @@ function page() {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-block btn-[#0b3a65ff]">
+          <button type="submit" className="btn btn-block btn-accent">
             {loading ? (
               <span className="loading loading-spinner loading-sm text-base-content"></span>
             ) : (

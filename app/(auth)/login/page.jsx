@@ -96,7 +96,7 @@ function page() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen font-primary p-10 m-2">
+    <div className="flex flex-col justify-center items-center h-screen font-primary px-8 pt-6 m-2">
       <form
         onSubmit={handleSubmit}
         // className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 border-2 border-green-300"
@@ -134,7 +134,7 @@ function page() {
           )}
         </div>
         <div>
-          <button type="submit" className="btn btn-block btn-[#0b3a65ff]">
+          <button type="submit" className="btn btn-block btn-accent">
             {loading ? (
               <span className="loading loading-spinner loading-sm text-base-content"></span>
             ) : (
