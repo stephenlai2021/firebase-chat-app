@@ -15,8 +15,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { useLoginUserStore } from '@/zustand/loginUserStore'
 
 /* components */
-import Users from "../components/main/Users";
-import ChatRoom from "../components/chatroom/ChatRoom";
+import Users from "./main/Users";
+import ChatRoom from "./chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
 function page() {
