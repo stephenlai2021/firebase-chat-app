@@ -49,7 +49,7 @@ function MessageCard({ message, me, other }) {
             <img src={message.image} className="max-h-60 mb-4 rounded" />
           </div>
         )}
-        <p className={`max-w-[360px] text-wrap text-sm tracker-tight leading-tight ${
+        <p className={`max-w-[360px] text-wrap ${
           isMessageFromMe
             ? "text-accent-content"
             : "text-primary-content"
