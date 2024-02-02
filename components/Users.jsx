@@ -377,9 +377,9 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleName(e.target.value)}
                     onKeyDown={handleUserNameSubmit}
                     placeholder="Enter name"
-                    className="input input-bordered input- w-full max-w-x"
+                    className="input input-bordered input- w-full max-w-x text-base-content"
                   />
-                  <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
+                  <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
                       className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
                       onClick={searchUserByName}
@@ -398,9 +398,9 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleEmail(e.target.value)}
                     onKeyDown={handleUserEmailSubmit}
                     placeholder="Enter email"
-                    className="input input-bordered input- w-full max-w-x"
+                    className="input input-bordered w-full max-w-x text-base-content"
                   />
-                  <div className="absolute right-0 top-[50%] translate-y-[-50%] p-2">
+                  <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
                       className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
                       onClick={searchUserByEmail}

@@ -1,20 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export const useStore = create(
+export const useLoginUserStore = create(
   persist(
     (set) => ({
-      loginUser: {},
-      // inc: () => set((state) => ({ count: state.count + 1 })),
-      // dec: () => set((state) => ({ count: state.count - 1 })),
+      loginUser: null,
+      setLoginUser: (newLoginUser) => set(() => ({ loginUser: newLoginUser }))
     }),
     {
       // name of the item in the storage (must be unique)
-      name: "users-storage", 
+      name: "loginUser-storage", 
       // (optional) by default, 'localStorage' is used
       // storage: createJSONStorage(() => sessionStorage), 
     }
   )
 );
-
-export default useStore;

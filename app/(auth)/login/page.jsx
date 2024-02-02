@@ -3,11 +3,7 @@
 import { useState, useEffect } from "react";
 
 /* firebase */
-import {
-  auth,
-  googleAuthProvider,
-  firestore,
-} from "@/firebase/client-config";
+import { auth, googleAuthProvider, firestore } from "@/firebase/client-config";
 import {
   signInWithEmailAndPassword,
   getRedirectResult,
@@ -26,6 +22,9 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+/* zustand */
+import { useLoginUserStore } from "@/zustand/loginUserStore";
+
 /* 3rd-party libraries */
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
@@ -35,7 +34,10 @@ function page() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
+
+  const { loginUser } = useLoginUserStore();
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -95,11 +97,15 @@ function page() {
     setLoading(false);
   };
 
+  /* check if user exists */
+  // useEffect(() => {
+  //   if (loginUser) router.push("/");
+  // }, [loginUser]);
+
   return (
-    <div className="flex flex-col justify-center items-center h-screen font-primary px-8 pt-6 m-2">
+    <div className="flex flex-col justify-center items-center h-screen font-primary px-8 m-2">
       <form
         onSubmit={handleSubmit}
-        // className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 border-2 border-green-300"
         className="space-y-4 w-full max-w-[600px] shadow-l pt-10 pl-10 pr-10 form-padding"
       >
         <h1 className="font-secondary text-xl text-center font-semibold text-base-content">
@@ -150,12 +156,9 @@ function page() {
         </span>
       </form>
 
-      {/* <div className="max-w-[600px] w-full px-10 border-2 border-red-300"> */}
       <div className="max-w-[600px] w-full px-10 form-padding">
         <div className="divider divider-base-300 text-base-content">OR</div>
-        <button className="btn bg-red-400 w-full" 
-          // onClick={() => signIn()}
-        >
+        <button className="btn bg-red-400 w-full" onClick={() => signIn()}>
           <FcGoogle className="w-[20px] h-[20px]" />
           Sign in with Google
         </button>

@@ -157,7 +157,7 @@ function page() {
         className="space-y-4 w-full max-w-2xl shadow-lg p-10 form-padding"
       >
         <h1 className="font-secondary text-xl text-center font-semibold text-base-content">
-          CHAT<span className="font-bold text-warning">2</span>CHAT
+          CHAT<span className="font-bold text-[#eeab63ff]">2</span>CHAT
         </h1>
 
         {/* Display the avatar and upload button */}

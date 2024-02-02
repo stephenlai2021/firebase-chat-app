@@ -11,6 +11,9 @@ import { firestore, auth } from "@/firebase/client-config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
+/* zustand */
+import { useLoginUserStore } from '@/zustand/loginUserStore'
+
 /* components */
 import Users from "../components/Users";
 import ChatRoom from "../components/ChatRoom";
@@ -22,6 +25,8 @@ function page() {
 
   const router = useRouter();
 
+  const { setLoginUser } = useLoginUserStore()
+
   /* get login user */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -31,6 +36,7 @@ function page() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setUser(data);
+          setLoginUser(data)
         } else {
           console.log("No such document!");
         }
@@ -41,6 +47,10 @@ function page() {
     });
     return () => unsubscribe();
   }, [auth, router]);
+
+  useEffect(() => {
+    console.log('user: ', user)
+  }, [user])
 
   if (user == null) return <LoadingSkeleton />;
 

@@ -143,10 +143,10 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         <div
           className={`${
             selectedChatroom ? "arrow-show" : "hidden"
-          } hidden ml-4 flex pt-[12px] h-9 hover:cursor-pointer`}
+          } hidden ml-4 flex pt-[12px] hover:cursor-pointer`}
           onClick={gotoUsersMenu}
         >
-          <FaArrowLeft className="text-base-content" />
+          <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
         </div>
 
         <div className="relative w-9 h-9 ml-2">
@@ -176,7 +176,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
       {/* Messages container with overflow and scroll */}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden pt-10 px-6 chatroom-padding"
+        className="flex-1 overflow-y-auto overflow-x-hidden pt-4 px-6 chatroom-padding"
       >
         {!loading &&
           messages?.map((message) => (
