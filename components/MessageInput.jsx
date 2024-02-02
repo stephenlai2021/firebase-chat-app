@@ -8,6 +8,7 @@ import { storage } from "@/firebase/client-config";
 /* 3rd-pary libraries */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { IoImageOutline } from "react-icons/io5";
 import EmojiPicker from "emoji-picker-react";
 
 function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
@@ -94,9 +95,9 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
     <div className="relative flex items-center px-4 py-3">
       {/* file input icon */}
       <div className="mr-3">
-        <FaPaperclip
+        <IoImageOutline
           onClick={() => document.getElementById("dashboard").showModal()}
-          className={`cursor-pointer text-gray-400 w-[16px] h-[16px]`}
+          className={`cursor-pointer text-gray-400 w-[22px] h-[22px]`}
         />
       </div>
 
@@ -119,16 +120,17 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         } outline-none text-gray-200`}
       />
       {/* {message && ( */}
-        <FaPaperPlane
-          onClick={() => sendMessage()}
-          className="absolute right-[26px] top-[50%] translate-y-[-50%] z-[200] text-base-content cursor-pointer w-[16px] h-[16px]"
-        />
+      <FaPaperPlane
+        onClick={() => sendMessage()}
+        className={`absolute right-[26px] top-[50%] translate-y-[-50%] z-[200] text-base-content cursor-pointer w-[16px] h-[16px]`}
+      />
       {/* )} */}
 
       {/* small image preview */}
-      {/* <div className="absolute right-[40px]">
+      {/* <div className="absolute top-[-30px] right-[18px]"> */}
+      <div className="absolute right-[16px]">
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
-      </div> */}
+      </div>
 
       {/* <div className="ml-3">
         <FaPaperPlane
@@ -155,44 +157,45 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       {/* image preview modal */}
       <dialog id="dashboard" className="modal">
         <div className="modal-box relative">
-          <form method="dialog" className="flex justify-center">
-            {/* <div className="border border-2"> */}
-              {imagePreview && (
-                <div className="relative">
+          <form
+            method="dialog"
+            className="flex flex-col justify-center items-center"
+          >
+            {imagePreview && (
+              <div className="relative">
+                <img
+                  src="./upload-icon.png"
+                  alt="upload icon"
+                  className="w-[40px] absolute top-[-20px] left-[50%] translate-x-[-50%] hover:cursor-pointer"
+                  onClick={handleUpload}
+                />
+                <div className="flex justify-center">
                   <img
-                    src="./upload-icon.png"
-                    alt="upload icon"
-                    className="w-[40px] absolute top-[-20px] left-[50%] translate-x-[-50%] hover:cursor-pointer"
-                    onClick={handleUpload}
+                    src={imagePreview}
+                    alt="Uploaded"
+                    className="max-h-60 max-w-xs mb-4 rounded"
                   />
-                  <div className="flex justify-center">
-                    <img
-                      src={imagePreview}
-                      alt="Uploaded"
-                      className="max-h-60 max-w-xs mb-4 rounded"
-                    />
-                  </div>
-                  <progress
-                    value={uploadProgress}
-                    className="progress progress-primary absolute bottom-0 left-0 z-50"
-                    max="100"
-                  ></progress>
                 </div>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                ref={inputFile}
-                className="mt-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
-                onChange={handleFileChange}
-              />
-            {/* </div> */}
+                <progress
+                  value={uploadProgress}
+                  className="progress progress-primary absolute bottom-0 left-0 z-50"
+                  max="100"
+                ></progress>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              ref={inputFile}
+              className="mt-2 file-input file-input-bordered file-input-primary text-base-content w-full max-w-xs"
+              onChange={handleFileChange}
+            />
           </form>
           <button
-            className="btn btn-sm btn-circle btn-ghost absolute top-0 right-2 top-2"
+            className="btn btn-sm btn-circle btn-ghost absolute top-0 right-1 top-1"
             onClick={closeAndClearModal}
           >
-            ✕
+            <IoIosCloseCircleOutline className="w-[22px] h-[22px] text-base-content" />
           </button>
         </div>
       </dialog>
