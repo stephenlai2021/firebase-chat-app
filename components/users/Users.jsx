@@ -33,6 +33,7 @@ import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
+import { IoSettingsSharp } from "react-icons/io5";
 
 function Users({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("chatrooms");
@@ -260,19 +261,38 @@ function Users({ userData, setSelectedChatroom }) {
   return (
     <div className="flex h-full">
       {/* sidebar */}
-      <div className="h-full flex flex-col items-center sidebar-hide pt-1">
-        <div className={`${activeTab == 'users' ? 'menu-active border-base-content' : ''} border- w-full py-4 px-5 flex items-center justify-center`}>
+      <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-1">
+        <div
+          className={`${
+            activeTab == "users" ? "menu-active border-base-content" : ""
+          } border- w-full py-4 px-5 flex items-center justify-center`}
+        >
           <IoPersonAddSharp
             className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
             onClick={() => handleTabClick("users")}
           />
         </div>
-        <div className={`${activeTab == 'chatrooms' ? 'menu-active border-base-content' : ''} border- w-full py-4 px-5 flex items-center justify-center`}>
+        <div
+          className={`${
+            activeTab == "chatrooms" ? "menu-active border-base-content" : ""
+          } border- w-full py-4 px-5 flex items-center justify-center`}
+        >
           <IoMdChatboxes
             className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
             onClick={() => handleTabClick("chatrooms")}
           />
         </div>
+        <div
+          className={`${
+            activeTab == "settings" ? "menu-active border-base-content" : ""
+          } border- w-full py-4 px-5 flex items-center justify-center`}
+        >
+          <IoSettingsSharp
+            className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
+            onClick={() => handleTabClick("settings")}
+          />
+        </div>
+
         {/* user icon */}
         <div className="drawer mt-auto p-5">
           <input id="sidebar-menu" type="checkbox" className="drawer-toggle" />
@@ -297,7 +317,72 @@ function Users({ userData, setSelectedChatroom }) {
             ></label>
             <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
               <li>
-                <a>Sidebar Item 1</a>
+                <a>
+                  <div className="dropdown dropdown-bottom">
+                    <div tabIndex={0} role="button" className="">
+                      Theme
+                      <svg
+                        width="12px"
+                        height="12px"
+                        className="ml-2 h-2 w-2 fill-current opacity-60 inline-block"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 2048 2048"
+                      >
+                        <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+                      </svg>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
+                    >
+                      <li>
+                        <input
+                          type="radio"
+                          name="theme-dropdown"
+                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                          aria-label="Default"
+                          value="default"
+                        />
+                      </li>
+                      <li>
+                        <input
+                          type="radio"
+                          name="theme-dropdown"
+                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                          aria-label="Retro"
+                          value="retro"
+                        />
+                      </li>
+                      <li>
+                        <input
+                          type="radio"
+                          name="theme-dropdown"
+                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                          aria-label="Cyberpunk"
+                          value="cyberpunk"
+                        />
+                      </li>
+                      <li>
+                        <input
+                          type="radio"
+                          name="theme-dropdown"
+                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                          aria-label="Valentine"
+                          value="valentine"
+                        />
+                      </li>
+                      <li>
+                        <input
+                          type="radio"
+                          name="theme-dropdown"
+                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                          aria-label="Aqua"
+                          value="aqua"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </a>
               </li>
               <li>
                 <a onClick={logoutClick}>Logout</a>
@@ -306,9 +391,18 @@ function Users({ userData, setSelectedChatroom }) {
           </div>
         </div>
       </div>
+      {/* <dialog id="theme-modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">Press ESC key or click outside to close</p>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>        
+      </dialog> */}
 
       {/* main */}
-      <div className="h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
+      <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
         {/* top menu */}
         <div className="h-[60px] flex items-center pl-[15px]">
           <div className="text-xl font-bold text-base-content">
@@ -316,6 +410,8 @@ function Users({ userData, setSelectedChatroom }) {
               ? "Chatrooms"
               : activeTab == "users"
               ? "Add friend"
+              : activeTab == "settings"
+              ? "Settings"
               : ""}
           </div>
         </div>
@@ -364,6 +460,131 @@ function Users({ userData, setSelectedChatroom }) {
             </>
           )}
 
+          {activeTab === "settings" && (
+            <div className="px-2 flex flex-col items-center">
+              {/* <div className="dropdown mb-72">
+                <div tabIndex={0} role="button" className="btn btn-wide m-1" >
+                  Theme
+                  <svg
+                    width="12px"
+                    height="12px"
+                    className="h-2 w-2 fill-current opacity-60 inline-block"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 2048 2048"
+                  >
+                    <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+                  </svg>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
+                >
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Default"
+                      value="default"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Retro"
+                      value="retro"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Cyberpunk"
+                      value="cyberpunk"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Valentine"
+                      value="valentine"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Aqua"
+                      value="aqua"
+                    />
+                  </li>
+                </ul>
+              </div> */}
+
+              <details className="collapse bg-base-200 ">
+                <summary className="collapse-title font-medium text-base-content">
+                  <div className="flex justify-between items-center">
+                    <span>Themes</span>
+                    <svg
+                      width="12px"
+                      height="12px"
+                      className="h-3 w-3 fill-current opacity-60 inline-block"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 2048 2048"
+                    >
+                      <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+                    </svg>
+                  </div>
+                </summary>
+                <div className="collapse-content">
+                  <div className="join join-vertical">
+                    <input
+                      type="radio"
+                      name="theme-buttons"
+                      className="btn btn-wide theme-controller join-item w-full"
+                      aria-label="Default"
+                      value="default"
+                    />
+                    <input
+                      type="radio"
+                      name="theme-buttons"
+                      className="btn btn-wide theme-controller join-item"
+                      aria-label="Retro"
+                      value="retro"
+                    />
+                    <input
+                      type="radio"
+                      name="theme-buttons"
+                      className="btn btn-wide theme-controller join-item"
+                      aria-label="Cyberpunk"
+                      value="cyberpunk"
+                    />
+                    <input
+                      type="radio"
+                      name="theme-buttons"
+                      className="btn btn-wide theme-controller join-item"
+                      aria-label="Valentine"
+                      value="valentine"
+                    />
+                    <input
+                      type="radio"
+                      name="theme-buttons"
+                      className="btn btn-wide theme-controller join-item"
+                      aria-label="Aqua"
+                      value="aqua"
+                    />
+                  </div>
+                </div>
+              </details>
+            </div>
+          )}
+
           {/* users section */}
           {activeTab === "users" && (
             <>
@@ -377,7 +598,7 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleName(e.target.value)}
                     onKeyDown={handleUserNameSubmit}
                     placeholder="Enter name"
-                    className="input input-bordered input- w-full max-w-x text-base-content"
+                    className="input bg-base-200 input-md w-full max-w-x text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
@@ -398,7 +619,7 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleEmail(e.target.value)}
                     onKeyDown={handleUserEmailSubmit}
                     placeholder="Enter email"
-                    className="input input-bordered w-full max-w-x text-base-content"
+                    className="input input-md bg-base-200 w-full max-w-x text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend

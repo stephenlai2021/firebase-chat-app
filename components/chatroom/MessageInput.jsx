@@ -93,7 +93,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   };
 
   return (
-    <div className="relative flex items-center px-4 py-3">
+    <div className="relative flex items-center px-4 py-3 shadow-inner">
       {/* file input icon */}
       <div className="mr-3">
         <IoImageOutline

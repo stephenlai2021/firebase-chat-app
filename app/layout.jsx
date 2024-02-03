@@ -18,11 +18,18 @@ export const metadata = {
   icons: {
     icon: "/chat-icon.png",
   },
+  content: {
+    width: "device-width",
+    "user-scalable": "no",
+    "initial-scale": "1.0",
+    "maximum-scale": "1.0"
+  }
+
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="dracula">
+    <html lang="en" data-theme="light">
       <body
         className={`${inter.className} bg-base-100`}
         suppressHydrationWarning={true}

@@ -144,9 +144,9 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   }, [loading]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen shadow-inner">
       {/* top menu */}
-      <div className="h-[60px] flex items-center">
+      <div className="h-[60px] flex items-center shadow-inner">
         <div
           className={`${
             selectedChatroom ? "arrow-show" : "hidden"
@@ -183,7 +183,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
       {/* Messages container with overflow and scroll */}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden pt-4 px-6 chatroom-padding"
+        className="shadow-inner flex-1 overflow-y-auto overflow-x-hidden pt-4 px-6 chatroom-padding"
       >
         {!loading &&
           messages?.map((message) => (
