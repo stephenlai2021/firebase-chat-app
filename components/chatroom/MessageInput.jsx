@@ -82,7 +82,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   };
 
   const handleSubmit = (event) => {
-    if (event.key === "Enter") sendMessage();
+    if (event.key == "Enter") sendMessage();
   };
 
   const closeAndClearModal = () => {

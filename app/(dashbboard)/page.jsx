@@ -15,22 +15,24 @@ import { doc, getDoc } from "firebase/firestore";
 import { useLoginUserStore } from '@/zustand/loginUserStore'
 
 /* components */
-import Users from "./main/Users";
-import ChatRoom from "./chatroom/ChatRoom";
+import Users from "../../components/users/Users";
+import ChatRoom from "../../components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
-function page() {
+function HomePage() {
   const [user, setUser] = useState(null);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const router = useRouter();
 
-  const { setLoginUser } = useLoginUserStore()
+  const { setLoginUser, setUserCredential } = useLoginUserStore()
 
   /* get login user */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log('user credential: ', user)
+        setUserCredential(user)
         const docRef = doc(firestore, "users", user.email);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -83,4 +85,4 @@ function page() {
   );
 }
 
-export default page;
+export default HomePage;

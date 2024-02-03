@@ -7,7 +7,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
 /* components */
-import Users from "@/components/main/Users";
+import Users from "@/components/users/Users";
 
 const inter = Inter({ subsets: ["latin"] });
 

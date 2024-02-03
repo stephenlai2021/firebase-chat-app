@@ -5,7 +5,9 @@ export const useLoginUserStore = create(
   persist(
     (set) => ({
       loginUser: null,
-      setLoginUser: (newLoginUser) => set(() => ({ loginUser: newLoginUser }))
+      userCredential: null,
+      setLoginUser: (newLoginUser) => set(() => ({ loginUser: newLoginUser })),
+      setUserCredential: (newUserCredential) => set(() => ({ userCredential: newUserCredential }))
     }),
     {
       // name of the item in the storage (must be unique)

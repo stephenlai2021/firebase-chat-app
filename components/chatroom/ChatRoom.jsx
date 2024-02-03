@@ -84,12 +84,12 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   /* put messages in db */
   const sendMessage = async () => {
     // Check if the message is not empty
-    if (message == "" && image == "") return;
+    if (message == "" && image == null) return;
 
     if (
-      (message == "" && image !== "") ||
-      (message !== "" && image == "") ||
-      (message !== "" && image !== "")
+      (message == "" && image !== null) ||
+      (message !== "" && image == null) ||
+      (message !== "" && image !== null)
     ) {
       try {
         // Add a new message to the Firestore collection
@@ -104,7 +104,8 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         const messagesCollection = collection(firestore, "messages");
         await addDoc(messagesCollection, newMessage);
         setMessage("");
-        setImage("");
+        setImage(null);
+
         //send to chatroom by chatroom id and update last message
         const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
         await updateDoc(chatroomRef, {
@@ -116,6 +117,10 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
       } catch (error) {
         console.error("Error sending message:", error.message);
       }
+    } else {
+      setMessage("");
+      setImage(null);
+      return
     }
 
     // Scroll to the bottom after sending a message
