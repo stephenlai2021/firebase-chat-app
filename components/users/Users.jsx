@@ -403,8 +403,8 @@ function Users({ userData, setSelectedChatroom }) {
 
       {/* main */}
       <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
-        {/* top menu */}
-        <div className="h-[60px] flex items-center pl-[15px]">
+        {/* navbar */}
+        {/* <div className="h-[60px] flex items-center pl-[15px]">
           <div className="text-xl font-bold text-base-content">
             {activeTab == "chatrooms"
               ? "Chatrooms"
@@ -414,6 +414,18 @@ function Users({ userData, setSelectedChatroom }) {
               ? "Settings"
               : ""}
           </div>
+        </div> */}
+
+        <div className="navbar bg-base-10">
+          <a className="btn btn-ghost text-xl">
+            {activeTab == "chatrooms"
+              ? "Chatrooms"
+              : activeTab == "users"
+              ? "Add friend"
+              : activeTab == "settings"
+              ? "Settings"
+              : ""}
+          </a>
         </div>
 
         {/* body */}
