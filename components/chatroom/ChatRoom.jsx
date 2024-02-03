@@ -78,7 +78,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
         console.log("messages: ", messages);
       }
     );
-    return unsubscribe;
+    return () => unsubscribe();
   }, [chatRoomId]);
 
   /* put messages in db */
@@ -101,10 +101,11 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
           image: image,
         };
 
-        const messagesCollection = collection(firestore, "messages");
-        await addDoc(messagesCollection, newMessage);
         setMessage("");
         setImage(null);
+
+        const messagesCollection = collection(firestore, "messages");
+        await addDoc(messagesCollection, newMessage);
 
         //send to chatroom by chatroom id and update last message
         const chatroomRef = doc(firestore, "chatrooms", chatRoomId);
@@ -134,6 +135,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
     setSelectedChatroom(null);
   };
 
+  /* handle chat bubble loading time */
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);

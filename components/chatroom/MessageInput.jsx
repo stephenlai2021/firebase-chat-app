@@ -1,5 +1,5 @@
 /* react */
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 /* firebase */
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -16,6 +16,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  // const [delay, setDelay] = useState(false);
 
   const inputFile = useRef(null);
 
@@ -81,7 +82,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
     setMessage((prevMessage) => prevMessage + emojiData.emoji);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (event.key == "Enter") sendMessage();
   };
 
