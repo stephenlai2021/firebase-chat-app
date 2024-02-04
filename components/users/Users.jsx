@@ -435,7 +435,7 @@ function Users({ userData, setSelectedChatroom }) {
             <div className="settings-section">
               <ul className="menu text-base-content">
                 <li>
-                  <details open>
+                  <details>
                     <summary>Theme</summary>
                     <ul className="menu">
                       {themes.map((theme) => (
