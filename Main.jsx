@@ -8,8 +8,8 @@ import { firestore } from "@/firebase/client-config";
 import { doc, getDoc } from "firebase/firestore";
 
 /* components */
-import Users from "./users/Users";
-import ChatRoom from "./chatroom/ChatRoom";
+import Users from "./components/main/Main";
+import ChatRoom from "./components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
 function Main({ userCredential }) {

@@ -6,9 +6,6 @@ import { Inter } from "next/font/google";
 /* 3rd pary library */
 import { Toaster } from "react-hot-toast";
 
-/* components */
-import Users from "@/components/users/Users";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,22 +17,24 @@ export const metadata = {
   },
   content: {
     width: "device-width",
-    "user-scalable": "no",
-    "initial-scale": "1.0",
-    "maximum-scale": "1.0"
-  }
-
+    userScalable: "no",
+    initialScale: "1.0",
+    maximumScale: "1.0",
+  },
 };
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="aqua">
+    <html lang="en">
       <body
-        className={`${inter.className} bg-base-100`}
-        suppressHydrationWarning={true}
+        className={`${inter.className}`}
+        suppressHydrationWarning
+        data-theme="pastel"
       >
-        <Toaster position="bottom-center" />
-        {children}
+        <div className="max-w-[1600px] mx-auto">
+          <Toaster position="bottom-center" />
+          {children}
+        </div>
       </body>
     </html>
   );

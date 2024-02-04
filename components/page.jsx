@@ -1,5 +1,5 @@
 /* components */
-import Main from '@/components/Main'
+import Main from '@/Main'
 
 function HomePage() {
   /* get user credential from server and protect route */

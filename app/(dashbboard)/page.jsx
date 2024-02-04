@@ -15,7 +15,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useLoginUserStore } from '@/zustand/loginUserStore'
 
 /* components */
-import Users from "../../components/users/Users";
+import Main from "../../components/main/Main";
 import ChatRoom from "../../components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
@@ -50,10 +50,6 @@ function HomePage() {
     return () => unsubscribe();
   }, [auth, router]);
 
-  useEffect(() => {
-    console.log('user: ', user)
-  }, [user])
-
   if (user == null) return <LoadingSkeleton />;
 
   return (
@@ -63,7 +59,7 @@ function HomePage() {
           selectedChatroom == null ? "users-mobile" : "users-hide"
         }`}
       >
-        <Users userData={user} setSelectedChatroom={setSelectedChatroom} />
+        <Main userData={user} setSelectedChatroom={setSelectedChatroom} />
       </div>
 
       {selectedChatroom && (

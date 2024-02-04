@@ -1,7 +1,7 @@
 "use client";
 
 /* react */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 /* firebase */
 import { firestore, auth } from "@/firebase/client-config";
@@ -24,24 +24,25 @@ import { useRouter } from "next/navigation";
 
 /* components */
 import UsersCard from "./UsersCard";
+import Sidebar from "../menu/Sidebar";
+import MainBottomNavbar from "../menu/MainBottomNavbar";
+import MainNavbar from "../menu/MainNavbar";
 
-/* 3rd-party libraries */
+/* others */
 import { toast } from "react-hot-toast";
-import { IoMdChatboxes } from "react-icons/io";
+
+/* react-icons */
 import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { IoSettingsSharp } from "react-icons/io5";
+import { IoMdAdd } from "react-icons/io";
+import { IoMdAddCircle } from "react-icons/io";
 
-import { themes } from "@/actions/client/utils";
-
-function Users({ userData, setSelectedChatroom }) {
+function Main({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("chatrooms");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
   const [user, setUser] = useState("");
-  const [menu, setMenu] = useState(false);
   const [userName, setUserName] = useState("");
-  const [userByName, setUserByName] = useState("");
   const [usersByName, setUsersByName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userByEmail, setUserByEmail] = useState("");
@@ -130,7 +131,7 @@ function Users({ userData, setSelectedChatroom }) {
     if (event.key === "Enter") searchUserByName();
   };
 
-  /* 切換到 chatrooms tab 時清除 Email 表格內容及找到的用戶資料 */
+  /* if tab switched to chatrooms, reset name && email */
   useEffect(() => {
     if (activeTab == "chatrooms") {
       setUserName("");
@@ -140,7 +141,7 @@ function Users({ userData, setSelectedChatroom }) {
     }
   }, [activeTab]);
 
-  /* 讀取用戶s */
+  /* get users */
   useEffect(() => {
     const usersRef = collection(firestore, "users");
     const unsubscribe = onSnapshot(usersRef, (snapshot) => {
@@ -152,7 +153,7 @@ function Users({ userData, setSelectedChatroom }) {
     return () => unsubscribe();
   }, []);
 
-  // 讀取聊天室s
+  // get chatrooms
   useEffect(() => {
     if (!userData?.id) return;
     const chatroomsQuery = query(
@@ -172,7 +173,7 @@ function Users({ userData, setSelectedChatroom }) {
     return () => unsubscribeChatrooms();
   }, [userData]);
 
-  /* 把登陸用戶狀態設置為 "offline" */
+  /* set user status to offline */
   const setUserStatusOffline = async () => {
     /* 把 users 收集的登陸用戶狀態設置為 "offline" */
     const loginUserRef = doc(firestore, "users", userData.email);
@@ -191,7 +192,7 @@ function Users({ userData, setSelectedChatroom }) {
     });
   };
 
-  /* 建立聊天室 */
+  /* create chatroom */
   const createChat = async (user) => {
     setUser(user);
 
@@ -234,7 +235,7 @@ function Users({ userData, setSelectedChatroom }) {
     }
   };
 
-  /* 開啟聊天室 */
+  /* open chatroom */
   const openChat = async (chatroom) => {
     const data = {
       id: chatroom.id,
@@ -245,7 +246,7 @@ function Users({ userData, setSelectedChatroom }) {
     setSelectedChatroom(data);
   };
 
-  /* 登出用戶並將用戶狀態設置為"offline" */
+  /* logout user */
   const logoutClick = () => {
     signOut(auth)
       .then(() => {
@@ -312,83 +313,16 @@ function Users({ userData, setSelectedChatroom }) {
 
   return (
     <div className="flex h-full">
-      {/* sidebar */}
-      <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-1">
-        {/* add friend icon */}
-        <div
-          className={`${
-            activeTab == "add" ? "menu-active border-base-content" : ""
-          } border- w-full py-4 px-5 flex items-center justify-center`}
-        >
-          <IoPersonAddSharp
-            className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
-            onClick={() => handleTabClick("add")}
-          />
-        </div>
-
-        {/* chatroom icon */}
-        <div
-          className={`${
-            activeTab == "chatrooms" ? "menu-active border-base-content" : ""
-          } border- w-full py-4 px-5 flex items-center justify-center`}
-        >
-          <IoMdChatboxes
-            className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
-            onClick={() => handleTabClick("chatrooms")}
-          />
-        </div>
-
-        {/* settings icon */}
-        <div
-          className={`${
-            activeTab == "settings" ? "menu-active border-base-content" : ""
-          } border- w-full py-4 px-5 flex items-center justify-center`}
-        >
-          <IoSettingsSharp
-            className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
-            onClick={() => handleTabClick("settings")}
-          />
-        </div>
-
-        {/* user icon */}
-        <div
-          className={`${
-            activeTab == "user" ? "menu-active border-base-content" : ""
-          } mt-auto p-5 w-full py-4 px-5 flex items-center justify-center`}
-          onClick={() => handleTabClick("user")}
-        >
-          <img
-            src={userData.avatarUrl}
-            width={30}
-            height={30}
-            alt="Picture of the author"
-            className="rounded-full"
-            tabIndex={0}
-            role="button"
-          />
-        </div>
-      </div>
-
-      {/* main */}
+      <Sidebar
+        userData={userData}
+        activeTab={activeTab}
+        handleTabClick={handleTabClick}
+      />
       <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
-        {/* navbar */}
-        <div className="h-[60px] flex py-[16px] pl-[15px]">
-          <div className="text-xl font-bold text-base-content">
-            {activeTab == "chatrooms"
-              ? "Chatrooms"
-              : activeTab == "add"
-              ? "Add friend"
-              : activeTab == "settings"
-              ? "Settings"
-              : activeTab == "user"
-              ? "Profile"
-              : ""}
-          </div>
-        </div>
+        <MainNavbar activeTab={activeTab} />
 
-        {/* body */}
+        {/* main body */}
         <div className="pt-1 overflow-y-auto">
-          {/* chatrooms section */}
           {activeTab === "chatrooms" && (
             <>
               {userChatrooms.map((chatroom) => (
@@ -424,35 +358,20 @@ function Users({ userData, setSelectedChatroom }) {
                     lastMessageSentTime={chatroom.lastMessageSentTime}
                     timeStamp={chatroom.timestamp}
                     loginUser={userData}
-                    type={"chat"}
+                    found={"false"}
                   />
                 </div>
               ))}
             </>
           )}
-
           {activeTab === "settings" && (
             <div className="settings-section">
               <ul className="menu text-base-content">
                 <li>
-                  <details>
-                    <summary>Theme</summary>
-                    <ul className="menu">
-                      {themes.map((theme) => (
-                        <li key={theme.label}>
-                          <label className="label cursor-pointer w-full">
-                            <span className="label-text">{theme.label}</span>
-                            <input
-                              type="radio"
-                              name="theme-radios"
-                              className="radio theme-controller"
-                              value={theme.value}
-                            />
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
+                  <a className="">Theme</a>
+                </li>
+                <li>
+                  <a className="">Language</a>
                 </li>
                 <li>
                   <a onClick={logoutClick}>Logout</a>
@@ -460,8 +379,6 @@ function Users({ userData, setSelectedChatroom }) {
               </ul>
             </div>
           )}
-
-          {/* add friend section */}
           {activeTab === "add" && (
             <>
               {/* Search user by name */}
@@ -474,7 +391,7 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleName(e.target.value)}
                     onKeyDown={handleUserNameSubmit}
                     placeholder="Enter name"
-                    className="input bg-base-200 input-md w-full max-w-x text-base-content"
+                    className="input bg-base-200 rounded-md input-bordered input-sm w-full max-w-x text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
@@ -495,7 +412,7 @@ function Users({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleEmail(e.target.value)}
                     onKeyDown={handleUserEmailSubmit}
                     placeholder="Enter email"
-                    className="input input-md bg-base-200 w-full max-w-x text-base-content"
+                    className="input input-sm input-bordered rounded-md bg-base-200 w-full text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
@@ -512,7 +429,7 @@ function Users({ userData, setSelectedChatroom }) {
               </div>
 
               {/* users found by name  */}
-              {activeTab === "users" && usersByName && (
+              {activeTab === "add" && usersByName && (
                 <div className="relative mt-8 flex flex-col">
                   {usersByName &&
                     usersByName.map((user) => (
@@ -522,18 +439,19 @@ function Users({ userData, setSelectedChatroom }) {
                           avatarUrl={user.avatarUrl}
                           email={user.email}
                           status={user.status}
-                          lastMessage={user.name}
-                          type={"user"}
+                          lastMessage={user.lastMessage}
                           found={"true"}
-                          bgColor="bg-gray-800"
                         />
                         {user.email !== userData.email && (
-                          <button
-                            className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
+                          // <button
+                          //   className="btn btn-circle btn-sm absolute right-4 top-[50%] translate-y-[-50%]"
+                          //   onClick={() => createChat(user)}
+                          // >
+                          <IoPersonAddSharp
+                            className="w-5 h-5 text-base-content absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
                             onClick={() => createChat(user)}
-                          >
-                            <IoPersonAddSharp className="w-[20px] h-[20px] text-white" />
-                          </button>
+                          />
+                          // </button>
                         )}
                       </div>
                     ))}
@@ -541,96 +459,39 @@ function Users({ userData, setSelectedChatroom }) {
               )}
 
               {/* user found by email  */}
-              {activeTab === "users" && userByEmail && (
+              {activeTab === "add" && userByEmail && (
                 <div className="relative mt-8 flex flex-col">
                   <UsersCard
                     name={userByEmail.name}
                     avatarUrl={userByEmail.avatarUrl}
                     email={userByEmail.email}
                     status={userByEmail.status}
-                    lastMessage={userByEmail.name}
-                    type={"user"}
+                    lastMessage={userByEmail.lastMessage}
                     found={"true"}
-                    bgColor="bg-gray-800"
                   />
                   {userEmail !== userData.email && (
-                    <button
-                      className="btn btn-circle btn-sm btn-neutral absolute right-0 top-0"
+                    <IoPersonAddSharp
+                      className="w-5 h-5 font-semibold text-base-content absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
                       onClick={() => createChat(userByEmail)}
-                    >
-                      <IoPersonAddSharp className="w-[20px] h-[20px] text-white" />
-                    </button>
+                    />
                   )}
                 </div>
               )}
             </>
           )}
-
-          {/* user section */}
-          {activeTab === "user" && <div className="px-3 text-base-content">user profile</div>}
+          {activeTab === "user" && (
+            <div className="px-3 text-base-content">user profile</div>
+          )}
         </div>
 
-        {/* bottom menu */}
-        <div className="mt-auto hidden users-mobile">
-          <div className="btm-nav">
-            {/* add friend button */}
-            <button
-              className={`${
-                activeTab == "add" ? "active text-base-content" : ""
-              }`}
-            >
-              <IoPersonAddSharp
-                className="w-[20px] h-[20px] text-base-content"
-                onClick={() => handleTabClick("add")}
-              />
-            </button>
-
-            {/* chatroom button */}
-            <button
-              className={`${
-                activeTab == "chatrooms" ? "active text-base-content" : ""
-              }`}
-            >
-              <IoMdChatboxes
-                className="w-[24px] h-[24px] text-base-content"
-                onClick={() => handleTabClick("chatrooms")}
-              />
-            </button>
-
-            {/* settings button */}
-            <button
-              className={`${
-                activeTab == "settings" ? "active text-base-content" : ""
-              }`}
-            >
-              <IoSettingsSharp
-                className="w-[24px] h-[24px] text-base-content"
-                onClick={() => handleTabClick("settings")}
-              />
-            </button>
-
-            {/* user icon */}
-            <button
-              className={`${
-                activeTab == "user" ? "active text-base-content" : ""
-              }`}
-            >
-              <img
-                src={userData.avatarUrl}
-                width={30}
-                height={30}
-                alt="Picture of the author"
-                className="rounded-full"
-                tabIndex={0}
-                role="button"
-                onClick={() => handleTabClick("user")}
-              />
-            </button>
-          </div>
-        </div>
+        <MainBottomNavbar
+          userData={userData}
+          activeTab={activeTab}
+          handleTabClick={handleTabClick}
+        />
       </div>
     </div>
   );
 }
 
-export default Users;
+export default Main;

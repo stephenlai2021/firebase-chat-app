@@ -11,9 +11,9 @@ function UsersCard({
   timeStamp,
   status,
   found,
-  type,
-  loginUser,
-  bgColor,
+  // type,
+  // loginUser,
+  // bgColor,
 }) {
   /* 時間格式 */
   const formatTimeAgo = (timestamp) => {
@@ -25,11 +25,11 @@ function UsersCard({
   return (
     <div
       className={`${
-        found == "true" ? "" : "hover:cursor-pointer"
-      } border-1 border-red-30 w-full hover:bg-base-300 flex items-center justify-between rounded p-3 relative ${
-        bgColor ? bgColor : ""
-      }`}
+        found == "false" ? "hover:cursor-pointer" : ""
+      } hover:bg-base-200 px-4 w-full flex items-center justify-between rounded p-3 relative 
+      `}
     >
+      {/* ${ bgColor ? bgColor : "" } */}
       {/* Avatar on the left */}
       <div className="flex-shrink-0 mr-4 relative">
         <div className="w-12 h-12 rounded-full overflow-hidden">
@@ -50,19 +50,21 @@ function UsersCard({
         </div>
       </div>
 
-      {type == "chat" && (
-        <div className="flex-1">
-          <div className="flex items-center justify-between text-desktop text-phone border-1 border-green-30">
-            <h2 className="text-lg font-semibold truncate text-base-content">{name}</h2>
-            <div className="text-xs text-base-content truncate time-stamp-desktop">
-              {lastMessageSentTime ? formatTimeAgo(lastMessageSentTime) : ''}
-            </div>
+      {/* {type == "chat" && ( */}
+      <div className="flex-1">
+        <div className="flex items-center justify-between text-desktop text-phone border-1 border-green-30">
+          <h2 className="border-1 border-blue-30 text-lg font-semibold truncate text-base-content">
+            {name}
+          </h2>
+          <div className="text-xs text-base-content truncate time-stamp-desktop">
+            {lastMessageSentTime ? formatTimeAgo(lastMessageSentTime) : ""}
           </div>
-          <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
-            {lastMessage}
-          </p>
         </div>
-      )}
+        <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
+          {lastMessage}
+        </p>
+      </div>
+      {/* )} */}
     </div>
   );
 }

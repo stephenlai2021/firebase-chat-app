@@ -61,26 +61,26 @@
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    /* --input: 217.2 32.6% 17.5%; */
     --ring: 212.7 26.8% 83.9%;
   }
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
 
-body {
+/* body {
   max-width: 1800px;
   margin: 0 auto;
-}
+} */
 
-.upload-box > p {
+/* .upload-box > p {
   text-align: center;
   font-weight: 500;
   margin-top: 10px;
@@ -95,7 +95,7 @@ body {
 
 .backdrop-blur {
   backdrop-filter: blur(30px);
-}
+} */
 
 .text-wrap {
   word-wrap: break-word;

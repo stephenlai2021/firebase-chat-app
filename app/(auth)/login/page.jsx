@@ -97,11 +97,6 @@ function page() {
     setLoading(false);
   };
 
-  /* check if user exists */
-  // useEffect(() => {
-  //   if (loginUser) router.push("/");
-  // }, [loginUser]);
-
   return (
     <div className="flex flex-col justify-center items-center h-screen font-primary px-8 m-2">
       <form

@@ -16,7 +16,6 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  // const [delay, setDelay] = useState(false);
 
   const inputFile = useRef(null);
 
@@ -104,7 +103,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
 
       {/* Emoji Picker Button */}
       <button
-        className="mr-3"
+        className="mr-3 text-[18px]"
         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
       >
         😊
@@ -116,10 +115,10 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         onKeyDown={handleSubmit}
         type="text"
         placeholder="Type a message..."
-        className={`rounded bg-base-300 text-base-content flex-1 border-none p-2 pr-8 w-full max-w-x ${
-          image ? "pr-[52px]" : "pr-2"
-        } outline-none text-gray-200`}
+        className={`rounded-md input-bordered bg-base-200 input input-sm text-base-content flex-1 p-2 pr-8 w-full outline-non
+        `}
       />
+      {/* ${image ? "pr-[52px]" : "pr-2"} */}
       {/* {message && ( */}
       <FaPaperPlane
         onClick={() => sendMessage()}
