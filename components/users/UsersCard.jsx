@@ -26,7 +26,7 @@ function UsersCard({
     <div
       className={`${
         found == "true" ? "" : "hover:cursor-pointer"
-      } border-1 border-red-30 w-full hover:bg-base-300 flex items-center justify-between rounded px-4 py-3 relative ${
+      } border-1 border-red-30 w-full hover:bg-base-300 flex items-center justify-between rounded p-3 relative ${
         bgColor ? bgColor : ""
       }`}
     >

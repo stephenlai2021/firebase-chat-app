@@ -381,7 +381,7 @@ function Users({ userData, setSelectedChatroom }) {
               : activeTab == "settings"
               ? "Settings"
               : activeTab == "user"
-              ? userData.name
+              ? "Profile"
               : ""}
           </div>
         </div>
@@ -465,7 +465,7 @@ function Users({ userData, setSelectedChatroom }) {
           {activeTab === "add" && (
             <>
               {/* Search user by name */}
-              <div className="mt-3 px-2 input-padding">
+              <div className="mt-3 px-3 input-padding">
                 <span className="label-text pl-1">Search by name</span>
                 <div className="relative">
                   <input
@@ -486,7 +486,7 @@ function Users({ userData, setSelectedChatroom }) {
               </div>
 
               {/* Search user by email */}
-              <div className="mt-6 px-2 input-padding">
+              <div className="mt-6 px-3 input-padding">
                 <span className="label-text pl-1">Search by email</span>
                 <div className="relative">
                   <input
@@ -567,7 +567,7 @@ function Users({ userData, setSelectedChatroom }) {
           )}
 
           {/* user section */}
-          {activeTab === "user" && <>user profile</>}
+          {activeTab === "user" && <div className="px-3 text-base-content">user profile</div>}
         </div>
 
         {/* bottom menu */}
