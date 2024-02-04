@@ -28,12 +28,11 @@ import UsersCard from "./UsersCard";
 /* 3rd-party libraries */
 import { toast } from "react-hot-toast";
 import { IoMdChatboxes } from "react-icons/io";
-import { IoSearchSharp } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { IoSettingsOutline } from "react-icons/io5";
-import { FiLogOut } from "react-icons/fi";
 import { IoSettingsSharp } from "react-icons/io5";
+
+import { themes } from "@/actions/client/utils";
 
 function Users({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("chatrooms");
@@ -257,21 +256,77 @@ function Users({ userData, setSelectedChatroom }) {
         console.error("Error logging out:", error);
       });
   };
+  //   // {
+  //   //   label: "Default",
+  //   //   value: "default",
+  //   // },
+  //   {
+  //     label: "Light",
+  //     value: "light",
+  //   },
+  //   {
+  //     label: "Dark",
+  //     value: "dark",
+  //   },
+  //   {
+  //     label: "Retro",
+  //     value: "retro",
+  //   },
+  //   {
+  //     label: "Cyberpunk",
+  //     value: "cyberpunk",
+  //   },
+  //   {
+  //     label: "Valentine",
+  //     value: "valentine",
+  //   },
+  //   {
+  //     label: "Halloween",
+  //     value: "halloween",
+  //   },
+  //   {
+  //     label: "Aqua",
+  //     value: "aqua",
+  //   },
+  //   {
+  //     label: "Synthwave",
+  //     value: "synthwave",
+  //   },
+  //   {
+  //     label: "Luxury",
+  //     value: "luxury",
+  //   },
+  //   {
+  //     label: "Dracula",
+  //     value: "dracula",
+  //   },
+  //   {
+  //     label: "Coffee",
+  //     value: "coffee",
+  //   },
+  //   {
+  //     label: "Autumn",
+  //     value: "autumn",
+  //   }
+  // ];
 
   return (
     <div className="flex h-full">
       {/* sidebar */}
       <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-1">
+        {/* add friend icon */}
         <div
           className={`${
-            activeTab == "users" ? "menu-active border-base-content" : ""
+            activeTab == "add" ? "menu-active border-base-content" : ""
           } border- w-full py-4 px-5 flex items-center justify-center`}
         >
           <IoPersonAddSharp
             className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
-            onClick={() => handleTabClick("users")}
+            onClick={() => handleTabClick("add")}
           />
         </div>
+
+        {/* chatroom icon */}
         <div
           className={`${
             activeTab == "chatrooms" ? "menu-active border-base-content" : ""
@@ -282,6 +337,8 @@ function Users({ userData, setSelectedChatroom }) {
             onClick={() => handleTabClick("chatrooms")}
           />
         </div>
+
+        {/* settings icon */}
         <div
           className={`${
             activeTab == "settings" ? "menu-active border-base-content" : ""
@@ -294,142 +351,43 @@ function Users({ userData, setSelectedChatroom }) {
         </div>
 
         {/* user icon */}
-        <div className="drawer mt-auto p-5">
-          <input id="sidebar-menu" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content">
-            <label htmlFor="sidebar-menu" className="drawer-button">
-              <img
-                src={userData.avatarUrl}
-                width={30}
-                height={30}
-                alt="Picture of the author"
-                className="rounded-full"
-                tabIndex={0}
-                role="button"
-              />
-            </label>
-          </div>
-          <div className="drawer-side z-[500]">
-            <label
-              htmlFor="sidebar-menu"
-              aria-label="close sidebar"
-              className="drawer-overlay"
-            ></label>
-            <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-              <li>
-                <a>
-                  <div className="dropdown dropdown-bottom">
-                    <div tabIndex={0} role="button" className="">
-                      Theme
-                      <svg
-                        width="12px"
-                        height="12px"
-                        className="ml-2 h-2 w-2 fill-current opacity-60 inline-block"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 2048 2048"
-                      >
-                        <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-                      </svg>
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
-                    >
-                      <li>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label="Default"
-                          value="default"
-                        />
-                      </li>
-                      <li>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label="Retro"
-                          value="retro"
-                        />
-                      </li>
-                      <li>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label="Cyberpunk"
-                          value="cyberpunk"
-                        />
-                      </li>
-                      <li>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label="Valentine"
-                          value="valentine"
-                        />
-                      </li>
-                      <li>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label="Aqua"
-                          value="aqua"
-                        />
-                      </li>
-                    </ul>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a onClick={logoutClick}>Logout</a>
-              </li>
-            </ul>
-          </div>
+        <div
+          className={`${
+            activeTab == "user" ? "menu-active border-base-content" : ""
+          } mt-auto p-5 w-full py-4 px-5 flex items-center justify-center`}
+          onClick={() => handleTabClick("user")}
+        >
+          <img
+            src={userData.avatarUrl}
+            width={30}
+            height={30}
+            alt="Picture of the author"
+            className="rounded-full"
+            tabIndex={0}
+            role="button"
+          />
         </div>
       </div>
-      {/* <dialog id="theme-modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click outside to close</p>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>        
-      </dialog> */}
 
       {/* main */}
       <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
         {/* navbar */}
-        {/* <div className="h-[60px] flex items-center pl-[15px]">
+        <div className="h-[60px] flex py-[16px] pl-[15px]">
           <div className="text-xl font-bold text-base-content">
             {activeTab == "chatrooms"
               ? "Chatrooms"
-              : activeTab == "users"
+              : activeTab == "add"
               ? "Add friend"
               : activeTab == "settings"
               ? "Settings"
+              : activeTab == "user"
+              ? userData.name
               : ""}
           </div>
-        </div> */}
-
-        <div className="navbar bg-base-10">
-          <a className="btn btn-ghost text-xl">
-            {activeTab == "chatrooms"
-              ? "Chatrooms"
-              : activeTab == "users"
-              ? "Add friend"
-              : activeTab == "settings"
-              ? "Settings"
-              : ""}
-          </a>
         </div>
 
         {/* body */}
-        <div className="pt-2 overflow-y-auto">
+        <div className="pt-1 overflow-y-auto">
           {/* chatrooms section */}
           {activeTab === "chatrooms" && (
             <>
@@ -441,6 +399,7 @@ function Users({ userData, setSelectedChatroom }) {
                   }}
                 >
                   <UsersCard
+                    key={chatroom.id}
                     name={
                       chatroom.usersData[
                         chatroom.users.find((id) => id !== userData?.id)
@@ -473,132 +432,37 @@ function Users({ userData, setSelectedChatroom }) {
           )}
 
           {activeTab === "settings" && (
-            <div className="px-2 flex flex-col items-center">
-              {/* <div className="dropdown mb-72">
-                <div tabIndex={0} role="button" className="btn btn-wide m-1" >
-                  Theme
-                  <svg
-                    width="12px"
-                    height="12px"
-                    className="h-2 w-2 fill-current opacity-60 inline-block"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 2048 2048"
-                  >
-                    <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-                  </svg>
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
-                >
-                  <li>
-                    <input
-                      type="radio"
-                      name="theme-dropdown"
-                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                      aria-label="Default"
-                      value="default"
-                    />
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="theme-dropdown"
-                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                      aria-label="Retro"
-                      value="retro"
-                    />
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="theme-dropdown"
-                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                      aria-label="Cyberpunk"
-                      value="cyberpunk"
-                    />
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="theme-dropdown"
-                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                      aria-label="Valentine"
-                      value="valentine"
-                    />
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="theme-dropdown"
-                      className="text-base-content theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                      aria-label="Aqua"
-                      value="aqua"
-                    />
-                  </li>
-                </ul>
-              </div> */}
-
-              <details className="collapse bg-base-200 ">
-                <summary className="collapse-title font-medium text-base-content">
-                  <div className="flex justify-between items-center">
-                    <span>Themes</span>
-                    <svg
-                      width="12px"
-                      height="12px"
-                      className="h-3 w-3 fill-current opacity-60 inline-block"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 2048 2048"
-                    >
-                      <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <div className="collapse-content">
-                  <div className="join join-vertical">
-                    <input
-                      type="radio"
-                      name="theme-buttons"
-                      className="btn btn-wide theme-controller join-item w-full"
-                      aria-label="Default"
-                      value="default"
-                    />
-                    <input
-                      type="radio"
-                      name="theme-buttons"
-                      className="btn btn-wide theme-controller join-item"
-                      aria-label="Retro"
-                      value="retro"
-                    />
-                    <input
-                      type="radio"
-                      name="theme-buttons"
-                      className="btn btn-wide theme-controller join-item"
-                      aria-label="Cyberpunk"
-                      value="cyberpunk"
-                    />
-                    <input
-                      type="radio"
-                      name="theme-buttons"
-                      className="btn btn-wide theme-controller join-item"
-                      aria-label="Valentine"
-                      value="valentine"
-                    />
-                    <input
-                      type="radio"
-                      name="theme-buttons"
-                      className="btn btn-wide theme-controller join-item"
-                      aria-label="Aqua"
-                      value="aqua"
-                    />
-                  </div>
-                </div>
-              </details>
+            <div className="settings-section">
+              <ul className="menu text-base-content">
+                <li>
+                  <details open>
+                    <summary>Theme</summary>
+                    <ul className="menu">
+                      {themes.map((theme) => (
+                        <li key={theme.label}>
+                          <label className="label cursor-pointer w-full">
+                            <span className="label-text">{theme.label}</span>
+                            <input
+                              type="radio"
+                              name="theme-radios"
+                              className="radio theme-controller"
+                              value={theme.value}
+                            />
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <a onClick={logoutClick}>Logout</a>
+                </li>
+              </ul>
             </div>
           )}
 
-          {/* users section */}
-          {activeTab === "users" && (
+          {/* add friend section */}
+          {activeTab === "add" && (
             <>
               {/* Search user by name */}
               <div className="mt-3 px-2 input-padding">
@@ -701,22 +565,27 @@ function Users({ userData, setSelectedChatroom }) {
               )}
             </>
           )}
+
+          {/* user section */}
+          {activeTab === "user" && <>user profile</>}
         </div>
 
         {/* bottom menu */}
         <div className="mt-auto hidden users-mobile">
           <div className="btm-nav">
+            {/* add friend button */}
             <button
               className={`${
-                activeTab == "users" ? "active text-base-content" : ""
+                activeTab == "add" ? "active text-base-content" : ""
               }`}
             >
               <IoPersonAddSharp
                 className="w-[20px] h-[20px] text-base-content"
-                onClick={() => handleTabClick("users")}
+                onClick={() => handleTabClick("add")}
               />
             </button>
 
+            {/* chatroom button */}
             <button
               className={`${
                 activeTab == "chatrooms" ? "active text-base-content" : ""
@@ -728,41 +597,35 @@ function Users({ userData, setSelectedChatroom }) {
               />
             </button>
 
-            <div className="drawer">
-              <input
-                id="bottom-menu"
-                type="checkbox"
-                className="drawer-toggle"
+            {/* settings button */}
+            <button
+              className={`${
+                activeTab == "settings" ? "active text-base-content" : ""
+              }`}
+            >
+              <IoSettingsSharp
+                className="w-[24px] h-[24px] text-base-content"
+                onClick={() => handleTabClick("settings")}
               />
-              <div className="drawer-content">
-                <label htmlFor="bottom-menu" className="drawer-button">
-                  <img
-                    src={userData.avatarUrl}
-                    width={26}
-                    height={26}
-                    alt="Picture of the author"
-                    className="rounded-full"
-                    tabIndex={0}
-                    role="button"
-                  />
-                </label>
-              </div>
-              <div className="drawer-side z-[500]">
-                <label
-                  htmlFor="bottom-menu"
-                  aria-label="close sidebar"
-                  className="drawer-overlay"
-                ></label>
-                <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                  <li>
-                    <a>Sidebar Item 1</a>
-                  </li>
-                  <li>
-                    <a onClick={logoutClick}>Logout</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            </button>
+
+            {/* user icon */}
+            <button
+              className={`${
+                activeTab == "user" ? "active text-base-content" : ""
+              }`}
+            >
+              <img
+                src={userData.avatarUrl}
+                width={30}
+                height={30}
+                alt="Picture of the author"
+                className="rounded-full"
+                tabIndex={0}
+                role="button"
+                onClick={() => handleTabClick("user")}
+              />
+            </button>
           </div>
         </div>
       </div>

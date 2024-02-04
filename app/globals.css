@@ -162,6 +162,9 @@ body {
     display: none;
     width: 0;
   }
+  .settings-section {
+    margin-bottom: 60px;
+  }
 }
 
 @media (max-width: 500px) {

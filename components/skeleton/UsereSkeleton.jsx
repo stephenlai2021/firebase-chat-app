@@ -5,7 +5,7 @@ import BottomMenuSkeleton from "./BottomMenuSkeleton";
 
 export default function UsersSkeleton() {
   return (
-    <div className="flex users-mobile">
+    <div className="flex users-mobile shadow-inner">
       <SidebarSkeleton />
       <div className="w-[300px] h-full flex flex-col pt-">
         <div className="h-[60px] flex items-center pl-[15px]">

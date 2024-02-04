@@ -76,7 +76,7 @@ function HomePage() {
         <div
           className={`${
             selectedChatroom == null ? "chatroom-hide" : "chatroom-mobile"
-          } w-9/12 flex items-center justify-center h-full chatroom-none`}
+          } shadow-inner w-9/12 flex items-center justify-center h-full chatroom-none`}
         >
           <div className="text-2xl text-gray-400">Select a chatroom</div>
         </div>
