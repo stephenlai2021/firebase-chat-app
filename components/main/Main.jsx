@@ -28,7 +28,7 @@ import Sidebar from "../menu/Sidebar";
 import MainBottomNavbar from "../menu/MainBottomNavbar";
 import MainNavbar from "../menu/MainNavbar";
 
-/* others */
+/* utils */
 import { toast } from "react-hot-toast";
 
 /* react-icons */
@@ -52,7 +52,6 @@ function Main({ userData, setSelectedChatroom }) {
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
-  /* 依姓名搜尋用戶 */
   const searchUserByName = async () => {
     if (!userName) return;
 
@@ -65,7 +64,6 @@ function Main({ userData, setSelectedChatroom }) {
     const users = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
       users.push(doc.data());
     });
 
@@ -73,7 +71,6 @@ function Main({ userData, setSelectedChatroom }) {
     setUserByEmail("");
   };
 
-  /* 依電郵信箱搜尋用戶 */
   const searchUserByEmail = async () => {
     if (!userEmail) return;
 
@@ -83,7 +80,6 @@ function Main({ userData, setSelectedChatroom }) {
       return;
     }
 
-    // 在 users 收集搜尋符合 email 的用戶
     const docRef = doc(firestore, "users", userEmail);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -105,7 +101,6 @@ function Main({ userData, setSelectedChatroom }) {
     setUsersByName("");
   };
 
-  /* 處理 Name 表格 */
   const handleName = (val) => {
     setUserByEmail("");
     setEmailError("");
@@ -113,7 +108,6 @@ function Main({ userData, setSelectedChatroom }) {
     setUsersByName("");
   };
 
-  /* 處理 Email 表格 */
   const handleEmail = (val) => {
     setUsersByName("");
     setUserEmail(val);
@@ -121,17 +115,15 @@ function Main({ userData, setSelectedChatroom }) {
     setEmailError("");
   };
 
-  /* 用戶按 Enter 鍵執行 searchUserByEmail 函式 */
   const handleUserEmailSubmit = (event) => {
     if (event.key === "Enter") searchUserByEmail();
   };
 
-  /* 用戶按 Enter 鍵執行 searchUserByName 函式 */
   const handleUserNameSubmit = (event) => {
     if (event.key === "Enter") searchUserByName();
   };
 
-  /* if tab switched to chatrooms, reset name && email */
+  /* reset name && email if switch to chatrooms menu */
   useEffect(() => {
     if (activeTab == "chatrooms") {
       setUserName("");
@@ -153,9 +145,9 @@ function Main({ userData, setSelectedChatroom }) {
     return () => unsubscribe();
   }, []);
 
-  // get chatrooms
+  /* get chatrooms */
   useEffect(() => {
-    if (!userData?.id) return;
+    if (!userData.id) return;
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
@@ -169,30 +161,26 @@ function Main({ userData, setSelectedChatroom }) {
       console.log("chatrooms: ", chatrooms);
     });
 
-    // Cleanup function for chatrooms
     return () => unsubscribeChatrooms();
   }, [userData]);
 
-  /* set user status to offline */
   const setUserStatusOffline = async () => {
-    /* 把 users 收集的登陸用戶狀態設置為 "offline" */
     const loginUserRef = doc(firestore, "users", userData.email);
     await updateDoc(loginUserRef, { status: "offline" });
 
-    /* 把 chatrooms 收集的登陸用戶狀態設置為 "offline" */
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
     );
     const querySnapshot = await getDocs(chatroomsQuery);
     querySnapshot.forEach(async (document) => {
+      // console.log(document.id, document.data())
       await updateDoc(doc(firestore, "chatrooms", document.id), {
         [`usersData.${userData.id}.status`]: "offline",
       });
     });
   };
 
-  /* create chatroom */
   const createChat = async (user) => {
     setUser(user);
 
@@ -235,7 +223,6 @@ function Main({ userData, setSelectedChatroom }) {
     }
   };
 
-  /* open chatroom */
   const openChat = async (chatroom) => {
     const data = {
       id: chatroom.id,
@@ -246,7 +233,6 @@ function Main({ userData, setSelectedChatroom }) {
     setSelectedChatroom(data);
   };
 
-  /* logout user */
   const logoutClick = () => {
     signOut(auth)
       .then(() => {
@@ -257,59 +243,6 @@ function Main({ userData, setSelectedChatroom }) {
         console.error("Error logging out:", error);
       });
   };
-  //   // {
-  //   //   label: "Default",
-  //   //   value: "default",
-  //   // },
-  //   {
-  //     label: "Light",
-  //     value: "light",
-  //   },
-  //   {
-  //     label: "Dark",
-  //     value: "dark",
-  //   },
-  //   {
-  //     label: "Retro",
-  //     value: "retro",
-  //   },
-  //   {
-  //     label: "Cyberpunk",
-  //     value: "cyberpunk",
-  //   },
-  //   {
-  //     label: "Valentine",
-  //     value: "valentine",
-  //   },
-  //   {
-  //     label: "Halloween",
-  //     value: "halloween",
-  //   },
-  //   {
-  //     label: "Aqua",
-  //     value: "aqua",
-  //   },
-  //   {
-  //     label: "Synthwave",
-  //     value: "synthwave",
-  //   },
-  //   {
-  //     label: "Luxury",
-  //     value: "luxury",
-  //   },
-  //   {
-  //     label: "Dracula",
-  //     value: "dracula",
-  //   },
-  //   {
-  //     label: "Coffee",
-  //     value: "coffee",
-  //   },
-  //   {
-  //     label: "Autumn",
-  //     value: "autumn",
-  //   }
-  // ];
 
   return (
     <div className="flex h-full">
@@ -322,7 +255,7 @@ function Main({ userData, setSelectedChatroom }) {
         <MainNavbar activeTab={activeTab} />
 
         {/* main body */}
-        <div className="pt-1 overflow-y-auto">
+        <div className="pt-1 overflow-y-auto h-full">
           {activeTab === "chatrooms" && (
             <>
               {userChatrooms.map((chatroom) => (
@@ -381,8 +314,7 @@ function Main({ userData, setSelectedChatroom }) {
           )}
           {activeTab === "add" && (
             <>
-              {/* Search user by name */}
-              <div className="mt-3 px-3 input-padding">
+              <div className="my-3 px-3 input-padding">
                 <span className="label-text pl-1">Search by name</span>
                 <div className="relative">
                   <input
@@ -391,7 +323,7 @@ function Main({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleName(e.target.value)}
                     onKeyDown={handleUserNameSubmit}
                     placeholder="Enter name"
-                    className="input bg-base-200 rounded-md input-bordered input-sm w-full max-w-x text-base-content"
+                    className="input bg-base-200 rounded-md input-bordere input-md w-full max-w-x text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
@@ -401,8 +333,6 @@ function Main({ userData, setSelectedChatroom }) {
                   </div>
                 </div>
               </div>
-
-              {/* Search user by email */}
               <div className="mt-6 px-3 input-padding">
                 <span className="label-text pl-1">Search by email</span>
                 <div className="relative">
@@ -412,7 +342,7 @@ function Main({ userData, setSelectedChatroom }) {
                     onChange={(e) => handleEmail(e.target.value)}
                     onKeyDown={handleUserEmailSubmit}
                     placeholder="Enter email"
-                    className="input input-sm input-bordered rounded-md bg-base-200 w-full text-base-content"
+                    className="input input-md input-bordered rounded-md bg-base-200 w-full text-base-content"
                   />
                   <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
                     <IoIosSend
@@ -443,15 +373,10 @@ function Main({ userData, setSelectedChatroom }) {
                           found={"true"}
                         />
                         {user.email !== userData.email && (
-                          // <button
-                          //   className="btn btn-circle btn-sm absolute right-4 top-[50%] translate-y-[-50%]"
-                          //   onClick={() => createChat(user)}
-                          // >
                           <IoPersonAddSharp
                             className="w-5 h-5 text-base-content absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
                             onClick={() => createChat(user)}
                           />
-                          // </button>
                         )}
                       </div>
                     ))}

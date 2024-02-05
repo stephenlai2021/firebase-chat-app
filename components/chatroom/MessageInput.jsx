@@ -1,21 +1,28 @@
 /* react */
 import { useState, useRef, useEffect } from "react";
 
+/* next */
+import Image from "next/image"
+
 /* firebase */
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase/client-config";
 
-/* 3rd-pary libraries */
+/* react-icons */
 import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { IoImageOutline } from "react-icons/io5";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+
+/* utils */
 import EmojiPicker from "emoji-picker-react";
 
 function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
   const [file, setFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showUploadBtn, setShowUploadBtn] = useState(false);
 
   const inputFile = useRef(null);
 
@@ -34,6 +41,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);
+      setShowUploadBtn(true);
     };
     reader.readAsDataURL(selectedFile);
   };
@@ -43,6 +51,8 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
       console.error("No file selected.");
       return;
     }
+    setShowUploadBtn(false)
+
     const storageRef = ref(storage, `images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -61,7 +71,7 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           // Reset file && upload progress state and update message with download URL
           setFile(null);
-          setUploadProgress(0);
+          setUploadProgress(null);
           console.log("File available at", downloadURL);
 
           setImage(downloadURL);
@@ -118,26 +128,15 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
         className={`rounded-md input-bordered bg-base-200 input input-sm text-base-content flex-1 p-2 pr-8 w-full outline-non
         `}
       />
-      {/* ${image ? "pr-[52px]" : "pr-2"} */}
-      {/* {message && ( */}
       <FaPaperPlane
         onClick={() => sendMessage()}
         className={`absolute right-[26px] top-[50%] translate-y-[-50%] z-[200] text-base-content cursor-pointer w-[16px] h-[16px]`}
       />
-      {/* )} */}
 
       {/* small image preview */}
-      {/* <div className="absolute top-[-30px] right-[18px]"> */}
       <div className="absolute right-[16px]">
         <img src={image ? image : ""} alt="" className="h-[40px] rounded" />
       </div>
-
-      {/* <div className="ml-3">
-        <FaPaperPlane
-          onClick={() => sendMessage()}
-          className="text-base-content cursor-pointer w-[16px] h-[16px]"
-        />
-      </div> */}
 
       {showEmojiPicker && (
         <div className="absolute right-0 bottom-full p-2">
@@ -163,24 +162,38 @@ function MessageInput({ sendMessage, message, setMessage, image, setImage }) {
           >
             {imagePreview && (
               <div className="relative">
-                <img
-                  src="./upload-icon.png"
-                  alt="upload icon"
-                  className="w-[40px] absolute top-[-20px] left-[50%] translate-x-[-50%] hover:cursor-pointer"
-                  onClick={handleUpload}
-                />
-                <div className="flex justify-center">
-                  <img
+                <div className="flex justify-center relative">
+                  {showUploadBtn && (
+                    <div className="backdrop-opacity-30 backdrop-invert bg-base-100/30 rounded-full p-1 w-16 h-16 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] hover:cursor-pointer">
+                      <AiOutlineCloudUpload
+                        className="text-base-content w-full h-full"
+                        onClick={handleUpload}
+                      />
+                    </div>
+                  )}
+                  {/* <img
                     src={imagePreview}
                     alt="Uploaded"
                     className="max-h-60 max-w-xs mb-4 rounded"
+                  /> */}
+                  <Image 
+                    src={imagePreview}
+                    alt="Uploaded"
+                    width={300}
+                    height={300}
+                    // placeholder="blur"
+                    className="mb-4 rounded"
                   />
+                  {uploadProgress !== null && (
+                    <div
+                      className="w-16 h-16 backdrop-opacity-30 backdrop-invert bg-base-100/30 radial-progress text-base-content absolute z-[500] top-[50%] translate-y-[-50%]"
+                      style={{ "--value": uploadProgress }}
+                      role="progressbar"
+                    >
+                      {uploadProgress.toFixed(0)}%
+                    </div>
+                  )}
                 </div>
-                <progress
-                  value={uploadProgress}
-                  className="progress progress-primary absolute bottom-0 left-0 z-50"
-                  max="100"
-                ></progress>
               </div>
             )}
             <input

@@ -8,7 +8,7 @@ import { firestore } from "@/firebase/client-config";
 import { doc, getDoc } from "firebase/firestore";
 
 /* components */
-import Users from "./components/main/Main";
+import Users from "./hooks/Main_new";
 import ChatRoom from "./components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 

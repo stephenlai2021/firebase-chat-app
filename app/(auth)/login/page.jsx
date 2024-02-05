@@ -77,14 +77,13 @@ function page() {
           );
           const querySnapshot = await getDocs(chatroomsQuery);
           querySnapshot.forEach(async (document) => {
-            // console.log(document.id, " => ", document.data());
-
             await updateDoc(doc(firestore, "chatrooms", document.id), {
               [`usersData.${user.uid}.status`]: "online",
             });
           });
 
           router.push("/");
+          // setLoading(false);
         }
         setErrors({});
       }
@@ -93,8 +92,7 @@ function page() {
       console.error("Error logging in user:", error.message);
       toast.error(error.message);
       setErrors({});
-    }
-    setLoading(false);
+    }    
   };
 
   return (
@@ -113,7 +111,7 @@ function page() {
           <input
             type="text"
             placeholder="Email"
-            className="w-full input input-bordered text-base-content pl-2"
+            className="w-full input outline-none rounded-md text-base-content pl-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -126,7 +124,7 @@ function page() {
           <input
             type="password"
             placeholder="Enter Password"
-            className="w-full input input-bordered text-base-content pl-2"
+            className="w-full input outline-none rounded-md text-base-content pl-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

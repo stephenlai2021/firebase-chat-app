@@ -28,8 +28,8 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${inter.className}`}
-        suppressHydrationWarning
-        data-theme="pastel"
+        suppressHydrationWarning        
+        data-theme="aqua"
       >
         <div className="max-w-[1600px] mx-auto">
           <Toaster position="bottom-center" />

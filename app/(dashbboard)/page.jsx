@@ -15,7 +15,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useLoginUserStore } from '@/zustand/loginUserStore'
 
 /* components */
-import Main from "../../components/main/Main";
+import Main from "@/components/main/Main";
 import ChatRoom from "../../components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 

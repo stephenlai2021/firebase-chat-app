@@ -1,5 +1,8 @@
-/* 3rd-party library */
+/* utils */
 import moment from "moment";
+
+/* next */
+import Image from "next/image";
 
 function MessageCard({ message, me, other }) {
   const isMessageFromMe = message.sender === me.id;
@@ -13,27 +16,19 @@ function MessageCard({ message, me, other }) {
   return (
     <div
       key={message.id}
-      className={` ${
-        isMessageFromMe ? "chat chat-end" : "chat chat-start"
-      }`}
+      className={` ${isMessageFromMe ? "chat chat-end" : "chat chat-start"}`}
     >
       {isMessageFromMe && (
         <div className="chat-image avatar avatar-show hidden">
           <div className="w-10 rounded-full">
-            <img
-              src={me.avatarUrl}
-              alt="Avatar"
-            />
+            <img src={me.avatarUrl} alt="Avatar" />
           </div>
         </div>
       )}
       {!isMessageFromMe && (
         <div className="chat-image avatar avatar-show hidden">
           <div className="w-10 rounded-full">
-            <img
-              src={other?.avatarUrl}
-              alt="Avatar"
-            />
+            <img src={other?.avatarUrl} alt="Avatar" />
           </div>
         </div>
       )}
@@ -47,18 +42,25 @@ function MessageCard({ message, me, other }) {
         {message.image && (
           <div className="max-w-60 flex justify-center">
             <img src={message.image} className="max-h-60 mb-4 rounded" />
+            {/* <Image
+              src={message.image}
+              width={300}
+              height={300}
+              alt="Picture"
+              className="max-h-60 rounded-lg mb-4"
+            /> */}
           </div>
         )}
-        <p className={`max-w-[360px] text-wrap ${
-          isMessageFromMe
-            ? "text-accent-content"
-            : "text-primary-content"
-        }`}>{message.content}</p>
+        <p
+          className={`max-w-[360px] text-wrap ${
+            isMessageFromMe ? "text-accent-content" : "text-primary-content"
+          }`}
+        >
+          {message.content}
+        </p>
         <div
           className={`text-xs ${
-            isMessageFromMe
-              ? "text-accent-content"
-              : "text-primary-content"
+            isMessageFromMe ? "text-accent-content" : "text-primary-content"
           }`}
         >
           {formatTimeAgo(message.time)}
