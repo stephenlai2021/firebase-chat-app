@@ -45,17 +45,10 @@ function MessageCard({ message, me, other }) {
         {message.image && (
           <div className="max-w-60 flex justify-center">
             <img src={message.image} className="max-h-60 mb-4 rounded" />
-            {/* <Image
-              src={message.image}
-              width={300}
-              height={300}
-              alt="Picture"
-              className="max-h-60 rounded-lg mb-4"
-            /> */}
           </div>
         )}
         <p
-          className={`max-w-[360px] text-wrap ${
+          className={`max-w-[360px] text-wrap leading-tight ${
             isMessageFromMe ? "text-accent-content" : "text-primary-content"
           }`}
         >
