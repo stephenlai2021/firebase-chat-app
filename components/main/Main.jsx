@@ -234,7 +234,7 @@ function Main({ userData, setSelectedChatroom }) {
 
       <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
         {/* navbar */}
-        <div className="navbar h-[60px]">
+        <div className="navbar h-[60px] bg-base-30">
           <div className="flex-1">
             <div className="text-xl font-bold text-base-content pl-3">
               {activeTab == "chatrooms"
@@ -340,6 +340,7 @@ function Main({ userData, setSelectedChatroom }) {
                 <div className="label">
                   <span className="label-text">Find your friend</span>
                 </div>
+                
                 <div className="relative">
                   {userInfo && (
                     <div className="border- absolute left-1 top-[50%] translate-y-[-50%] py-2 px-1">
@@ -353,7 +354,6 @@ function Main({ userData, setSelectedChatroom }) {
                     type="text"
                     value={userInfo}
                     onChange={(e) => setUserInfo(e.target.value)}
-                    // onChange={(e) => handleUserInfo(e.target.value)}
                     onKeyDown={handleUserInfoKeyDown}
                     placeholder="Enter name or email"
                     className={`bg-base-100 rounded-md input-m ${
@@ -391,6 +391,7 @@ function Main({ userData, setSelectedChatroom }) {
                     </div>
                   ))
                 } */}
+                
                 {loading && (
                   <UsersCardSkeleton />
                 )}

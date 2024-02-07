@@ -151,7 +151,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   return (
     <div className="flex flex-col h-screen shadow-inner">
       {/* top menu */}
-      <div className="h-[64px] flex items-center shadow-inner">       
+      <div className="h-[64px] flex items-center shadow-inner bg-base-300">       
         {loading && !otherUser ? (
           <div className="hidden show-flex">
             <div className="flex items-end ml-4 pb-1">
@@ -175,7 +175,8 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             </div>
 
             {/* user avatar */}
-            <div className="avatar ml-2 relative">
+            <div className="avatar ml-3
+             relative">
               <div className="w-9 h-9 rounded-full">
                 <img src={otherUser?.avatarUrl} />
               </div>
@@ -199,7 +200,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
       {/* Messages container with overflow and scroll */}
       <div
         ref={messagesContainerRef}
-        className="shadow-inner flex-1 overflow-y-auto overflow-x-hidden pt-4 px-6 chatroom-padding"
+        className="shadow-inner flex-1 overflow-y-auto overflow-x-hidden py-4 px-6 chatroom-padding"
       >
         {!loading &&
           messages?.map((message) => (

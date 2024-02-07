@@ -23,7 +23,7 @@ export default function Sidabar({
   logoutClick,
 }) {
   return (
-    <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
+    <div className="bg-base-30 shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
       {/* add icon */}
       <div
         className={`${

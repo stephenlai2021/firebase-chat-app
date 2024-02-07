@@ -51,14 +51,14 @@ function UsersCard({
 
       <div className="flex-1">
         <div className="flex items-center justify-between text-desktop text-phone border-1 border-green-30">
-          <h2 className="border-1 border-blue-30 text-lg font-semibold truncate text-base-content">
+          <h2 className="border-1 border-blue-30 text-lg font-semibol truncate text-base-content">
             {name}
           </h2>
           <div className="text-xs text-base-content truncate time-stamp-desktop">
             {lastMessageSentTime ? formatTimeAgo(lastMessageSentTime) : ""}
           </div>
         </div>
-        {email ? (
+        {email && !lastMessage ? (
           <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
             {email}
           </p>
