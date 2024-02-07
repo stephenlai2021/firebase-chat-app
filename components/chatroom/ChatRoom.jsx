@@ -168,14 +168,14 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             <div
               className={`${
                 selectedChatroom ? "arrow-show" : "hidden"
-              } hidden ml-4 flex pt-3 hover:cursor-pointer`}
+              } border-2 hidden ml-4 pr-1 flex pt-3 hover:cursor-pointer`}
               onClick={gotoUsersMenu}
             >
               <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
             </div>
 
             {/* user avatar */}
-            <div className="avatar ml-3
+            <div className="avatar ml-1
              relative">
               <div className="w-9 h-9 rounded-full">
                 <img src={otherUser?.avatarUrl} />

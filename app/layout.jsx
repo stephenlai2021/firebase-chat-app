@@ -25,7 +25,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="aqua" className="bg-base-300">
+    <html lang="en" data-theme="aqua">
       <body
         className={`${inter.className}`}
         suppressHydrationWarning                
