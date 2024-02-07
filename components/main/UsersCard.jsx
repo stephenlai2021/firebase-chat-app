@@ -26,10 +26,9 @@ function UsersCard({
     <div
       className={`${
         found == "false" ? "hover:cursor-pointer" : ""
-      } hover:bg-base-200 px-4 w-full flex items-center justify-between rounded p-3 relative 
+      } border- hover:bg-base-200 px-4 w-full flex items-center justify-between rounded p-3 relative 
       `}
     >
-      {/* ${ bgColor ? bgColor : "" } */}
       {/* Avatar on the left */}
       <div className="flex-shrink-0 mr-4 relative">
         <div className="w-12 h-12 rounded-full overflow-hidden">
@@ -50,7 +49,6 @@ function UsersCard({
         </div>
       </div>
 
-      {/* {type == "chat" && ( */}
       <div className="flex-1">
         <div className="flex items-center justify-between text-desktop text-phone border-1 border-green-30">
           <h2 className="border-1 border-blue-30 text-lg font-semibold truncate text-base-content">
@@ -60,11 +58,16 @@ function UsersCard({
             {lastMessageSentTime ? formatTimeAgo(lastMessageSentTime) : ""}
           </div>
         </div>
-        <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
-          {lastMessage}
-        </p>
+        {email ? (
+          <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
+            {email}
+          </p>
+        ) : (
+          <p className="text-base-content truncate text-sm text-desktop text-tablet text-phone">
+            {lastMessage}
+          </p>
+        )}
       </div>
-      {/* )} */}
     </div>
   );
 }

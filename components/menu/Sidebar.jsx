@@ -1,65 +1,133 @@
+/* components */
+import UsersCard from "../main/UsersCard";
+
 /* react-icons */
 import { IoMdChatboxes } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { IoSettingsSharp } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
+import { RxAvatar } from "react-icons/rx";
+import { FiUserPlus } from "react-icons/fi";
+import { RiUserSearchFill } from "react-icons/ri";
+import { SlSettings } from "react-icons/sl";
+import { RiUserAddLine } from "react-icons/ri";
+import { BsChatDots } from "react-icons/bs";
 
-export default function Sidabar({ userData, activeTab, handleTabClick }) {
+/* utils */
+import { themes, languages } from "@/data/utils";
+
+export default function Sidabar({
+  userData,
+  activeTab,
+  handleTabClick,
+  logoutClick,
+}) {
   return (
-    <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-1">
-    {/* add icon */}
-    <div
-      className={`${
-        activeTab == "add" ? "menu-active border-base-content" : ""
-      } border- w-full py-4 px-5 flex items-center justify-center`}
-    >
-      <IoMdAdd
-        className={`w-6 h-6 font-bold hover:cursor-pointer text-base-content`}
-        onClick={() => handleTabClick("add")}
-      />
-    </div>
+    <div className="shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
+      {/* add icon */}
+      <div
+        className={`${
+          activeTab == "add" ? "menu-active border-base-content" : ""
+        } border- w-full py-3 px-5 flex items-center justify-center`}
+      >
+        <RiUserAddLine
+          className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
+          onClick={() => handleTabClick("add")}
+        />
+      </div>
 
-    {/* chatroom icon */}
-    <div
-      className={`${
-        activeTab == "chatrooms" ? "menu-active border-base-content" : ""
-      } border- w-full py-4 px-5 flex items-center justify-center`}
-    >
-      <IoMdChatboxes
-        className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
-        onClick={() => handleTabClick("chatrooms")}
-      />
-    </div>
+      {/* chatroom icon */}
+      <div
+        className={`${
+          activeTab == "chatrooms" ? "menu-active border-base-content" : ""
+        } border- w-full py-3 px-5 flex items-center justify-center`}
+      >
+        <BsChatDots
+          className={`w-[20px] h-[20px] hover:cursor-pointer text-base-content`}
+          onClick={() => handleTabClick("chatrooms")}
+        />
+      </div>
 
-    {/* settings icon */}
-    <div
-      className={`${
-        activeTab == "settings" ? "menu-active border-base-content" : ""
-      } border- w-full py-4 px-5 flex items-center justify-center`}
-    >
-      <IoSettingsSharp
-        className={`w-[22px] h-[22px] hover:cursor-pointer text-base-content`}
-        onClick={() => handleTabClick("settings")}
-      />
+      {/* bottom icon */}
+      <div className="mt-auto mb-3">
+        <div className="drawer z-[100]">
+          <input
+            id="sidebar-drawer-settings"
+            type="checkbox"
+            className="drawer-toggle"
+          />
+          <div className="border- border-red-30 flex justify-center">
+            <label
+              htmlFor="sidebar-drawer-settings"
+              aria-label="close sidebar"
+              className="px-5 py-2"
+            >
+              <RxAvatar className="w-[24px] h-[24px] hover:cursor-pointer text-base-content" />
+            </label>
+          </div>
+          <div className="drawer-side">
+            <label
+              htmlFor="sidebar-drawer-settings"
+              aria-label="close sidebar"
+              className="drawer-overlay"
+            ></label>
+            <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
+              <li className="pl-2">
+                <a>
+                  <UsersCard
+                    name={userData.name}
+                    email={userData.email}
+                    avatarUrl={userData.avatarUrl}
+                  />
+                </a>
+              </li>
+              <li>
+                <a>
+                  <ul className="menu bg-base-200 w-ful rounded-box">
+                    <li>
+                      <details>
+                        <summary className="">Theme</summary>
+                        <ul>
+                          {themes.map((theme) => (
+                            <div key={theme.label} className="form-control">
+                              <label className="label cursor-pointer gap-4">
+                                <span className="label-text">
+                                  {theme.label}
+                                </span>
+                                <input
+                                  type="radio"
+                                  name="theme-radios"
+                                  className="radio theme-controller"
+                                  value={theme.value}
+                                />
+                              </label>
+                            </div>
+                          ))}
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <details>
+                        <summary>Language</summary>
+                        <ul>
+                          {languages.map((language) => (
+                            <li key={language.label}>
+                              <a>{language.value}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    </li>
+                    <li>
+                      <a onClick={logoutClick}>Logout</a>
+                    </li>
+                  </ul>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-
-    {/* user icon */}
-    <div
-      className={`${
-        activeTab == "user" ? "menu-active border-base-content" : ""
-      } mt-auto p-5 w-full py-4 px-5 flex items-center justify-center`}
-      onClick={() => handleTabClick("user")}
-    >
-      <img
-        src={userData.avatarUrl}
-        width={30}
-        height={30}
-        alt="Picture of the author"
-        className="rounded-full"
-        tabIndex={0}
-        role="button"
-      />
-    </div>
-  </div>
   );
 }

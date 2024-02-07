@@ -66,14 +66,7 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+/* .image-background {} */
 
 .text-wrap {
   word-wrap: break-word;
@@ -82,6 +75,10 @@
 .menu-active {
   border-left-width: 2px;
 }
+
+/* .img-bg {
+  background-image: url('avatar.png');
+} */
 
 @media (min-width: 800px) {
   .text-desktop {
@@ -107,6 +104,18 @@
   .users-mobile {
     width: 100vw;
     display: flex;;
+  }
+  .show-block {
+    width: 100%;
+    display: block;
+  }
+  .show-flex {
+    /* width: 100%; */
+    display: flex;
+  }
+  .navbar-show,
+  .add-icon-show {
+    display: flex;
   }
   .users-mobile-skeleton {
     width: 100vw;

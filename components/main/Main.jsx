@@ -14,6 +14,7 @@ import {
   serverTimestamp,
   doc,
   where,
+  or,
   getDocs,
   getDoc,
 } from "firebase/firestore";
@@ -27,8 +28,10 @@ import UsersCard from "./UsersCard";
 import Sidebar from "../menu/Sidebar";
 import MainBottomNavbar from "../menu/MainBottomNavbar";
 import MainNavbar from "../menu/MainNavbar";
+import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
 
 /* utils */
+import { themes, languages } from "@/data/utils";
 import { toast } from "react-hot-toast";
 
 /* react-icons */
@@ -36,114 +39,80 @@ import { IoIosSend } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import { IoMdAddCircle } from "react-icons/io";
+import { IoMdChatboxes } from "react-icons/io";
+import { IoSettingsSharp } from "react-icons/io5";
+import { RxAvatar } from "react-icons/rx";
+import { RiUserAddLine } from "react-icons/ri";
+import { IoIosSearch } from "react-icons/io";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 function Main({ userData, setSelectedChatroom }) {
   const [activeTab, setActiveTab] = useState("chatrooms");
   const [users, setUsers] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
-  const [user, setUser] = useState("");
-  const [userName, setUserName] = useState("");
-  const [usersByName, setUsersByName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userByEmail, setUserByEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [userInfo, setUserInfo] = useState("");
+  const [foundUsers, setFoundUsers] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const router = useRouter();
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
-  const searchUserByName = async () => {
-    if (!userName) return;
+  const searchUserByNameOrEmail = async () => {
+    // if (!userInfo) return;
+    console.log("user info: ", userInfo);
 
-    console.log("user name: ", userName);
+    setLoading(true)
     const q = query(
       collection(firestore, "users"),
-      where("name", "==", userName)
+      or(where("name", "==", userInfo), where("email", "==", userInfo))
     );
-
     const users = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       users.push(doc.data());
     });
+    setFoundUsers(users);
+    setLoading(false)
 
-    setUsersByName(users);
-    setUserByEmail("");
-  };
-
-  const searchUserByEmail = async () => {
-    if (!userEmail) return;
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail)) {
-      setEmailError("Invalid Email");
-      return;
+    if (users.length === 0) {
+      toast("This user is not existed !", { icon: "🤔" });
     }
-
-    const docRef = doc(firestore, "users", userEmail);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setUserByEmail(docSnap.data());
-    } else {
-      console.log("The email does not exist!");
-      toast("The email does not exist!", {
-        icon: "⚠️",
-      });
-    }
-
-    if (userEmail == userData.email) {
-      console.log("This is you!");
-      toast("This is you!", {
-        icon: "😀",
-      });
-    }
-
-    setUsersByName("");
   };
 
-  const handleName = (val) => {
-    setUserByEmail("");
-    setEmailError("");
-    setUserName(val);
-    setUsersByName("");
+  const handleUserInfo = (val) => {
+    setUserInfo(val);
+    setFoundUsers("");
   };
 
-  const handleEmail = (val) => {
-    setUsersByName("");
-    setUserEmail(val);
-    setUserByEmail("");
-    setEmailError("");
+  const handleUserInfoKeyDown = (event) => {
+    if (event.key === "Enter") searchUserByNameOrEmail();
   };
 
-  const handleUserEmailSubmit = (event) => {
-    if (event.key === "Enter") searchUserByEmail();
+  const resetUserInfoAndFoundUsers = () => {
+    setUserInfo("");
+    setFoundUsers("");
   };
 
-  const handleUserNameSubmit = (event) => {
-    if (event.key === "Enter") searchUserByName();
-  };
-
-  /* reset name && email if switch to chatrooms menu */
+  /* reset user info if switch to chatrooms menu */
   useEffect(() => {
     if (activeTab == "chatrooms") {
-      setUserName("");
-      setUsersByName("");
-      setUserEmail("");
-      setUserByEmail("");
+      setUserInfo("");
+      setFoundUsers("");
     }
   }, [activeTab]);
 
-  /* get users */
-  useEffect(() => {
-    const usersRef = collection(firestore, "users");
-    const unsubscribe = onSnapshot(usersRef, (snapshot) => {
-      const users = [];
-      snapshot.forEach((doc) => users.push(doc.data()));
-      setUsers(users);
-      console.log("users: ", users);
-    });
-    return () => unsubscribe();
-  }, []);
+  /* get all users */
+  // useEffect(() => {
+  //   const usersRef = collection(firestore, "users");
+  //   const unsubscribe = onSnapshot(usersRef, (snapshot) => {
+  //     const users = [];
+  //     snapshot.forEach((doc) => users.push(doc.data()));
+  //     setUsers(users);
+  //     console.log("users: ", users);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   /* get chatrooms */
   useEffect(() => {
@@ -164,6 +133,11 @@ function Main({ userData, setSelectedChatroom }) {
     return () => unsubscribeChatrooms();
   }, [userData]);
 
+  /* log found users */
+  useEffect(() => {
+    console.log("found users info: ", foundUsers);
+  }, [foundUsers]);
+
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.email);
     await updateDoc(loginUserRef, { status: "offline" });
@@ -174,7 +148,7 @@ function Main({ userData, setSelectedChatroom }) {
     );
     const querySnapshot = await getDocs(chatroomsQuery);
     querySnapshot.forEach(async (document) => {
-      // console.log(document.id, document.data())
+      console.log(document.id, document.data());
       await updateDoc(doc(firestore, "chatrooms", document.id), {
         [`usersData.${userData.id}.status`]: "offline",
       });
@@ -182,7 +156,12 @@ function Main({ userData, setSelectedChatroom }) {
   };
 
   const createChat = async (user) => {
-    setUser(user);
+    if (user.email === userData.email) {
+      toast(`You cannot add yourself !`, { icon: "😅" });
+      return;
+    }
+
+    // setUser(user);
 
     // 檢查聊天室是否存在
     const existingChatroomsQuery = query(
@@ -198,7 +177,7 @@ function Main({ userData, setSelectedChatroom }) {
 
       if (existingChatroomsSnapshot.docs.length > 0) {
         console.log(`chatroom for ${user.name} is already existed`);
-        toast(`chatroom for ${user.name} is already existed`, { icon: "😎" });
+        toast(`${user.name} is already in your chat list`, { icon: "😎" });
         return;
       }
 
@@ -250,12 +229,192 @@ function Main({ userData, setSelectedChatroom }) {
         userData={userData}
         activeTab={activeTab}
         handleTabClick={handleTabClick}
+        logoutClick={logoutClick}
       />
-      <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
-        <MainNavbar activeTab={activeTab} />
 
-        {/* main body */}
-        <div className="pt-1 overflow-y-auto h-full">
+      <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
+        {/* navbar */}
+        <div className="navbar h-[60px]">
+          <div className="flex-1">
+            <div className="text-xl font-bold text-base-content pl-3">
+              {activeTab == "chatrooms"
+                ? "Chatrooms"
+                : activeTab == "add"
+                ? "Add friend"
+                : activeTab == "settings"
+                ? "Settings"
+                : activeTab == "user"
+                ? "Profile"
+                : ""}
+            </div>
+          </div>
+
+          <div className="flex-none hidden navbar-show">
+            {/* avatar icon */}
+            <div className="drawer z-[200]">
+              <input
+                id="navbar-drawer-settings"
+                type="checkbox"
+                className="drawer-toggle"
+              />
+              <div className="flex justify-center">
+                <label
+                  htmlFor="navbar-drawer-settings"
+                  aria-label="close sidebar"
+                  className="px-3 py-2"
+                >
+                  <RxAvatar className="w-[24px] h-[24px] hover:cursor-pointer text-base-content" />
+                </label>
+              </div>
+              <div className="drawer-side">
+                <label
+                  htmlFor="navbar-drawer-settings"
+                  aria-label="close sidebar"
+                  className="drawer-overlay"
+                ></label>
+                <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
+                  <li className="pl-2">
+                    <a>
+                      <UsersCard
+                        name={userData.name}
+                        email={userData.email}
+                        avatarUrl={userData.avatarUrl}
+                      />
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <ul className="menu bg-base-200 w-ful rounded-box">
+                        <li>
+                          <details>
+                            <summary className="">Theme</summary>
+                            <ul>
+                              {themes.map((theme) => (
+                                <div key={theme.label} className="form-control">
+                                  <label className="label cursor-pointer gap-4">
+                                    <span className="label-text">
+                                      {theme.label}
+                                    </span>
+                                    <input
+                                      type="radio"
+                                      name="theme-radios"
+                                      className="radio theme-controller"
+                                      value={theme.value}
+                                    />
+                                  </label>
+                                </div>
+                              ))}
+                            </ul>
+                          </details>
+                        </li>
+                        <li>
+                          <details>
+                            <summary>Language</summary>
+                            <ul>
+                              {languages.map((language) => (
+                                <li key={language.label}>
+                                  <a>{language.value}</a>
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        </li>
+                        <li>
+                          <a onClick={logoutClick}>Logout</a>
+                        </li>
+                      </ul>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* body */}
+        <div className="pt-1 overflow-y-auto h-full shadow-inner">
+          {activeTab === "add" && (
+            <>
+              {/* search friend by name or email */}
+              <div className="my-3 px-3 input-padding">
+                <div className="label">
+                  <span className="label-text">Find your friend</span>
+                </div>
+                <div className="relative">
+                  {userInfo && (
+                    <div className="border- absolute left-1 top-[50%] translate-y-[-50%] py-2 px-1">
+                      <IoCloseCircleOutline
+                        className="w-[20px] h-[20px] hover:cursor-pointer text-base-content"
+                        onClick={resetUserInfoAndFoundUsers}
+                      />
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={userInfo}
+                    onChange={(e) => setUserInfo(e.target.value)}
+                    // onChange={(e) => handleUserInfo(e.target.value)}
+                    onKeyDown={handleUserInfoKeyDown}
+                    placeholder="Enter name or email"
+                    className={`bg-base-100 rounded-md input-m ${
+                      userInfo ? "pl-8" : "pl-4"
+                    } pr-8 py-3 w-full max-w-x text-base-content`}
+                  />
+                  {userInfo && (
+                    <div className="border- absolute right-1 top-[50%] translate-y-[-50%] py-2 px-1">
+                      <IoIosSearch
+                        className="w-[20px] h-[20px] hover:cursor-pointer text-base-content"
+                        onClick={searchUserByNameOrEmail}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* users found by name or email  */}
+              <div className="relative mt-8 flex flex-col">
+                {/* {foundUsers &&
+                  foundUsers.map((user) => (
+                    <div key={user.id} className="relative mb-2">
+                      <UsersCard
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        email={user.email}
+                        status={user.status}
+                        lastMessage={user.lastMessage}
+                        found={"true"}
+                      />
+                      <IoPersonAddSharp
+                        className="w-5 h-5 text-base-content absolute right-5 top-4 hover:cursor-pointer"
+                        onClick={() => createChat(user)}
+                      />
+                    </div>
+                  ))
+                } */}
+                {loading && (
+                  <UsersCardSkeleton />
+                )}
+
+                {!loading && foundUsers &&
+                  foundUsers.map((user) => (
+                    <div key={user.id} className="relative mb-2">
+                      <UsersCard
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        email={user.email}
+                        status={user.status}
+                        lastMessage={user.lastMessage}
+                        found={"true"}
+                      />
+                      <IoPersonAddSharp
+                        className="w-5 h-5 text-base-content absolute right-5 top-4 hover:cursor-pointer"
+                        onClick={() => createChat(user)}
+                      />
+                    </div>
+                  ))}
+              </div>
+            </>
+          )}
           {activeTab === "chatrooms" && (
             <>
               {userChatrooms.map((chatroom) => (
@@ -296,116 +455,6 @@ function Main({ userData, setSelectedChatroom }) {
                 </div>
               ))}
             </>
-          )}
-          {activeTab === "settings" && (
-            <div className="settings-section">
-              <ul className="menu text-base-content">
-                <li>
-                  <a className="">Theme</a>
-                </li>
-                <li>
-                  <a className="">Language</a>
-                </li>
-                <li>
-                  <a onClick={logoutClick}>Logout</a>
-                </li>
-              </ul>
-            </div>
-          )}
-          {activeTab === "add" && (
-            <>
-              <div className="my-3 px-3 input-padding">
-                <span className="label-text pl-1">Search by name</span>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={userName}
-                    onChange={(e) => handleName(e.target.value)}
-                    onKeyDown={handleUserNameSubmit}
-                    placeholder="Enter name"
-                    className="input bg-base-200 rounded-md input-bordere input-md w-full max-w-x text-base-content"
-                  />
-                  <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
-                    <IoIosSend
-                      className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
-                      onClick={searchUserByName}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 px-3 input-padding">
-                <span className="label-text pl-1">Search by email</span>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={userEmail}
-                    onChange={(e) => handleEmail(e.target.value)}
-                    onKeyDown={handleUserEmailSubmit}
-                    placeholder="Enter email"
-                    className="input input-md input-bordered rounded-md bg-base-200 w-full text-base-content"
-                  />
-                  <div className="absolute right-1 top-[50%] translate-y-[-50%] p-2">
-                    <IoIosSend
-                      className="w-[18px] h-[18px] hover:cursor-pointer text-base-content"
-                      onClick={searchUserByEmail}
-                    />
-                  </div>
-                </div>
-                {emailError && (
-                  <span className="label-text text-red-500 p-1">
-                    {emailError}
-                  </span>
-                )}
-              </div>
-
-              {/* users found by name  */}
-              {activeTab === "add" && usersByName && (
-                <div className="relative mt-8 flex flex-col">
-                  {usersByName &&
-                    usersByName.map((user) => (
-                      <div key={user.id} className="relative mb-2">
-                        <UsersCard
-                          name={user.name}
-                          avatarUrl={user.avatarUrl}
-                          email={user.email}
-                          status={user.status}
-                          lastMessage={user.lastMessage}
-                          found={"true"}
-                        />
-                        {user.email !== userData.email && (
-                          <IoPersonAddSharp
-                            className="w-5 h-5 text-base-content absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
-                            onClick={() => createChat(user)}
-                          />
-                        )}
-                      </div>
-                    ))}
-                </div>
-              )}
-
-              {/* user found by email  */}
-              {activeTab === "add" && userByEmail && (
-                <div className="relative mt-8 flex flex-col">
-                  <UsersCard
-                    name={userByEmail.name}
-                    avatarUrl={userByEmail.avatarUrl}
-                    email={userByEmail.email}
-                    status={userByEmail.status}
-                    lastMessage={userByEmail.lastMessage}
-                    found={"true"}
-                  />
-                  {userEmail !== userData.email && (
-                    <IoPersonAddSharp
-                      className="w-5 h-5 font-semibold text-base-content absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
-                      onClick={() => createChat(userByEmail)}
-                    />
-                  )}
-                </div>
-              )}
-            </>
-          )}
-          {activeTab === "user" && (
-            <div className="px-3 text-base-content">user profile</div>
           )}
         </div>
 

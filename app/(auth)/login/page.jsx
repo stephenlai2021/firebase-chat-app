@@ -111,7 +111,7 @@ function page() {
           <input
             type="text"
             placeholder="Email"
-            className="w-full input outline-none rounded-md text-base-content pl-2"
+            className="w-full input input-bordered rounded-md text-base-content pl-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -124,7 +124,7 @@ function page() {
           <input
             type="password"
             placeholder="Enter Password"
-            className="w-full input outline-none rounded-md text-base-content pl-2"
+            className="w-full input input-bordered rounded-md text-base-content pl-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -135,7 +135,7 @@ function page() {
         <div>
           <button type="submit" className="btn btn-block btn-accent">
             {loading ? (
-              <span className="loading loading-spinner loading-sm text-base-content"></span>
+              <span className="loading loading-spinner loading-sm text-accent-content"></span>
             ) : (
               "Sign In"
             )}

@@ -18,7 +18,8 @@ function MessageCard({ message, me, other }) {
       key={message.id}
       className={` ${isMessageFromMe ? "chat chat-end" : "chat chat-start"}`}
     >
-      {isMessageFromMe && (
+      {/* chat avatar */}
+      {/* {isMessageFromMe && (
         <div className="chat-image avatar avatar-show hidden">
           <div className="w-10 rounded-full">
             <img src={me.avatarUrl} alt="Avatar" />
@@ -31,7 +32,9 @@ function MessageCard({ message, me, other }) {
             <img src={other?.avatarUrl} alt="Avatar" />
           </div>
         </div>
-      )}
+      )} */}
+
+      {/* chat bubble */}
       <div
         className={`${
           isMessageFromMe

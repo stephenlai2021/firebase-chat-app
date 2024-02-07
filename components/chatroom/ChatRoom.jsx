@@ -1,6 +1,9 @@
 /* react */
 import { useState, useEffect, useRef } from "react";
 
+/* next */
+import backgroundImage from "../../public/avatar.png";
+
 /* firebase */
 import {
   addDoc,
@@ -20,8 +23,10 @@ import MessageCard from "./MessageCard";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "@/components/skeleton/MessageSkeleton";
 
-/* 3rd-party libraries */
+/* react-icons */
 import { FaArrowLeft, FaBullseye } from "react-icons/fa";
+
+import UserAvatar from "@/components/images/avatar.png";
 
 let setTimeoutInstance;
 
@@ -121,7 +126,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
     } else {
       setMessage("");
       setImage(null);
-      return
+      return;
     }
 
     // Scroll to the bottom after sending a message
@@ -146,38 +151,49 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   return (
     <div className="flex flex-col h-screen shadow-inner">
       {/* top menu */}
-      <div className="h-[60px] flex items-center shadow-inner">
-        <div
-          className={`${
-            selectedChatroom ? "arrow-show" : "hidden"
-          } hidden ml-4 flex pt-[12px] hover:cursor-pointer`}
-          onClick={gotoUsersMenu}
-        >
-          <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
-        </div>
-
-        <div className="relative w-9 h-9 ml-2">
-          <img
-            src={otherUser?.avatarUrl}
-            className="w-full h-full ml- rounded-full"
-            alt=""
-          />
-          <span
-            className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
-              otherUser?.status === "online" ? "bg-green-500" : "bg-gray-500"
-            }`}
-          ></span>
-        </div>
-
-        {/* <div className={`avatar ${otherUser?.status ==="online" ? "online" : "offline"}`}>
-          <div className="w-9 rounded-full">
-            <img src={otherUser?.avatarUrl} />
+      <div className="h-[64px] flex items-center shadow-inner">       
+        {loading && !otherUser ? (
+          <div className="hidden show-flex">
+            <div className="flex items-end ml-4 pb-1">
+              <div className="skeleton rounded w-[18px] h-[18px] pt-"></div>
+            </div>
+            <div className="skeleton rounded-full w-9 h-9 ml-2"></div>
+            <div className="flex items-end pb-1 border-1 ml-2">
+              <div className="skeleton rounded w-[72px] h-4"></div>
+            </div>
           </div>
-        </div> */}
+        ) : (
+          <>
+            {/* left arrow icon */}
+            <div
+              className={`${
+                selectedChatroom ? "arrow-show" : "hidden"
+              } hidden ml-4 flex pt-3 hover:cursor-pointer`}
+              onClick={gotoUsersMenu}
+            >
+              <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
+            </div>
 
-        <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
-          {otherUser?.name}
-        </div>
+            {/* user avatar */}
+            <div className="avatar ml-2 relative">
+              <div className="w-9 h-9 rounded-full">
+                <img src={otherUser?.avatarUrl} />
+              </div>
+              <span
+                className={`absolute bottom-0 right-0 w-[10px] h-[10px] border border-2 rounded-full ${
+                  otherUser?.status === "online"
+                    ? "bg-green-500"
+                    : "bg-gray-500"
+                }`}
+              ></span>
+            </div>
+
+            {/* user name */}
+            <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
+              {otherUser?.name}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Messages container with overflow and scroll */}

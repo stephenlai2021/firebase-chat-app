@@ -53,7 +53,7 @@ function HomePage() {
   if (user == null) return <LoadingSkeleton />;
 
   return (
-    <div className="flex h-screen oveflow-hidden">
+    <div className="flex h-screen">
       <div
         className={`relative ${
           selectedChatroom == null ? "users-mobile" : "users-hide"
