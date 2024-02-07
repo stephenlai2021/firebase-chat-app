@@ -168,7 +168,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
             <div
               className={`${
                 selectedChatroom ? "arrow-show" : "hidden"
-              } border-2 hidden ml-4 pr-1 flex pt-3 hover:cursor-pointer`}
+              } border- hidden ml-4 pr-1 flex pt-3 hover:cursor-pointer`}
               onClick={gotoUsersMenu}
             >
               <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
