@@ -3,7 +3,9 @@ import "./globals.css";
 /* next */
 import { Inter } from "next/font/google";
 
-/* 3rd pary library */
+import { AuthContext } from "@/context/authContext";
+
+/* utils */
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,13 +28,12 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="aqua">
-      <body
-        className={`${inter.className}`}
-        suppressHydrationWarning                
-      >
+      <body className={`${inter.className}`} suppressHydrationWarning>
         <div className="max-w-[1200px] mx-auto bg-base-200">
-          <Toaster position="bottom-center" />
-          {children}
+          {/* <AuthContext> */}
+            <Toaster position="bottom-center" />
+            {children}
+          {/* </AuthContext> */}
         </div>
       </body>
     </html>

@@ -7,7 +7,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-/* utils */
+/* 3rd party libraries */
 import { toast } from "react-hot-toast";
 
 /* firebase */
@@ -18,7 +18,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase/client-config";
 
 
-function RegisterPage() {  
+function page() {  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -149,9 +149,10 @@ function RegisterPage() {
     }
     setLoading(false);
   };
-
+  
   return (
     <div className="flex justify-center items-center h-screen font-primary p-8 m-2">
+      {/*form*/}
       <form
         onSubmit={handleSubmit}
         className="space-y-4 w-full max-w-2xl shadow-lg p-10 form-padding"
@@ -299,9 +300,8 @@ function RegisterPage() {
           </button>
         </div>
       </dialog>
-      
     </div>
   );
 }
 
-export default RegisterPage;
+export default page;

@@ -82,7 +82,7 @@ export default function Sidabar({
                 </a>
               </li>
               <li>
-                <a>
+                {/* <a> */}
                   <ul className="menu bg-base-200 w-ful rounded-box">
                     <li>
                       <details>
@@ -122,7 +122,7 @@ export default function Sidabar({
                       <a onClick={logoutClick}>Logout</a>
                     </li>
                   </ul>
-                </a>
+                {/* </a> */}
               </li>
             </ul>
           </div>

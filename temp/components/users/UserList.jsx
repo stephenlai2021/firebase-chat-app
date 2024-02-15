@@ -1,7 +1,7 @@
 "use client";
 
 /* react */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 /* firebase */
 import { firestore, auth } from "@/firebase/client-config";
@@ -23,20 +23,20 @@ import { signOut } from "firebase/auth";
 /* next */
 import { useRouter } from "next/navigation";
 
-/* components */
-import UsersCard from "./UsersCard";
-import Sidebar from "../menu/Sidebar";
-import MainBottomNavbar from "../menu/MainBottomNavbar";
-import MainNavbar from "../menu/MainNavbar";
-import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
+/* supabase */
+import { createBrowserClient } from "@supabase/ssr";
 
-/* i18n */
-import {useTranslations} from 'next-intl';
+/* components */
+import UsersCard from "../../../components/main/UsersCard";
+import Sidebar from "../../../components/menu/Sidebar";
+import MainBottomNavbar from "../../../components/menu/MainBottomNavbar";
+import MainNavbar from "../../../components/menu/MainNavbar";
+import UsersCardSkeleton from "../../../components/skeleton/UsersCardSkeleton";
 
 /* utils */
 import { themes, languages } from "@/data/utils";
 import { toast } from "react-hot-toast";
-
+import { useFirebase } from "@/hooks/useFirebase";
 
 /* react-icons */
 import { IoIosSend } from "react-icons/io";
@@ -60,11 +60,12 @@ function Main({ userData, setSelectedChatroom }) {
 
   const router = useRouter();
 
-  // const t = useTranslations('MainNavbar');
-
   const handleTabClick = (tab) => setActiveTab(tab);
 
   const searchUserByNameOrEmail = async () => {
+    // if (!userInfo) return;
+    console.log("user info: ", userInfo);
+
     setLoading(true);
     const q = query(
       collection(firestore, "users"),
@@ -105,17 +106,20 @@ function Main({ userData, setSelectedChatroom }) {
     }
   }, [activeTab]);
 
-  /* get users */
-  // useEffect(() => {
-  //   const usersRef = collection(firestore, "users");
-  //   const unsubscribe = onSnapshot(usersRef, (snapshot) => {
-  //     const users = [];
-  //     snapshot.forEach((doc) => users.push(doc.data()));
-  //     setUsers(users);
-  //     console.log("users: ", users);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
+  useEffect(() => {
+    /* get users once */
+    const usersRef = collection(firestore, "users");
+    const unsubscribe = onSnapshot(usersRef, (snapshot) => {
+      const users = [];
+      snapshot.forEach((doc) => users.push(doc.data()));
+      setUsers(users);
+      console.log("users: ", users);
+    });
+    return () => unsubscribe();
+
+    /* get users twice */
+    // getUsers()
+  }, []);
 
   /* get chatrooms */
   useEffect(() => {
@@ -235,13 +239,17 @@ function Main({ userData, setSelectedChatroom }) {
 
       <div className="shadow-inner h-screen flex flex-col w-[300px] min-w-[200px] users-mobile">
         {/* navbar */}
-        <div className="navbar h-[60px]">
+        <div className="navbar h-[60px] bg-base-30">
           <div className="flex-1">
             <div className="text-xl font-bold text-base-content pl-3">
               {activeTab == "chatrooms"
                 ? "Chatrooms"
                 : activeTab == "add"
                 ? "Add friend"
+                : activeTab == "settings"
+                ? "Settings"
+                : activeTab == "user"
+                ? "Profile"
                 : ""}
             </div>
           </div>
@@ -280,7 +288,7 @@ function Main({ userData, setSelectedChatroom }) {
                     </a>
                   </li>
                   <li>
-                    {/* <a> */}
+                    <a>
                       <ul className="menu bg-base-200 w-ful rounded-box">
                         <li>
                           <details>
@@ -320,7 +328,7 @@ function Main({ userData, setSelectedChatroom }) {
                           <a onClick={logoutClick}>Logout</a>
                         </li>
                       </ul>
-                    {/* </a> */}
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -370,6 +378,25 @@ function Main({ userData, setSelectedChatroom }) {
 
               {/* users found by name or email  */}
               <div className="relative mt-8 flex flex-col">
+                {/* {foundUsers &&
+                  foundUsers.map((user) => (
+                    <div key={user.id} className="relative mb-2">
+                      <UsersCard
+                        name={user.name}
+                        avatarUrl={user.avatarUrl}
+                        email={user.email}
+                        status={user.status}
+                        lastMessage={user.lastMessage}
+                        found={"true"}
+                      />
+                      <IoPersonAddSharp
+                        className="w-5 h-5 text-base-content absolute right-5 top-4 hover:cursor-pointer"
+                        onClick={() => createChat(user)}
+                      />
+                    </div>
+                  ))
+                } */}
+
                 {loading && <UsersCardSkeleton />}
 
                 {!loading &&
@@ -393,7 +420,6 @@ function Main({ userData, setSelectedChatroom }) {
               </div>
             </>
           )}
-
           {activeTab === "chatrooms" && (
             <>
               {userChatrooms.map((chatroom) => (
@@ -438,6 +464,7 @@ function Main({ userData, setSelectedChatroom }) {
         </div>
 
         <MainBottomNavbar
+          userData={userData}
           activeTab={activeTab}
           handleTabClick={handleTabClick}
         />

@@ -24,8 +24,7 @@ function Main({ userCredential }) {
       setUser(userData);
       console.log('user data: ', userData)
     } else {
-      // console.log("No such document!");
-      console.log("Cannot find user!");
+      console.log("No such document!");
     }
   };
 

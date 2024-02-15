@@ -1,6 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+/* react */
+import { useState, useContext } from "react";
+
+/* context */
+import { Context } from "@/context/authContext";
 
 /* firebase */
 import { auth, googleAuthProvider, firestore } from "@/firebase/client-config";
@@ -22,22 +26,17 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-/* zustand */
-import { useLoginUserStore } from "@/zustand/loginUserStore";
-
-/* 3rd-party libraries */
+/* utils */
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
-function page() {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
-  const { loginUser } = useLoginUserStore();
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,13 +56,13 @@ function page() {
     setLoading(true);
     try {
       if (validateForm()) {
-        // Register user with Firebase Authentication
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
         const user = userCredential.user;
+
         if (user) {
           /* 把 users colletion 的用戶狀態設置為 "online" */
           const loginUserRef = doc(firestore, "users", user.email);
@@ -83,7 +82,7 @@ function page() {
           });
 
           router.push("/");
-          // setLoading(false);
+          setLoading(false);
         }
         setErrors({});
       }
@@ -92,7 +91,7 @@ function page() {
       console.error("Error logging in user:", error.message);
       toast.error(error.message);
       setErrors({});
-    }    
+    }
   };
 
   return (
@@ -143,7 +142,10 @@ function page() {
         </div>
         <span className="text-base-content">
           Don't have an account?{" "}
-          <Link href="/register" className="text-base-content hover:underline">
+          <Link
+            href="/register"
+            className="text-base-content hover:underline"
+          >
             Register
           </Link>
         </span>
@@ -160,4 +162,4 @@ function page() {
   );
 }
 
-export default page;
+export default LoginPage;

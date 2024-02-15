@@ -151,7 +151,7 @@ function ChatRoom({ selectedChatroom, setSelectedChatroom }) {
   return (
     <div className="flex flex-col h-screen shadow-inner">
       {/* top menu */}
-      <div className="h-[64px] flex items-center shadow-inner bg-base-300">       
+      <div className="h-[64px] flex items-center shadow-inner bg-base-30">       
         {loading && !otherUser ? (
           <div className="hidden show-flex">
             <div className="flex items-end ml-4 pb-1">

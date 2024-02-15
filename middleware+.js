@@ -1,29 +1,14 @@
-import { NextResponse } from "next/server";
-
-export async function middleware(request) {
-  const session = request.cookies.get("session");
-
-  //Return to /login if don't have a session
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  //Call the authentication endpoint
-  const responseAPI = await fetch("/api/login", {
-    headers: {
-      Cookie: `session=${session?.value}`,
-    },
-  });
-
-  //Return to /login if token is not authorized
-  if (responseAPI.status !== 200) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  return NextResponse.next();
-}
-
-//Add your protected routes
+import createMiddleware from 'next-intl/middleware';
+ 
+export default createMiddleware({
+  // A list of all locales that are supported
+  locales: ['en', 'zh-TW'],
+ 
+  // Used when no locale matches
+  defaultLocale: 'en'
+});
+ 
 export const config = {
-  matcher: ["/"],
+  // Match only internationalized pathnames
+  matcher: ['/', '/(de|zhTW)/:path*']
 };
