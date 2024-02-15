@@ -6,6 +6,7 @@ import { firestore, auth } from "@/firebase/client-config";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
 
+/* Donot delete this hook !!! */
 // export function useUser() {
 //   const [user, setUser] = useState(null | false)
 
@@ -17,7 +18,6 @@ import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
 // }
 
 export function useUserData() {
-  // const [user, setUser] = useState(null | false);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {

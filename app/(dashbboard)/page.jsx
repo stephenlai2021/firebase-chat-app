@@ -1,80 +1,21 @@
 "use client";
 
 /* react */
-import { useEffect, useState, useContext } from "react";
-
-/* next */
-import { useRouter } from "next/navigation";
-
-/* firebase */
-import { firestore, auth } from "@/firebase/client-config";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { useState } from "react";
 
 /* components */
 import Main from "@/components/main/Main";
 import ChatRoom from "@/components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 
-/* context */
-import { Context } from "@/context/authContext";
-
+/* firebase */
 import { useUserData } from "@/hooks/useFirebase";
 
 function DashboardPage() {
-  // const [userData, setUserData] = useState(null);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
-
-  const router = useRouter();
-
   const { userData } = useUserData();
-  console.log("user data: ", userData);
-  
-  // const { user } = useUser();
-  // console.log("user: ", user);
-
-  // const getUserData = async () => {
-  //   const docRef = doc(firestore, "users", user.email);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     const data = docSnap.data();
-  //     setUserData(data);
-  //   } else {
-  //     console.log("No such document!");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (user) getUserData();
-  // }, [user]);
-
-  // useEffect(() => {
-  //   console.log("user data: ", userData);
-  // }, [userData]);
-
-  /* get login user */
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       console.log('user credential: ', user)
-  //       const docRef = doc(firestore, "users", user.email);
-  //       const docSnap = await getDoc(docRef);
-  //       if (docSnap.exists()) {
-  //         const data = docSnap.data();
-  //         setUser(data);
-  //       } else {
-  //         console.log("No such document!");
-  //       }
-  //     } else {
-  //       setUser(null);
-  //       router.push("/login");
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, [auth, router]);
 
   if (userData == null) return <LoadingSkeleton />;
-  // if (loading) return <LoadingSkeleton />;
 
   return (
     <div className="flex h-screen">

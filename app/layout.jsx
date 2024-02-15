@@ -3,7 +3,9 @@ import "./globals.css";
 /* next */
 import { Inter } from "next/font/google";
 
-import { AuthContext } from "@/context/authContext";
+/* theme */
+import { ThemeProvider } from "@/context/ThemeContext";
+import ThemeWrapper from "@/context/ThemeWrapper";
 
 /* utils */
 import { Toaster } from "react-hot-toast";
@@ -27,14 +29,16 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="aqua">
+    <html lang="en">
       <body className={`${inter.className}`} suppressHydrationWarning>
-        <div className="max-w-[1200px] mx-auto bg-base-200">
-          {/* <AuthContext> */}
-            <Toaster position="bottom-center" />
-            {children}
-          {/* </AuthContext> */}
-        </div>
+        <ThemeProvider>
+          <ThemeWrapper>
+            <div className="max-w-[1200px] mx-auto bg-base-200">
+              <Toaster position="bottom-center" />
+              {children}
+            </div>
+          </ThemeWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

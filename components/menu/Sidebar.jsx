@@ -16,12 +16,20 @@ import { BsChatDots } from "react-icons/bs";
 /* utils */
 import { themes, languages } from "@/data/utils";
 
+/* theme */
+import { ThemeContext } from "@/context/ThemeContext";
+
+/* react */
+import { useContext } from "react";
+
 export default function Sidabar({
   userData,
   activeTab,
   handleTabClick,
   logoutClick,
 }) {
+  const { changeTheme } = useContext(ThemeContext
+    )
   return (
     <div className="bg-base-30 shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
       {/* add icon */}
@@ -82,47 +90,43 @@ export default function Sidabar({
                 </a>
               </li>
               <li>
-                {/* <a> */}
-                  <ul className="menu bg-base-200 w-ful rounded-box">
-                    <li>
-                      <details>
-                        <summary className="">Theme</summary>
-                        <ul>
-                          {themes.map((theme) => (
-                            <div key={theme.label} className="form-control">
-                              <label className="label cursor-pointer gap-4">
-                                <span className="label-text">
-                                  {theme.label}
-                                </span>
-                                <input
-                                  type="radio"
-                                  name="theme-radios"
-                                  className="radio theme-controller"
-                                  value={theme.value}
-                                />
-                              </label>
-                            </div>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                    <li>
-                      <details>
-                        <summary>Language</summary>
-                        <ul>
-                          {languages.map((language) => (
-                            <li key={language.label}>
-                              <a>{language.value}</a>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                    <li>
-                      <a onClick={logoutClick}>Logout</a>
-                    </li>
-                  </ul>
-                {/* </a> */}
+                <ul className="menu bg-base-200 w-ful rounded-box">
+                  <li>
+                    <details>
+                      <summary className="">Theme</summary>
+                      <ul>
+                        {themes.map((theme) => (
+                          <div key={theme.label} className="form-control" onClick={() => changeTheme(theme.value)}>
+                            <label className="label cursor-pointer gap-4">
+                              <span className="label-text">{theme.label}</span>
+                              <input
+                                type="radio"
+                                name="theme-radios"
+                                className="radio theme-controller"
+                                value={theme.value}
+                              />
+                            </label>
+                          </div>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <details>
+                      <summary>Language</summary>
+                      <ul>
+                        {languages.map((language) => (
+                          <li key={language.label}>
+                            <a>{language.value}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <a onClick={logoutClick}>Logout</a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>

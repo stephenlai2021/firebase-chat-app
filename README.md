@@ -1,3 +1,19 @@
+# Chat2Chat V1
+
+## Tech Stack
+
+- Nextjs 14
+- Firebase Services
+  - Auth
+  - Firestore
+  - Storage
+- Tailwindcss
+
+## Features
+
+- Client side auth in dashboard/login/register page layout
+- Firestore realtime database
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
