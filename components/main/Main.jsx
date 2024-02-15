@@ -1,7 +1,7 @@
 "use client";
 
 /* react */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 /* firebase */
 import { firestore, auth } from "@/firebase/client-config";
@@ -31,12 +31,14 @@ import MainNavbar from "../menu/MainNavbar";
 import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
 
 /* i18n */
-import {useTranslations} from 'next-intl';
+import { useTranslations } from "next-intl";
 
 /* utils */
 import { themes, languages } from "@/data/utils";
 import { toast } from "react-hot-toast";
 
+/* context */
+import { ThemeContext } from "@/context/ThemeContext";
 
 /* react-icons */
 import { IoIosSend } from "react-icons/io";
@@ -59,6 +61,8 @@ function Main({ userData, setSelectedChatroom }) {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  const { changeTheme } = useContext(ThemeContext);
 
   // const t = useTranslations('MainNavbar');
 
@@ -280,47 +284,49 @@ function Main({ userData, setSelectedChatroom }) {
                     </a>
                   </li>
                   <li>
-                    {/* <a> */}
-                      <ul className="menu bg-base-200 w-ful rounded-box">
-                        <li>
-                          <details>
-                            <summary className="">Theme</summary>
-                            <ul>
-                              {themes.map((theme) => (
-                                <div key={theme.label} className="form-control">
-                                  <label className="label cursor-pointer gap-4">
-                                    <span className="label-text">
-                                      {theme.label}
-                                    </span>
-                                    <input
-                                      type="radio"
-                                      name="theme-radios"
-                                      className="radio theme-controller"
-                                      value={theme.value}
-                                    />
-                                  </label>
-                                </div>
-                              ))}
-                            </ul>
-                          </details>
-                        </li>
-                        <li>
-                          <details>
-                            <summary>Language</summary>
-                            <ul>
-                              {languages.map((language) => (
-                                <li key={language.label}>
-                                  <a>{language.value}</a>
-                                </li>
-                              ))}
-                            </ul>
-                          </details>
-                        </li>
-                        <li>
-                          <a onClick={logoutClick}>Logout</a>
-                        </li>
-                      </ul>
-                    {/* </a> */}
+                    <ul className="menu bg-base-200 w-ful rounded-box">
+                      <li>
+                        <details>
+                          <summary className="">Theme</summary>
+                          <ul>
+                            {themes.map((theme) => (
+                              <div
+                                key={theme.label}
+                                className="form-control"
+                                onClick={() => changeTheme(theme.value)}
+                              >
+                                <label className="label cursor-pointer gap-4">
+                                  <span className="label-text">
+                                    {theme.label}
+                                  </span>
+                                  <input
+                                    type="radio"
+                                    name="theme-radios"
+                                    className="radio theme-controller"
+                                    value={theme.value}
+                                  />
+                                </label>
+                              </div>
+                            ))}
+                          </ul>
+                        </details>
+                      </li>
+                      <li>
+                        <details>
+                          <summary>Language</summary>
+                          <ul>
+                            {languages.map((language) => (
+                              <li key={language.label}>
+                                <a>{language.value}</a>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      </li>
+                      <li>
+                        <a onClick={logoutClick}>Logout</a>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </div>

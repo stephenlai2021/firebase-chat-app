@@ -16,7 +16,7 @@ import { BsChatDots } from "react-icons/bs";
 /* utils */
 import { themes, languages } from "@/data/utils";
 
-/* theme */
+/* context */
 import { ThemeContext } from "@/context/ThemeContext";
 
 /* react */
@@ -28,8 +28,8 @@ export default function Sidabar({
   handleTabClick,
   logoutClick,
 }) {
-  const { changeTheme } = useContext(ThemeContext
-    )
+  const { changeTheme } = useContext(ThemeContext);
+
   return (
     <div className="bg-base-30 shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
       {/* add icon */}
@@ -96,7 +96,11 @@ export default function Sidabar({
                       <summary className="">Theme</summary>
                       <ul>
                         {themes.map((theme) => (
-                          <div key={theme.label} className="form-control" onClick={() => changeTheme(theme.value)}>
+                          <div
+                            key={theme.label}
+                            className="form-control"
+                            onClick={() => changeTheme(theme.value)}
+                          >
                             <label className="label cursor-pointer gap-4">
                               <span className="label-text">{theme.label}</span>
                               <input
