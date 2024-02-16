@@ -34,7 +34,7 @@ import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
 import { useTranslations } from "next-intl";
 
 /* next-themes */
-import { useTheme } from "next-themes"
+import { useTheme } from "next-themes";
 
 /* utils */
 import { themes, languages } from "@/data/utils";
@@ -61,7 +61,7 @@ function Main({ userData, setSelectedChatroom }) {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { setTheme } = useTheme()
+  const { setTheme } = useTheme();
 
   // const t = useTranslations('MainNavbar');
 
@@ -399,7 +399,7 @@ function Main({ userData, setSelectedChatroom }) {
             </>
           )}
 
-          {activeTab === "chatrooms" && (
+          {activeTab === "chatrooms" && userChatrooms.length !== 0 && (
             <>
               {userChatrooms.map((chatroom) => (
                 <div
@@ -437,6 +437,13 @@ function Main({ userData, setSelectedChatroom }) {
                     found={"false"}
                   />
                 </div>
+              ))}
+            </>
+          )}
+          {activeTab === "chatrooms" && userChatrooms.length === 0 && (
+            <>
+              {"abcd".split("").map((i) => (
+                <UsersCardSkeleton key={i} />
               ))}
             </>
           )}

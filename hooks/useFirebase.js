@@ -23,7 +23,7 @@ export function useUserData() {
   useEffect(() => {
     return onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("user credential: ", user);
+        // console.log("user credential | useUserData hooks: ", user);
         const docRef = doc(firestore, "users", user.email);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
