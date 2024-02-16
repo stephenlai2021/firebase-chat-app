@@ -39,10 +39,11 @@ export default function DashboardPageLayout({ children }) {
   }, [isUserValid, router])
 
   if (isUserValid) return children
-  if (!isUserValid) return <LoadingSkeleton />
+  // if (!isUserValid) return <LoadingSkeleton />
 }
 
 /* 
+  Donot delete this block !!!
   Save user data in local storage 
   This approach reads localstorage data and render chatroom list, the con
   is it takes time to render

@@ -140,9 +140,9 @@ function Main({ userData, setSelectedChatroom }) {
   }, [userData]);
 
   /* log found users */
-  useEffect(() => {
-    console.log("found users info: ", foundUsers);
-  }, [foundUsers]);
+  // useEffect(() => {
+  //   console.log("found users info: ", foundUsers);
+  // }, [foundUsers]);
 
   const setUserStatusOffline = async () => {
     const loginUserRef = doc(firestore, "users", userData.email);
@@ -292,7 +292,6 @@ function Main({ userData, setSelectedChatroom }) {
                               <div
                                 key={theme.label}
                                 className="form-control"
-                                // onClick={() => changeTheme(theme.value)}
                                 onClick={() => setTheme(theme.value)}
                               >
                                 <label className="label cursor-pointer gap-4">
