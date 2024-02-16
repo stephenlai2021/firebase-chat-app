@@ -39,7 +39,9 @@ export default function DashboardPageLayout({ children }) {
   }, [isUserValid, router])
 
   if (isUserValid) return children
-  // if (!isUserValid) return <LoadingSkeleton />
+
+  // This provides good user experience though the animation takes some time to play 😅
+  if (!isUserValid) return <LoadingSkeleton />
 }
 
 /* 

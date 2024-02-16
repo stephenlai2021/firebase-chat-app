@@ -17,8 +17,7 @@ import { useUserData } from "@/hooks/useFirebase";
 
 function DashboardPage() {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
-  
-  /* Get user data */
+    
   const { userData } = useUserData();
   
   if (userData == null) return <LoadingSkeleton />;
