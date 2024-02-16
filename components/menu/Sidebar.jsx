@@ -16,11 +16,8 @@ import { BsChatDots } from "react-icons/bs";
 /* utils */
 import { themes, languages } from "@/data/utils";
 
-/* context */
-import { ThemeContext } from "@/context/ThemeContext";
-
-/* react */
-import { useContext } from "react";
+/* next-themes */
+import { useTheme } from "next-themes"
 
 export default function Sidabar({
   userData,
@@ -28,7 +25,7 @@ export default function Sidabar({
   handleTabClick,
   logoutClick,
 }) {
-  const { changeTheme } = useContext(ThemeContext);
+  const { setTheme } = useTheme()
 
   return (
     <div className="bg-base-30 shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
@@ -99,7 +96,7 @@ export default function Sidabar({
                           <div
                             key={theme.label}
                             className="form-control"
-                            onClick={() => changeTheme(theme.value)}
+                            onClick={() => setTheme(theme.value)}
                           >
                             <label className="label cursor-pointer gap-4">
                               <span className="label-text">{theme.label}</span>

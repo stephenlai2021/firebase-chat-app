@@ -33,12 +33,12 @@ import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
 /* i18n */
 import { useTranslations } from "next-intl";
 
+/* next-themes */
+import { useTheme } from "next-themes"
+
 /* utils */
 import { themes, languages } from "@/data/utils";
 import { toast } from "react-hot-toast";
-
-/* context */
-import { ThemeContext } from "@/context/ThemeContext";
 
 /* react-icons */
 import { IoIosSend } from "react-icons/io";
@@ -61,8 +61,7 @@ function Main({ userData, setSelectedChatroom }) {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
-  const { changeTheme } = useContext(ThemeContext);
+  const { setTheme } = useTheme()
 
   // const t = useTranslations('MainNavbar');
 
@@ -293,7 +292,8 @@ function Main({ userData, setSelectedChatroom }) {
                               <div
                                 key={theme.label}
                                 className="form-control"
-                                onClick={() => changeTheme(theme.value)}
+                                // onClick={() => changeTheme(theme.value)}
+                                onClick={() => setTheme(theme.value)}
                               >
                                 <label className="label cursor-pointer gap-4">
                                   <span className="label-text">

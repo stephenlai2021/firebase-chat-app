@@ -3,9 +3,8 @@ import "./globals.css";
 /* next */
 import { Inter } from "next/font/google";
 
-/* theme */
-import { ThemeProvider } from "@/context/ThemeContext";
-import ThemeWrapper from "@/context/ThemeWrapper";
+/* daisyui + next-themes */
+import DaisyUIThemeProvider from "@/providers/daisyui-theme-provider";
 
 /* utils */
 import { Toaster } from "react-hot-toast";
@@ -27,18 +26,16 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className}`} suppressHydrationWarning>
-        <ThemeProvider>
-          <ThemeWrapper>
-            <div className="max-w-[1200px] mx-auto bg-base-200">
-              <Toaster position="bottom-center" />
-              {children}
-            </div>
-          </ThemeWrapper>
-        </ThemeProvider>
+        <DaisyUIThemeProvider>
+          <div className="max-w-[1200px] mx-auto bg-base-200">
+            <Toaster position="bottom-center" />
+            {children}
+          </div>
+        </DaisyUIThemeProvider>
       </body>
     </html>
   );

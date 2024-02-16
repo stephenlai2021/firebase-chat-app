@@ -3,19 +3,25 @@
 /* react */
 import { useState } from "react";
 
+/* stores */
+import { useUserStore } from "@/stores/zustand/userStore";
+
 /* components */
 import Main from "@/components/main/Main";
 import ChatRoom from "@/components/chatroom/ChatRoom";
 import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
+import UsersCardSkeleton from "@/components/skeleton/UsersCardSkeleton";
 
-/* firebase */
+/* firebase hooks */
 import { useUserData } from "@/hooks/useFirebase";
 
 function DashboardPage() {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
-  const { userData } = useUserData();
-
-  if (userData == null) return <LoadingSkeleton />;
+  // const { userData } = useUserData();
+  const { userData } = useUserStore()
+  
+  // if (userData == null) return <LoadingSkeleton />;
+  if (!userData) return <UsersCardSkeleton />;
 
   return (
     <div className="flex h-screen">
