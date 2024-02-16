@@ -20,10 +20,8 @@ function DashboardPage() {
   
   /* Get user data */
   const { userData } = useUserData();
-  // const { userData } = useUserStore()
   
   if (userData == null) return <LoadingSkeleton />;
-  // if (userData) return <UsersCardSkeleton />;
 
   return (
     <div className="flex h-screen">

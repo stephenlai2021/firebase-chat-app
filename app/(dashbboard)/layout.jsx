@@ -18,8 +18,11 @@ import LoadingSkeleton from "@/components/skeleton/LoadingSkeleton";
 import { useUserStore } from "@/stores/zustand/userStore";
 
 /* 
-  Donot remove this block !!! 
-  It works with useUser hook in Main component
+  Check user auth
+  - if no user redirect to login page
+  - if there is user render dashboard page
+
+  This approach reads data and render chatroom list very fast !!!
 */
 export default function DashboardPageLayout({ children }) {
   const router = useRouter();
@@ -36,10 +39,14 @@ export default function DashboardPageLayout({ children }) {
   }, [isUserValid, router])
 
   if (isUserValid) return children
-  // if (!isUserValid) return <LoadingSkeleton />
+  if (!isUserValid) return <LoadingSkeleton />
 }
 
-/* Save user data in localstorage */
+/* 
+  Save user data in local storage 
+  This approach reads localstorage data and render chatroom list, the con
+  is it takes time to render
+*/
 // export default function DashboardPageLayout({ children }) {
 //   const [isUserValid, setIsUserValid] = useState(false);
 
